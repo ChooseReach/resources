@@ -1,6 +1,17 @@
 /* Mobile */  
 body {-webkit-overflow-scrolling: touch;}
 
+/* Links */
+a[href*="//"]{cursor: alias;}
+
+/* Text */
+.dropcaps p:first-of-type::first-letter {float: left; font-size: 3.05em; font-weight: bold; line-height: 1em; margin-right: .1em;}
+.crumbs li:last-child {background: none; padding: 0; margin: 0;}
+
+/* Richtext */
+.w-richtext-figure-type-video {border-radius: .5em !important; overflow: hidden !important;}
+.w-embed:before, .w-embed:after {display: none !important;}
+
 /* Forms */
 * {-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
 input[type=text],input[type=email],input[type=search],input[type=radio],textarea {-webkit-appearance:none;}
@@ -9,10 +20,6 @@ button {background-color: transparent;}
 
 /* Videos */
 video {display: block;}
-
-/* Text */
-.dropcaps p:first-of-type::first-letter {float: left; font-size: 3.05em; font-weight: bold; line-height: 1em; margin-right: .1em;}
-.crumbs li:last-child {background: none; padding: 0; margin: 0;}
 
 /* Transcripts */
 .vlog__richtext li a {text-decoration: underline;}
@@ -26,10 +33,6 @@ video {display: block;}
 .vlog__richtext ol li:last-child {border-bottom-right-radius: 1em;}
 .vlog__richtext ol li a {color: white;}
 .vlog__h6--host {display: none !important;}
-
-/* Richtext */
-.w-richtext-figure-type-video {border-radius: .5em !important; overflow: hidden !important;}
-.w-embed:before, .w-embed:after {display: none !important;}
 
 /* Consent Manager */
 .css-17ss3j2 {background: inherit !important; padding: inherit !important; font-family: inherit !important; font-weight: inherit !important; letter-spacing: inherit !important; font-size: inherit !important; line-height: inherit !important;}
