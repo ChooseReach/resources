@@ -32,7 +32,6 @@ video {display: block;}
 .vlog__richtext ol > li {border-top-left-radius: 1em; border-bottom-left-radius: 1em;}
 .vlog__richtext ol li:last-child {border-bottom-right-radius: 1em;}
 .vlog__richtext ol li a {color: white;}
-.vlog__h6--host {display: none !important;}
 
 /* Consent Manager */
 .css-17ss3j2 {background: inherit !important; padding: inherit !important; font-family: inherit !important; font-weight: inherit !important; letter-spacing: inherit !important; font-size: inherit !important; line-height: inherit !important;}
