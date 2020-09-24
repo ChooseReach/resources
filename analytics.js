@@ -57,7 +57,7 @@ window.consentManagerConfig = function(exports) {
   }
 }
 
-reachLoadScriptSync('https://cdn.jsdelivr.net/npm/@segment/consent-manager@4.0.0/commonjs/index.min.js');
+reachLoadScriptSync('https://www.unpkg.com/@segment/consent-manager@5.0.1/standalone/consent-manager.js');
 
 !(function() {
   var analytics = (window.analytics = window.analytics || []);
