@@ -57,7 +57,7 @@ window.consentManagerConfig = function(exports) {
   }
 }
 
-reachLoadScriptSync('https://cdn.jsdelivr.net/npm/@segment/consent-manager@5.0.1/commonjs/index.min.js');
+reachLoadScriptSync('https://cdn.jsdelivr.net/npm/@segment/consent-manager@4.0.0/commonjs/index.min.js');
 
 !(function() {
   var analytics = (window.analytics = window.analytics || []);
