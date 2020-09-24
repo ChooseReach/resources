@@ -41,9 +41,6 @@ video {display:block;}
 /* Stripe */
 .ElementsApp {font-size:5vw !important;}
 
-/* Disqus */
-.disqus-loading.is-hidden {display: none;}
-
 /* Colorize */
 .colorize {-webkit-animation:colorize 20s infinite;animation:colorize 10s infinite;-webkit-animation-direction:alternate;animation-direction:alternate;}
 
