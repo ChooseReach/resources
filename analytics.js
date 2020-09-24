@@ -63,8 +63,6 @@ window.consentManagerConfig = function(exports) {
   }
 }
 
-reachLoadScriptSync('https://www.unpkg.com/@segment/consent-manager@5.0.1/standalone/consent-manager.js');
-
 !(function() {
   var analytics = (window.analytics = window.analytics || []);
   if (!analytics.initialize)
