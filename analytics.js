@@ -1,7 +1,7 @@
 function consentManagerConfig(exports) {
     return {
         container: '#consent-manager',
-        writeKey: '1JjjWP9mIT3qIFpQEAh1qChXVXzxH0kP',
+        writeKey: segmentKey,
         bannerContent:'By using our website, you agree to our',
         bannerSubContent: 'Cookie Policy',
         preferencesDialogTitle: 'Data Collection Preferences',
