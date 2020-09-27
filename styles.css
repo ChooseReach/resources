@@ -18,6 +18,9 @@ button {background-color:transparent;}
 /* Videos */
 video {display:block;}
 
+/* Ecommerce */
+.cart__menu {top: 4em;}
+
 /* Transcripts */
 .vlog__richtext li a {text-decoration:underline;}
 .vlog__richtext ul li {background-color:#F0F0F0;background-image:none;color:#1b2229;padding-left:.55em;}
@@ -29,6 +32,7 @@ video {display:block;}
 .vlog__richtext ol > li {border-top-left-radius:1em; border-bottom-left-radius:1em;}
 .vlog__richtext ol li:last-child {border-bottom-right-radius:1em;}
 .vlog__richtext ol li a {color:white;}
+.vlog__richtext figure iframe {border-radius: .5em; width: 100%;}
 
 /* Consent Manager */
 .css-17ss3j2 {background:inherit !important;padding:inherit !important;font-family:inherit !important;font-weight:inherit !important;letter-spacing:inherit !important;font-size:inherit !important;line-height:inherit !important;}
