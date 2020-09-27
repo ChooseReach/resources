@@ -24,9 +24,6 @@ a.callFilters("promiseQueueMix",i.promise,arguments)},getDataOperation:function(
 /* ProveSrc.js by ProveSrc (0.0.4) */
 !function(o,i){window.provesrc&&window.console&&console.error&&console.error("ProveSource is included twice in this page."),provesrc=window.provesrc={dq:[],display:function(){this.dq.push(arguments)}},o._provesrcAsyncInit=function(){provesrc.init({apiKey:provesrcKey,v:"0.0.4"})};var r=i.createElement("script");r.type="text/javascript",r.async=!0,r["ch"+"ar"+"set"]="UTF-8",r.src="https://cdn.provesrc.com/provesrc.js";var e=i.getElementsByTagName("script")[0];e.parentNode.insertBefore(r,e)}(window,document);
 
-/* iFrames */
-function resizeIframe(obj) {obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';}
-
 /* Bookmarks */
 function rudr_favorite(a){pageTitle=document.title,pageURL=document.location;try{eval("window.external.AddFa-vorite(pageURL, pageTitle)".replace(/-/g,""))}catch(e){try{window.sidebar.addPanel(pageTitle,pageURL,"")}catch(e){if("object"==typeof opera)return a.rel="sidebar",a.title=pageTitle,a.url=pageURL,!0;alert("Press "+(-1!=navigator.userAgent.toLowerCase().indexOf("mac")?"Cmd":"Ctrl")+"+D to bookmark this page.")}}return!1}
 
