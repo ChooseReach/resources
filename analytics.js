@@ -36,16 +36,9 @@ function reachDebounce(func, timeoutMS) {
     }
 }
 
-console.log("reach script");
-
-// If we the script is for Doctor Suits or Alison Rachiell or Burn Foundation, track every page visit
-
-
-
 // Wrapped in set time out so errors don't propagate and interfere with other scripts
 window.setTimeout(function() {
-
-    
+ 
 /* Analytics.js by Segment (4.1.0) */
 !(function() {
     var analytics = (window.analytics = window.analytics || []);
@@ -121,10 +114,8 @@ window.setTimeout(function() {
                         value: 0
                     });
                     lastScrollPercentage = currentScrollPercentage;
-                    console.log( currentScrollPercentage );
 
                     if (!!reachBadge && !reachBadgeAlreadyScrolledIntoView && isElementScrolledIntoView(reachBadge)) {
-                        console.log("Reach badge scrolled into view.")
                         window.analytics.track('Reach Badge Scrolled Into View', {
                             category: 'Visibility',
                             label: window.location.href,
@@ -141,10 +132,6 @@ window.setTimeout(function() {
                 var closestAnchorTag = event.target.closest("a");
 
                 var clickedElement = closestAnchorTag || event.target;
-
-                console.log("Click");
-                // Log the clicked element in the console
-                console.log(clickedElement);
 
                 // If the clicked element is not a link, don't do anything
                 // Removed this so that we track more click events
@@ -201,7 +188,9 @@ window.setTimeout(function() {
             });
 
             window.analytics.ready(function() {
-                console.log("window analytics ready");
+                console.log("[*] Reach: Version 1.0.0");
+                console.log("[*] Reach: We grow small businesses. Learn more at https://www.ChooseReach.com");
+                
                 var userId = window.analytics.user().anonymousId()
 
                 var allPhoneNumbers = Array.from(document.querySelectorAll("a")).filter(function(a) { return a.href.includes("tel:"); }).map(function(a) { return a.href.replace("tel:", "")});
@@ -222,7 +211,6 @@ window.setTimeout(function() {
                                 "Content-Type": "application/json"
                             },
                             complete: function() {
-                                console.log("Sent contact info to Reach.");
                             }
                         });
                     })
@@ -236,11 +224,9 @@ window.setTimeout(function() {
 // Wrapped in set time out so errors don't propagate and interfere with other scripts
 window.setTimeout(function() {
 
-console.log("Loading Reach.");
 function loadReach() {
     function sendFormToReach (formName, formType) {
         return function (event) {
-            console.log("Sending contact info to Reach2.");
 
             if (window.reachTest === true) {
                 // Don't submit form
@@ -265,8 +251,6 @@ function loadReach() {
                     formValues[name] = t.val()
                 }
             });
-
-            console.log("Form Values: " + JSON.stringify(formValues));
 
             var urlParams = new URLSearchParams(window.location.search);
 
@@ -310,7 +294,6 @@ function loadReach() {
                     "Content-Type": "application/json"
                 },
                 complete: function() {
-                    console.log("Sent contact info to Reach.");
                 }
             });
 
@@ -326,8 +309,6 @@ function loadReach() {
             )
          );
     });
-
-    console.log("Loaded Reach.");
 }
 
 function waitForFormHandlerJquery() {
@@ -347,11 +328,9 @@ waitForFormHandlerJquery();
 // Wrapped in set time out so errors don't propagate and interfere with other scripts
 window.setTimeout(function() {
 
-console.log("Loading Reach.");
 function loadReachReviewForm() {
     function sendReviewFormToReach (formName) {
         return function (event) {
-            console.log("Sending review info to Reach.");
 
             if (window.reachTest === true) {
                 // Don't submit form
@@ -413,8 +392,6 @@ function loadReachReviewForm() {
                 }
             );
 
-            console.log("Form Values: " + JSON.stringify(allReviewData));
-
             var payload = JSON.stringify(allReviewData);
 
             // Send the data using post
@@ -426,7 +403,6 @@ function loadReachReviewForm() {
                     "Content-Type": "application/json"
                 },
                 complete: function() {
-                    console.log("Sent review info to Reach.");
                 }
             });
 
@@ -437,8 +413,6 @@ function loadReachReviewForm() {
     $("form[data-reach-review]").each(function(index, reachForm) {
         $(reachForm).submit(sendReviewFormToReach($(reachForm).attr("data-reach-review") || ""));
     });
-
-    console.log("Loaded Reach.");
 }
 
 function waitForReviewFormHandlerJquery() {
@@ -460,7 +434,6 @@ window.setTimeout(function() {
 
 function loadReachFeedbackForm() {
     function sendFeedback(name, rating, outOf, container) {
-            console.log("Sending feedback to Reach.");
 
             if (window.reachTest === true) {
                 // Don't submit form
@@ -485,14 +458,12 @@ function loadReachFeedbackForm() {
                 complete: function(resp) {
                     var feedbackId = resp.responseJSON.id;
                     container.attr("data-reach-feedback-id", feedbackId);
-                    console.log("Sent feedback to Reach.");
                 }
             });
     }
 
     function sendFeedbackAdditionalDetails (container) {
         return function (event) {
-            console.log("Sending review info to Reach.");
 
             if (window.reachTest === true) {
                 // Don't submit form
@@ -520,7 +491,6 @@ function loadReachFeedbackForm() {
                     "Content-Type": "application/json"
                 },
                 complete: function(resp) {
-                    console.log("Sent feedback details to Reach.");
                 }
             });
 
@@ -541,8 +511,6 @@ function loadReachFeedbackForm() {
 
         $(reachFeedbackWidget).find("[data-reach-feedback-form]").submit(sendFeedbackAdditionalDetails($reachFeedbackWidget));
     });
-
-    console.log("Loaded Reach.");
 }
 
 function waitForFeedbackFormHandlerJquery() {
