@@ -1,7 +1,7 @@
 function consentManagerConfig(exports) {
     return {
         container: '#consent-manager',
-        writeKey: reachConfig.segment,
+        writeKey: reachConfig.segmentWriteKey,
         bannerContent:'By using our website, you agree to our',
         bannerSubContent: 'Cookie Policy',
         preferencesDialogTitle: 'Data Collection Preferences',
@@ -272,9 +272,9 @@ function loadReach() {
                     referrer: document.referrer || "",
                     formName: formName,
                     formType: formType,
-                    businessId: formValues.business || `5eab3a4970b88a8dcc32ba48`,
-                    agencyId: formValues.agency || `5db0cda06169d96a030bba18`,
-                    websiteId: formValues.website || `5f6e428b44fc7312d48c175c`
+                    businessId: formValues.business || reachConfig.businessId,
+                    agencyId: formValues.agency || reachConfig.agency,
+                    websiteId: formValues.website || reachConfig.websiteId
                 },
                 additionalDetails: additionalDetails,
                 segmentIOUserId: (typeof analytics !== "undefined" && typeof analytics.user === "function" && typeof analytics.user().anonymousId === "function" && analytics.user().anonymousId()) || undefined,
@@ -380,9 +380,9 @@ function loadReachReviewForm() {
                 formValues,
                 {
                     referer: document.referrer || "",
-                    businessId: formValues.business || `5eab3a4970b88a8dcc32ba48`,
-                    agencyId: formValues.agency || `5db0cda06169d96a030bba18`,
-                    websiteId: formValues.website || `5f6e428b44fc7312d48c175c`,
+                    businessId: formValues.business || reachConfig.businessId,
+                    agencyId: formValues.agency || reachConfig.agency,
+                    websiteId: formValues.website || reachConfig.websiteId,
                     formName: formName,
                     segmentIOUserId: (typeof analytics !== "undefined" && typeof analytics.user === "function" && typeof analytics.user().anonymousId === "function" && analytics.user().anonymousId()) || undefined,
                     utmSource: urlParams.get('utm_source') || undefined,
@@ -441,7 +441,7 @@ function loadReachFeedbackForm() {
             }
 
             var payload = JSON.stringify({
-                websiteId: '5f6e428b44fc7312d48c175c',
+                websiteId: reachConfig.websiteId,
                 href: window.location.href,
                 ratings: [{"name": name, "rating": rating, "outOf": outOf}],
                 segmentIOUserId: (typeof analytics !== "undefined" && typeof analytics.user === "function" && typeof analytics.user().anonymousId === "function" && analytics.user().anonymousId()) || undefined,
