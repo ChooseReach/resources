@@ -1,7 +1,7 @@
 function consentManagerConfig(exports) {
     return {
         container: '#consent-manager',
-        writeKey: reachConfig.segment,
+        writeKey: reachConfig.segmentWriteKey,
         bannerContent:'By using our website, you agree to our',
         bannerSubContent: 'Cookie Policy',
         preferencesDialogTitle: 'Data Collection Preferences',
