@@ -48,6 +48,10 @@ video {display:block;}
 /* Colorize */
 .colorize {-webkit-animation:colorize 20s infinite;animation:colorize 10s infinite;-webkit-animation-direction:alternate;animation-direction:alternate;}
 
+/* Lightbox */
+.w-lightbox-backdrop {background: white;}
+.w-lightbox-frame {border-radius: 1em; overflow: hidden;}
+
 /* Zoom */  
 img[data-action="zoom"] {cursor:zoom-in;}
 .zoom-img {cursor:zoom-out;border-radius:.5em;}
