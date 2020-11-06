@@ -3,7 +3,7 @@ body {-webkit-overflow-scrolling:touch;}
 
 /* Text */
 .dropcaps p:first-of-type::first-letter {float:left;font-size:3.05em;font-weight:bold;line-height:1em;margin-right:.1em;}
-.dropcaps {float:left;font-size:3.05em;font-weight:bold;line-height:1em;margin-right:.1em;}
+.dropcaps::first-letter {float:left;font-size:3.05em;font-weight:bold;line-height:1em;margin-right:.1em;}
 .crumbs li:last-child {background:none;padding:0;margin:0;}
 
 /* Richtext */
