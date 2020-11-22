@@ -47,4 +47,4 @@ a.callFilters("promiseQueueMix",i.promise,arguments)},getDataOperation:function(
 const lazyVideoOptions={root:null,rootMargin:"0px",threshold:0},videoObserver=new IntersectionObserver(function(e,i){e.forEach(e=>{e.isIntersecting?(e.target.querySelectorAll("source").forEach(function(i){i.dataset.src&&(i.src=i.dataset.src,delete i.dataset.src,e.target.load())}),e.target.play()):e.target.pause()})},lazyVideoOptions);function initializeVideos(){Array.from(document.querySelectorAll("video")).filter(e=>!e.className.includes("video-initialized")).forEach(e=>{e.className=e.className+" video-initialized",videoObserver.observe(e)})}initializeVideos();
 
 /* ReInitialize Scripts on Infinite-Scroll */
-$grid.on("load.infiniteScroll",function(){Webflow.destroy();Webflow.ready();Webflow.require('ix2').init();initializeVideos();});
+$grid.on("load.infiniteScroll",function(){Webflow.destroy();Webflow.ready();Webflow.require('ix2').init();initializeVideos()});
