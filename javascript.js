@@ -30,7 +30,7 @@ var DISQUSWIDGETS,disqus_domain,disqus_shortname;void 0===DISQUSWIDGETS&&(DISQUS
 function rudr_favorite(a){pageTitle=document.title,pageURL=document.location;try{eval("window.external.AddFa-vorite(pageURL, pageTitle)".replace(/-/g,""))}catch(e){try{window.sidebar.addPanel(pageTitle,pageURL,"")}catch(e){if("object"==typeof opera)return a.rel="sidebar",a.title=pageTitle,a.url=pageURL,!0;alert("Press "+(-1!=navigator.userAgent.toLowerCase().indexOf("mac")?"Cmd":"Ctrl")+"+D to bookmark this page.")}}return!1}
 
 /* Resize iFrames */
-function resizeIframes() {Array.from(document.querySelectorAll('iframe')).forEach(o => o.style.height = o.contentWindow.document.body.scrollHeight + 'px')}
+function resizeIframes() {Array.from(document.querySelectorAll('iframe')).forEach(o => o.style.height = o.contentWindow.document.body.scrollHeight + 'px')}resizeIframes();
 
 /* LazyLoad & AutoPause Videos */
 const lazyVideoOptions={root:null,rootMargin:"0px",threshold:0},videoObserver=new IntersectionObserver(function(e,i){e.forEach(e=>{e.isIntersecting?(e.target.querySelectorAll("source").forEach(function(i){i.dataset.src&&(i.src=i.dataset.src,delete i.dataset.src,e.target.load())}),e.target.play()):e.target.pause()})},lazyVideoOptions);function initializeVideos(){Array.from(document.querySelectorAll("video")).filter(e=>!e.className.includes("video-initialized")).forEach(e=>{e.className=e.className+" video-initialized",videoObserver.observe(e)})}initializeVideos();
