@@ -14,7 +14,7 @@ body {-webkit-overflow-scrolling:touch;}
 * {-webkit-tap-highlight-color:rgba(0, 0, 0, 0);}
 input[type=text],input[type=email],input[type=search],input[type=radio],input[type=url],textarea,select {-webkit-appearance:none;}
 input:focus, button:focus, a:focus {outline:0;}
-input[type=email]:invalid,input[type=url]:invalid {border: 1px solid red;}
+input[type=url]:invalid {border: 1px solid red;}
 button {background-color:transparent;}
 
 /* Videos */
