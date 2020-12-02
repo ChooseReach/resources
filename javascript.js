@@ -1,4 +1,4 @@
-/* LazyLoad & AutoPause Videos 569B */
+/* LazyVideos.js by Reach (0.0.0 - 569B) */
 const lazyVideoOptions={root:null,rootMargin:"0px",threshold:0},videoObserver=new IntersectionObserver(function(e,i){e.forEach(e=>{e.isIntersecting?(e.target.querySelectorAll("source").forEach(function(i){i.dataset.src&&(i.src=i.dataset.src,delete i.dataset.src,e.target.load())}),e.target.play()):e.target.pause()})},lazyVideoOptions);function initializeVideos(){Array.from(document.querySelectorAll("video")).filter(e=>!e.className.includes("video-initialized")).forEach(e=>{e.className=e.className+" video-initialized",videoObserver.observe(e)})}initializeVideos();
 
 /* Count.js by Disqus (0.0.0 - 1.3KB) */
