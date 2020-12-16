@@ -64,3 +64,6 @@ img[data-action="zoom"] {cursor:zoom-in;}
 /* Selectize */
 .selectize-input>input{display: inline-block !important;padding: 0 !important;min-height: 0 !important;max-height: none !important;max-width: 100% !important;margin: 0 !important;text-indent: 0 !important;border: 0 none !important;background: none !important;line-height: inherit !important;user-select: auto !important;box-shadow: none !important}
 .selectize-input>input::placeholder{color:black}
+
+/* Hide Elements with Empty Src Attributes */
+img[src=''],iframe[src=''],video[src=''] {display:none}
