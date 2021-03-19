@@ -18,7 +18,9 @@ input[type=url]:invalid {border: 1px solid red;}
 button {background-color:transparent;}
 
 /* Videos */
-video {display:block;}
+video {display:block;outline:none;line-height:0;}
+.video video {width:102%;height:102%;margin-left:-2px;object-fit:cover;}
+
 
 /* Ecommerce */
 .cart__menu {top: 4em;}
