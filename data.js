@@ -109,17 +109,14 @@ window.setTimeout(function() {
                         scroll_threshold: '' + currentScrollPercentage,
                         scroll_units: 'percent',
                         scroll_direction: 'vertical',
-                        category: 'Scroll',
-                        label: window.location.href,
-                        value: 0
+                        category: 'Scroll'
                     });
                     lastScrollPercentage = currentScrollPercentage;
 
                     if (!!reachBadge && !reachBadgeAlreadyScrolledIntoView && isElementScrolledIntoView(reachBadge)) {
-                        window.analytics.track('Reach Badge Scrolled Into View', {
-                            category: 'Visibility',
-                            label: window.location.href,
-                            value: 0
+                        window.analytics.track('Element Visible', {
+                            element_id: 'Reach-Badge',
+                            category: 'Visibility'
                         });
                         reachBadgeAlreadyScrolledIntoView = true
                     }
@@ -130,7 +127,6 @@ window.setTimeout(function() {
             document.addEventListener('click', function (event) {
 
                 var closestAnchorTag = event.target.closest("a");
-
                 var clickedElement = closestAnchorTag || event.target;
 
                 // If the clicked element is not a link, don't do anything
@@ -148,13 +144,8 @@ window.setTimeout(function() {
 
                 if (eventName !== "Element Clicked") {
                     window.analytics.track(eventName, {
-                        element_tag_name: tagName,
                         element_id: clickedElement.id,
-                        element_classes: clickedElement.className,
                         element_href: clickedElement.href,
-                        element_src: clickedElement.src,
-                        element_name: clickedElement.name,
-                        element_text_content: clickedElement.textContent,
                         category: 'Click'
                     });
                 }
@@ -179,10 +170,7 @@ window.setTimeout(function() {
                 window.analytics.track('Form Submitted', {
                     form_id: form.id,
                     form_name: form.name,
-                    form_classes: form.className,
-                    form_text: form.textContent,
                     category: 'Form',
-                    label: window.location.href,
                     formData: JSON.stringify($(form).serializeArray())
                 });
             });
