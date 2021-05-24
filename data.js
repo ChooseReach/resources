@@ -92,7 +92,8 @@ window.setTimeout(function() {
             };
             analytics.SNIPPET_VERSION = '4.1.0';
 
-            window.analytics.page("Page Viewed", {});
+            // Page Event Tag
+            window.analytics.page(location.pathname, {});
 
             // Persist the last scroll percentage so we don't send duplicate events one after another (in case of slow scrolling)
             var lastScrollPercentage = null;
@@ -105,51 +106,53 @@ window.setTimeout(function() {
                 var currentScrollPercentage = Math.round((scrolledPixels / ( document.body.scrollHeight - window.innerHeight ) ) * 100);
 
                 if (currentScrollPercentage % 25 === 0 && lastScrollPercentage !== currentScrollPercentage) {
-                    window.analytics.track('Page Scrolled', {
+                    
+                    // Scroll Event Tag
+                    window.analytics.track(location.pathname + ' (' + currentScrollPercentage + '%)', {
                         scroll_threshold: '' + currentScrollPercentage,
                         scroll_units: 'percent',
                         scroll_direction: 'vertical',
-                        category: 'Scroll'
+                        trackType: 'Scroll'
                     });
                     lastScrollPercentage = currentScrollPercentage;
 
                     if (!!reachBadge && !reachBadgeAlreadyScrolledIntoView && isElementScrolledIntoView(reachBadge)) {
-                        window.analytics.track('Element Visible', {
+                        
+                        // View Event Tag
+                        window.analytics.track('Reach Badge Viewed', {
                             element_id: 'Reach-Badge',
-                            category: 'Visibility'
+                            trackType: 'View'
                         });
                         reachBadgeAlreadyScrolledIntoView = true
                     }
                 }
             });
 
-            // Listen to all click events
-            document.addEventListener('click', function (event) {
+             document.addEventListener('click', function (event) {
 
-                var closestAnchorTag = event.target.closest("a");
-                var clickedElement = closestAnchorTag || event.target;
-
-                // If the clicked element is not a link, don't do anything
-                // Removed this so that we track more click events
-                // if (!event.target.matches('a')) return;
-
-                var tagName = clickedElement.tagName.toLowerCase();
-
+                var closestAnchorTag = event.target.closest('a');
+                var closestButtonTag = event.target.closest('button');
+                var clickedElement = closestAnchorTag || closestButtonTag || event.target;
+                var clickedElementTag = clickedElement.tagName.toLowerCase();
+                var clickedElementId = clickedElement.id;          
                 var eventName = 'Element Clicked';
-                if (tagName === "a") {
-                    eventName = "Link Clicked";
-                } else if (tagName === "button") {
-                    eventName = "Button Clicked";
-                }
 
-                if (eventName !== "Element Clicked") {
+                if (clickedElementTag === 'a' && elementId !== '') {eventName = elementId + ' Clicked';} 
+                else if (clickedElementTag === 'a') {eventName = 'Link Clicked';} 
+                else if (clickedElementTag === 'button' && elementId !== '') {eventName = elementId + ' Clicked';}
+                else if (clickedElementTag === 'button') {eventName = 'Button Clicked';} 
+
+                if (eventName !== 'Element Clicked') {
+
+                    // Click Event Tag
                     window.analytics.track(eventName, {
                         element_id: clickedElement.id,
                         element_href: clickedElement.href,
-                        category: 'Click'
+                        trackType: 'Click'
                     });
                 }
             }, false);
+
 
             document.addEventListener('submit', function(event) {
                 // If this is not a form, do nothing
@@ -167,10 +170,10 @@ window.setTimeout(function() {
                     phone: maybePhoneElement && maybePhoneElement.value,
                 });
 
-                window.analytics.track('Form Submitted', {
+                window.analytics.track(form.name + ' Submitted', {
                     form_id: form.id,
                     form_name: form.name,
-                    category: 'Form',
+                    trackType: 'Form',
                     formData: JSON.stringify($(form).serializeArray())
                 });
             });
