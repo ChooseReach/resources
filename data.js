@@ -137,9 +137,9 @@ window.setTimeout(function() {
                 var clickedElementId = clickedElement.id;          
                 var eventName = 'Element Clicked';
 
-                if (clickedElementTag === 'a' && elementId !== '') {eventName = elementId + ' Clicked';} 
+                if (clickedElementTag === 'a' && clickedElementId !== '') {eventName = clickedElementId + ' Clicked';} 
                 else if (clickedElementTag === 'a') {eventName = 'Link Clicked';} 
-                else if (clickedElementTag === 'button' && elementId !== '') {eventName = elementId + ' Clicked';}
+                else if (clickedElementTag === 'button' && clickedElementId !== '') {eventName = clickedElementId + ' Clicked';}
                 else if (clickedElementTag === 'button') {eventName = 'Button Clicked';} 
 
                 if (eventName !== 'Element Clicked') {
