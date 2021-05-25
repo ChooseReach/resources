@@ -134,7 +134,9 @@ window.setTimeout(function() {
                 var closestButtonTag = event.target.closest('button');
                 var clickedElement = closestAnchorTag || closestButtonTag || event.target;
                 var clickedElementTag = clickedElement.tagName.toLowerCase();
-                var clickedElementId = clickedElement.id;          
+                var clickedElementClass = clickedElement.className;
+                var clickedElementId = clickedElement.id;
+                var clickedElementHref = clickedElement.href; 
                 var eventName = 'Element Clicked';
 
                 if (clickedElementTag === 'a' && clickedElementId !== '') {eventName = clickedElementId + ' Clicked';} 
@@ -146,8 +148,10 @@ window.setTimeout(function() {
 
                     // Click Event Tag
                     window.analytics.track(eventName, {
-                        element_id: clickedElement.id,
-                        element_href: clickedElement.href,
+                        element_tag: clickedElementTag,
+                        element_class: clickedElementClass,
+                        element_id: clickedElementId,
+                        element_href: clickedElementHref,
                         trackType: 'Click'
                     });
                 }
