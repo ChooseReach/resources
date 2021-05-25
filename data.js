@@ -112,7 +112,7 @@ window.setTimeout(function() {
                         scroll_threshold: '' + currentScrollPercentage,
                         scroll_units: 'percent',
                         scroll_direction: 'vertical',
-                        trackType: 'Scroll'
+                        trackCategory: 'Scroll'
                     });
                     lastScrollPercentage = currentScrollPercentage;
 
@@ -121,7 +121,7 @@ window.setTimeout(function() {
                         // View Event Tag
                         window.analytics.track('Reach Badge Viewed', {
                             element_id: 'Reach-Badge',
-                            trackType: 'View'
+                            trackCategory: 'View'
                         });
                         reachBadgeAlreadyScrolledIntoView = true
                     }
@@ -152,7 +152,7 @@ window.setTimeout(function() {
                         element_class: clickedElementClass,
                         element_id: clickedElementId,
                         element_href: clickedElementHref,
-                        trackType: 'Click'
+                        trackCategory: 'Click'
                     });
                 }
             }, false);
@@ -177,7 +177,7 @@ window.setTimeout(function() {
                 window.analytics.track(form.id + ' Submitted', {
                     form_id: form.id,
                     form_name: form.name,
-                    trackType: 'Form',
+                    trackCategory: 'Form',
                     formData: JSON.stringify($(form).serializeArray())
                 });
             });
