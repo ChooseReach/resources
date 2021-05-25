@@ -117,7 +117,7 @@ window.setTimeout(function() {
                 if (currentScrollPercentage % 5 === 0 && lastScrollPercentage !== currentScrollPercentage) {
                     impressionsToTrack.filter(impression => {
                         // Don't track the same impression twice
-                        return impressionsAlreadyTracked[impression.attr(dataReachImpressionTag)] === true
+                        return impressionsAlreadyTracked[impression.attr(dataReachImpressionTag)] === false
                     }).forEach(impressionToTrack => {
                         var impressionName = impressionToTrack.attr(dataReachImpressionTag)
                         if (isElementScrolledIntoView(impressionToTrack)) {
