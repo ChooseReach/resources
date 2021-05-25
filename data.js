@@ -174,7 +174,7 @@ window.setTimeout(function() {
                     phone: maybePhoneElement && maybePhoneElement.value,
                 });
 
-                window.analytics.track(form.name + ' Submitted', {
+                window.analytics.track(form.id + ' Submitted', {
                     form_id: form.id,
                     form_name: form.name,
                     trackType: 'Form',
