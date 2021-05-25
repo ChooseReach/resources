@@ -109,10 +109,10 @@ window.setTimeout(function() {
                     
                     // Scroll Event Tag
                     window.analytics.track(location.pathname + ' (' + currentScrollPercentage + '%)', {
+                        track_category: 'Scroll',
                         scroll_threshold: '' + currentScrollPercentage,
                         scroll_units: 'percent',
-                        scroll_direction: 'vertical',
-                        trackCategory: 'Scroll'
+                        scroll_direction: 'vertical'
                     });
                     lastScrollPercentage = currentScrollPercentage;
 
@@ -120,8 +120,8 @@ window.setTimeout(function() {
                         
                         // View Event Tag
                         window.analytics.track('Reach Badge Viewed', {
-                            element_id: 'Reach-Badge',
-                            trackCategory: 'View'
+                            track_category: 'View',
+                            element_id: 'Reach-Badge'
                         });
                         reachBadgeAlreadyScrolledIntoView = true
                     }
@@ -136,7 +136,10 @@ window.setTimeout(function() {
                 var clickedElementTag = clickedElement.tagName.toLowerCase();
                 var clickedElementClass = clickedElement.className;
                 var clickedElementId = clickedElement.id;
-                var clickedElementHref = clickedElement.href; 
+                var clickedElementHref = clickedElement.href;
+                var conversionCategory = clickedElement.dataset.reachConversionCategory;
+                var conversionType = clickedElement.dataset.reachConversionType;
+                var conversionName = clickedElement.dataset.reachConversionName;
                 var eventName = 'Element Clicked';
 
                 if (clickedElementTag === 'a' && clickedElementId !== '') {eventName = clickedElementId + ' Clicked';} 
@@ -148,11 +151,14 @@ window.setTimeout(function() {
 
                     // Click Event Tag
                     window.analytics.track(eventName, {
+                        track_category: 'Click',
                         element_tag: clickedElementTag,
                         element_class: clickedElementClass,
                         element_id: clickedElementId,
                         element_href: clickedElementHref,
-                        trackCategory: 'Click'
+                        conversion_category: conversionCategory,
+                        conversion_type: conversionType,
+                        conversion_name: conversionName
                     });
                 }
             }, false);
@@ -163,6 +169,9 @@ window.setTimeout(function() {
                 if (!event.target.matches('form')) return;
 
                 var form = event.target;
+                var conversionCategory = form.dataset.reachConversionCategory;
+                var conversionType = form.dataset.reachConversionType;
+                var conversionName = form.dataset.reachConversionName;
 
                 var maybeNameElement = form.querySelector("[data-reach-input='name']");
                 var maybeEmailElement = form.querySelector("[data-reach-input='email']");
@@ -174,10 +183,14 @@ window.setTimeout(function() {
                     phone: maybePhoneElement && maybePhoneElement.value,
                 });
 
+                // Form Event Tag
                 window.analytics.track(form.id + ' Submitted', {
+                    track_category: 'Form',
                     form_id: form.id,
                     form_name: form.name,
-                    trackCategory: 'Form',
+                    conversion_category: conversionCategory,
+                    conversion_type: conversionType,
+                    conversion_name: conversionName,
                     formData: JSON.stringify($(form).serializeArray())
                 });
             });
