@@ -13,13 +13,13 @@ function consentManagerConfig(exports) {
     }
 }
 
-function isElementScrolledIntoView(elem)
+function isElementScrolledIntoView($elem)
 {
     var docViewTop = $(window).scrollTop();
     var docViewBottom = docViewTop + $(window).height();
 
-    var elemTop = $(elem).offset().top;
-    var elemBottom = elemTop + $(elem).height();
+    var elemTop = $elem.offset().top;
+    var elemBottom = elemTop + $elem.height();
 
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
 }
@@ -97,14 +97,41 @@ window.setTimeout(function() {
 
             // Persist the last scroll percentage so we don't send duplicate events one after another (in case of slow scrolling)
             var lastScrollPercentage = null;
-            var reachBadgeAlreadyScrolledIntoView = false;
-            var reachBadge = document.querySelector("#Reach-Badge");
+            // If these are scrolled into view, we want to track that
+            var dataReachImpressionTag= "data-reach-impression"
+            var impressionsToTrack = Array.from(document.querySelectorAll("[" + dataReachImpressionTag + "]"))
+                .map(element => $(element))
+            // These impressions have already been tracked
+            var impressionsAlreadyTracked = {}
+            Array.from(impressionsToTrack).map(element => $(element).attr(dataReachImpressionTag))
+                .forEach(impressionName => {
+                    impressionsAlreadyTracked[impressionName] = false
+                })
 
             // Send scroll events to segment every 25%
             window.addEventListener('scroll', function() {
                 var scrolledPixels = document.body.scrollTop || document.documentElement.scrollTop
                 var currentScrollPercentage = Math.round((scrolledPixels / ( document.body.scrollHeight - window.innerHeight ) ) * 100);
 
+                // Every 10% scrolled, check to see if there are any impressions to track
+                if (currentScrollPercentage % 5 === 0 && lastScrollPercentage !== currentScrollPercentage) {
+                    impressionsToTrack.filter(impression => {
+                        // Don't track the same impression twice
+                        return impressionsAlreadyTracked[impression.attr(dataReachImpressionTag)] === true
+                    }).forEach(impressionToTrack => {
+                        var impressionName = impressionToTrack.attr(dataReachImpressionTag)
+                        if (isElementScrolledIntoView(impressionToTrack)) {
+                            impressionsAlreadyTracked[impressionName] = true
+                            console.log(impressionName + " scrolled into view.")
+                            window.analytics.track(impressionName + " Viewed", {
+                                category: 'Visibility',
+                                label: window.location.href,
+                                value: 0
+                            });
+                        }
+                    })
+                }
+                
                 if (currentScrollPercentage % 25 === 0 && lastScrollPercentage !== currentScrollPercentage) {
                     
                     // Scroll Event Tag
@@ -115,16 +142,6 @@ window.setTimeout(function() {
                         scroll_direction: 'vertical'
                     });
                     lastScrollPercentage = currentScrollPercentage;
-
-                    if (!!reachBadge && !reachBadgeAlreadyScrolledIntoView && isElementScrolledIntoView(reachBadge)) {
-                        
-                        // View Event Tag
-                        window.analytics.track('Reach Badge Viewed', {
-                            track_category: 'View',
-                            element_id: 'Reach-Badge'
-                        });
-                        reachBadgeAlreadyScrolledIntoView = true
-                    }
                 }
             });
 
