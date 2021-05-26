@@ -157,6 +157,7 @@ window.setTimeout(function() {
                 var conversionCategory = clickedElement.dataset.reachConversionCategory;
                 var conversionType = clickedElement.dataset.reachConversionType;
                 var conversionName = clickedElement.dataset.reachConversionName;
+                var conversionRating = clickedElement.dataset.reachConversionRating;
                 var eventName = 'Element Clicked';
 
                 if (clickedElementTag === 'a' && clickedElementId !== '') {eventName = clickedElementId + ' Clicked';} 
@@ -175,7 +176,8 @@ window.setTimeout(function() {
                         element_href: clickedElementHref,
                         conversion_category: conversionCategory,
                         conversion_type: conversionType,
-                        conversion_name: conversionName
+                        conversion_name: conversionName,
+                        conversion_rating: conversionRating
                     });
                 }
             }, false);
