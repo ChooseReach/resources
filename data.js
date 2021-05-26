@@ -123,11 +123,9 @@ window.setTimeout(function() {
                         if (isElementScrolledIntoView(impressionToTrack)) {
                             impressionsAlreadyTracked[impressionName] = true
                             console.log(impressionName + " scrolled into view.")
-                            window.analytics.track(impressionName + " Viewed", {
-                                category: 'Visibility',
-                                label: window.location.href,
-                                value: 0
-                            });
+                            
+                            // Impression Event Tag
+                            window.analytics.track(impressionName + ' Viewed', {track_category: 'Impression'});
                         }
                     })
                 }
