@@ -1,3 +1,7 @@
+console.log("[*] Reach: Version 1.0.0");
+console.log("[*] Reach: Data Driven Marketing. Learn more at https://www.ChooseReach.com");
+
+//Consent Manager
 function consentManagerConfig(exports) {
     return {
         container: '#consent-manager',
@@ -39,7 +43,7 @@ function reachDebounce(func, timeoutMS) {
 // Wrapped in set time out so errors don't propagate and interfere with other scripts
 window.setTimeout(function() {
  
-/* Analytics.js by Segment (4.1.0) */
+// Analytics.js by Segment (4.1.0)
 !(function() {
     var analytics = (window.analytics = window.analytics || []);
     if (!analytics.initialize)
@@ -92,57 +96,204 @@ window.setTimeout(function() {
             };
             analytics.SNIPPET_VERSION = '4.1.0';
 
-            // Page Event Tag
-            window.analytics.page(location.pathname, {});
+            // Page Events
+            function round(value, precision) {
+                var multiplier = Math.pow(10, precision || 0);
+                return Math.round(value * multiplier) / multiplier;
+            }
 
-            // Persist the last scroll percentage so we don't send duplicate events one after another (in case of slow scrolling)
-            var lastScrollPercentage = null;
-            // If these are scrolled into view, we want to track that
-            var dataReachImpressionTag= "data-reach-impression"
-            var impressionsToTrack = Array.from(document.querySelectorAll("[" + dataReachImpressionTag + "]"))
-                .map(element => $(element))
-            // These impressions have already been tracked
-            var impressionsAlreadyTracked = {}
-            Array.from(impressionsToTrack).map(element => $(element).attr(dataReachImpressionTag))
-                .forEach(impressionName => {
-                    impressionsAlreadyTracked[impressionName] = false
-                })
+            let
+                connection = navigator.connection,
+                time = performance.getEntriesByType('navigation')[0],
+                paint = performance.getEntriesByType('paint'),
 
-            // Send scroll events to segment every 25%
-            window.addEventListener('scroll', function() {
-                var scrolledPixels = document.body.scrollTop || document.documentElement.scrollTop
-                var currentScrollPercentage = Math.round((scrolledPixels / ( document.body.scrollHeight - window.innerHeight ) ) * 100);
+                platform = navigator.platform,
+                vendor = navigator.vendor,
+                memory = navigator.deviceMemory,
+                windowWidth = visualViewport.width,
+                windowHeight = visualViewport.height,
 
-                // Every 10% scrolled, check to see if there are any impressions to track
-                if (currentScrollPercentage % 5 === 0 && lastScrollPercentage !== currentScrollPercentage) {
-                    impressionsToTrack.filter(impression => {
-                        // Don't track the same impression twice
-                        return impressionsAlreadyTracked[impression.attr(dataReachImpressionTag)] === false
-                    }).forEach(impressionToTrack => {
-                        var impressionName = impressionToTrack.attr(dataReachImpressionTag)
-                        if (isElementScrolledIntoView(impressionToTrack)) {
-                            impressionsAlreadyTracked[impressionName] = true
-                            console.log(impressionName + " scrolled into view.")
-                            
-                            // Impression Event Tag
-                            window.analytics.track(impressionName + ' Viewed', {track_category: 'Impression'});
-                        }
-                    })
+                connectionType = connection.effectiveType,
+                downLink = connection.downlink,
+                roundTrip = connection.rtt,
+
+                startTime = time.startTime,
+                redirectStart = time.redirectStart,
+                redirectEnd = time.redirectEnd,
+                fetchStart = time.fetchStart,
+                dnsStart = time.domainLookupStart,
+                dnsEnd = time.domainLookupEnd,
+                connectStart = time.connectStart,
+                sslStart = time.secureConnectionStart,
+                connectEnd = time.connectEnd,
+                requestStart = time.requestStart,
+                responseStart = time.responseStart,
+                responseEnd = time.responseEnd,
+                domInteractive = time.domInteractive,
+                domContentStart = time.domContentLoadedEventStart,
+                domContentEnd = time.domContentLoadedEventEnd,
+                domComplete = time.domComplete,
+                loadStart = time.loadEventStart,
+                loadEnd = time.loadEventEnd,
+
+                redirect_time = redirectEnd - redirectStart,
+                fetch_time = dnsStart - fetchStart,
+                dns_time = dnsEnd - dnsStart,
+                connect_time = sslStart - connectStart,
+                ssl_time = connectEnd - sslStart,
+                tcp_time = connectEnd - connectStart,
+                request_time = responseStart - requestStart,
+                response_time = responseEnd - responseStart,
+                processing_time = domComplete - domInteractive,
+                domContent_time = domContentEnd - domContentStart,
+                load_time = loadEnd - loadStart,
+
+                firstByte = responseStart - startTime,
+                firstPaint = paint[0].startTime,
+                firstContentfulPaint = paint[1].startTime,
+                pageLoad = loadEnd - startTime,
+                transferSize = time.transferSize,
+                decodedBodySize = time.decodedBodySize;
+
+            window.analytics.page(location.pathname, {
+                platform: platform,
+                vendor: vendor,
+                memory: memory,
+                windowWidth: windowWidth,
+                windowHeight: windowHeight,
+                connectionType: connectionType,
+                downLink: downLink,
+                roundTrip: roundTrip,
+                startTime: startTime,
+                redirectStart: redirectStart,
+                redirectEnd: redirectEnd,
+                fetchStart: fetchStart,
+                dnsStart: dnsStart,
+                dnsEnd: dnsEnd,
+                connectStart: connectStart,
+                sslStart: sslStart,
+                connectEnd: connectEnd,
+                requestStart: requestStart,
+                responseStart: responseStart,
+                responseEnd: responseEnd,
+                domInteractive: domInteractive,
+                domContentStart: domContentStart,
+                domContentEnd: domContentEnd,
+                domComplete: domComplete,
+                loadStart: loadStart,
+                loadEnd: loadEnd,
+                redirect_time: redirect_time,
+                fetch_time: fetch_time,
+                dns_time: dns_time,
+                connect_time: connect_time,
+                ssl_time: ssl_time,
+                tcp_time: tcp_time,
+                request_time: request_time,
+                response_time: response_time,
+                processing_time: processing_time,
+                domContent_time: domContent_time,
+                load_time: load_time,
+                firstByte: firstByte,
+                firstPaint: firstPaint,
+                firstContentfulPaint: firstContentfulPaint,
+                pageLoad: pageLoad,
+                transferSize: transferSize,
+                decodedBodySize: decodedBodySize
+            });
+            
+            console.log('Platform: ' + platform);
+            console.log('Vendor: ' + vendor);
+            console.log('Device Memory: ' + memory + 'GB');
+            console.log('Window Width: ' + windowWidth + 'px');
+            console.log('Window Heigt: ' + windowHeight + 'px');
+
+            console.log('Connection Type: ' + connectionType);
+            console.log('Connection Speed: ' + downLink + 'MBPS');
+            console.log('Round Trip Time: ' + roundTrip + 'ms');
+
+            console.log('Start Time: ' + round(startTime,2) + 'ms');
+            console.log('Redirect Start: ' + round(redirectStart,2) + 'ms');
+            console.log('Redirect End: ' + round(redirectEnd,2) + 'ms');
+            console.log('Fetch Start: ' + round(fetchStart,2) + 'ms');
+            console.log('DNS Start: ' + round(dnsStart,2) + 'ms');
+            console.log('DNS End: ' + round(dnsEnd,2) + 'ms');
+            console.log('Connect Start: ' + round(connectStart,2) + 'ms');
+            console.log('SSL Start: ' + round(sslStart,2) + 'ms');
+            console.log('Connect End: ' + round(connectEnd,2) + 'ms');
+            console.log('Request Start: ' + round(requestStart,2) + 'ms');
+            console.log('Response Start: ' + round(responseStart,2) + 'ms');
+            console.log('Response End: ' + round(responseEnd,2) + 'ms');
+            console.log('DOM Interactive: ' + round(domInteractive,2) + 'ms');
+            console.log('DOM Content Start: ' + round(domContentStart,2) + 'ms');
+            console.log('DOM Content End: ' + round(domContentEnd,2) + 'ms');
+            console.log('DOM Complete: ' + round(domComplete,2) + 'ms');
+            console.log('Load Start: ' + round(loadStart,2) + 'ms');
+            console.log('Load End: ' + round(loadEnd,2) + 'ms');
+
+            console.log('Redirect Time: ' + round(redirect_time,2) + 'ms');
+            console.log('Fetch Time: ' + round(fetch_time,2) + 'ms');
+            console.log('DNS Time: ' + round(dns_time,2) + 'ms');
+            console.log('Connect Time: ' + round(connect_time,2) + 'ms');
+            console.log('SSL Time: ' + round(ssl_time,2) + 'ms');
+            console.log('TCP Time: ' + round(tcp_time,2) + 'ms');
+            console.log('Request Time: ' + round(request_time,2) + 'ms');
+            console.log('Response Time: ' + round(response_time,2) + 'ms');
+            console.log('Processing Time: ' + round(processing_time,2) + 'ms');
+            console.log('DOM Content Time: ' + round(domContent_time,2) + 'ms');
+            console.log('Load Time: ' + round(load_time,2) + 'ms');
+
+            console.log('First Byte: ' + round(firstByte/1000,2) + 'sec');
+            console.log('First Paint: ' + round(firstPaint/1000,2) + 'sec');
+            console.log('First Contentful Paint: ' + round(firstContentfulPaint/1000,2) + 'sec');
+            console.log('Page Load: ' + round(pageLoad/1000,2) + 'sec');
+            console.log('Transfer Size: ' + round(transferSize/1000,2) + 'kb');
+            console.log('Decoded Body Size: ' + round(decodedBodySize/1000,2) + 'kb');
+
+            console.log("[*] Reach: Version 1.0.0");
+            console.log("[*] Reach: Data Driven Marketing. Learn more at https://www.ChooseReach.com");
+                        
+            // Scroll Events
+            var scrollWrapper = document.querySelector('main');
+            var scrollTracker = document.getElementById('scrollTracker');
+            var scrollEvents = document.querySelectorAll('[data-reach-scroll]');
+
+            if(scrollTracker){scrollWrapper.appendChild(scrollTracker)};
+
+            scrollObserver = new IntersectionObserver(entries => {
+              entries.forEach(entry => {if (entry.isIntersecting) {
+                  window.analytics.track(location.pathname + ' (Scrolled ' + entry.target.dataset.reachScroll + '%)', {
+                      track_category: 'Scroll'
+                  });
+                  console.log(location.pathname + ' (Scrolled ' + entry.target.dataset.reachScroll + '%)');
+                  //scrollObserver.unobserve(entry.target);
                 }
-                
-                if (currentScrollPercentage % 25 === 0 && lastScrollPercentage !== currentScrollPercentage) {
-                    
-                    // Scroll Event Tag
-                    window.analytics.track(location.pathname + ' (' + currentScrollPercentage + '%)', {
-                        track_category: 'Scroll',
-                        scroll_threshold: '' + currentScrollPercentage,
-                        scroll_units: 'percent',
-                        scroll_direction: 'vertical'
-                    });
-                    lastScrollPercentage = currentScrollPercentage;
+              })
+            })
+
+            scrollEvents.forEach(scroll => {scrollObserver.observe(scroll)})
+
+            // Impression Events
+            const impressionEvents = document.querySelectorAll('form,[data-reach-impression]');
+            impressionObserver = new IntersectionObserver(entries => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  window.analytics.track(entry.target.id + ' Viewed', {
+                      track_category: 'Impression',
+                      element_id: entry.target.id,
+                      element_class: entry.target.className,
+                  });
+                  console.log(entry.target.id + ' Viewed');
+                  impressionObserver.unobserve(entry.target);
                 }
+              });
             });
 
+            impressionEvents.forEach(impression => {impressionObserver.observe(impression);});
+
+            // Hover Events
+
+
+             // Click Events
              document.addEventListener('click', function (event) {
 
                 var closestAnchorTag = event.target.closest('a');
@@ -164,8 +315,6 @@ window.setTimeout(function() {
                 else if (clickedElementTag === 'button') {eventName = 'Button Clicked';} 
 
                 if (eventName !== 'Element Clicked') {
-
-                    // Click Event Tag
                     window.analytics.track(eventName, {
                         track_category: 'Click',
                         element_tag: clickedElementTag,
@@ -177,10 +326,12 @@ window.setTimeout(function() {
                         conversion_name: conversionName,
                         conversion_rating: conversionRating
                     });
+                    console.log(eventName);
                 }
             }, false);
 
 
+            // Form Events
             document.addEventListener('submit', function(event) {
                 // If this is not a form, do nothing
                 if (!event.target.matches('form')) return;
@@ -200,7 +351,6 @@ window.setTimeout(function() {
                     phone: maybePhoneElement && maybePhoneElement.value,
                 });
 
-                // Form Event Tag
                 window.analytics.track(form.id + ' Submitted', {
                     track_category: 'Form',
                     form_id: form.id,
@@ -210,11 +360,10 @@ window.setTimeout(function() {
                     conversion_name: conversionName,
                     formData: JSON.stringify($(form).serializeArray())
                 });
+                console.log(form.id + ' Submitted');
             });
 
             window.analytics.ready(function() {
-                console.log("[*] Reach: Version 1.0.0");
-                console.log("[*] Reach: We grow small businesses. Learn more at https://www.ChooseReach.com");
                 
                 var userId = window.analytics.user().anonymousId()
 
