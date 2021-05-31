@@ -99,6 +99,52 @@ window.onload = function(){
                     transferSize = time.transferSize,
                     decodedBodySize = time.decodedBodySize;
 
+                const pageProperties = {
+                    platform: platform,
+                    vendor: vendor,
+                    memory: memory,
+                    windowWidth: windowWidth,
+                    windowHeight: windowHeight,
+                    connectionType: connectionType,
+                    downLink: downLink,
+                    roundTrip: roundTrip,
+                    startTime: startTime,
+                    redirectStart: redirectStart,
+                    redirectEnd: redirectEnd,
+                    fetchStart: fetchStart,
+                    dnsStart: dnsStart,
+                    dnsEnd: dnsEnd,
+                    connectStart: connectStart,
+                    sslStart: sslStart,
+                    connectEnd: connectEnd,
+                    requestStart: requestStart,
+                    responseStart: responseStart,
+                    responseEnd: responseEnd,
+                    domInteractive: domInteractive,
+                    domContentStart: domContentStart,
+                    domContentEnd: domContentEnd,
+                    domComplete: domComplete,
+                    loadStart: loadStart,
+                    loadEnd: loadEnd,
+                    redirect_time: redirect_time,
+                    fetch_time: fetch_time,
+                    dns_time: dns_time,
+                    connect_time: connect_time,
+                    ssl_time: ssl_time,
+                    tcp_time: tcp_time,
+                    request_time: request_time,
+                    response_time: response_time,
+                    processing_time: processing_time,
+                    domContent_time: domContent_time,
+                    load_time: load_time,
+                    firstByte: firstByte,
+                    firstPaint: firstPaint,
+                    firstContentfulPaint: firstContentfulPaint,
+                    pageLoad: pageLoad,
+                    transferSize: transferSize,
+                    decodedBodySize: decodedBodySize
+                };
+
                 // Log page insights and performance data to console.
                 console.log('%cPage Insights','font-weight: bold;font-size:1.2em;');
                 console.log('--');
@@ -161,58 +207,14 @@ window.onload = function(){
                 console.log('Decoded Body Size: ' + round(decodedBodySize/1000,2) + 'kb');
                 console.log('--');
 
-
-                window.analytics.page(location.pathname + ' (Loaded)', {
-                    platform: platform,
-                    vendor: vendor,
-                    memory: memory,
-                    windowWidth: windowWidth,
-                    windowHeight: windowHeight,
-                    connectionType: connectionType,
-                    downLink: downLink,
-                    roundTrip: roundTrip,
-                    startTime: startTime,
-                    redirectStart: redirectStart,
-                    redirectEnd: redirectEnd,
-                    fetchStart: fetchStart,
-                    dnsStart: dnsStart,
-                    dnsEnd: dnsEnd,
-                    connectStart: connectStart,
-                    sslStart: sslStart,
-                    connectEnd: connectEnd,
-                    requestStart: requestStart,
-                    responseStart: responseStart,
-                    responseEnd: responseEnd,
-                    domInteractive: domInteractive,
-                    domContentStart: domContentStart,
-                    domContentEnd: domContentEnd,
-                    domComplete: domComplete,
-                    loadStart: loadStart,
-                    loadEnd: loadEnd,
-                    redirect_time: redirect_time,
-                    fetch_time: fetch_time,
-                    dns_time: dns_time,
-                    connect_time: connect_time,
-                    ssl_time: ssl_time,
-                    tcp_time: tcp_time,
-                    request_time: request_time,
-                    response_time: response_time,
-                    processing_time: processing_time,
-                    domContent_time: domContent_time,
-                    load_time: load_time,
-                    firstByte: firstByte,
-                    firstPaint: firstPaint,
-                    firstContentfulPaint: firstContentfulPaint,
-                    pageLoad: pageLoad,
-                    transferSize: transferSize,
-                    decodedBodySize: decodedBodySize
-                });
-
+                window.analytics.page(location.pathname + ' (Loaded)', pageProperties);
+                
 
                 // User Experience
                 console.log('%cUser Experience','font-weight: bold;font-size:1.2em;');
                 console.log('--');
-
+                console.log('Page: ' + location.pathname + ' (Loaded)', pageProperties);
+                
                 // Scroll Events
                 var scrollWrapper = document.querySelector('main');
                 var scrollTracker = document.getElementById('scrollTracker');
@@ -226,8 +228,8 @@ window.onload = function(){
                 scrollObserver = new IntersectionObserver(entries => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            window.analytics.track(location.pathname + ' ' + entry.target.dataset.reachScroll + '(% Scrolled)', scrollProperties);
-                            console.log('Scroll:',location.pathname,entry.target.dataset.reachScroll + '(% Scrolled)',scrollProperties);
+                            window.analytics.track(location.pathname + ' (' + entry.target.dataset.reachScroll + '% Scrolled)', scrollProperties);
+                            console.log('Scroll: ' + location.pathname + ' (' + entry.target.dataset.reachScroll + '% Scrolled)', scrollProperties);
                             //scrollObserver.unobserve(entry.target);
                         }
                     })
@@ -247,7 +249,7 @@ window.onload = function(){
                                 element_class: entry.target.className
                             };
                             window.analytics.track(entry.target.id + ' Viewed', impressionProperties);
-                            console.log('Impression:',entry.target.id,'Viewed',impressionProperties);
+                            console.log('Impression: ' + entry.target.id + ' Viewed', impressionProperties);
                             //impressionObserver.unobserve(entry.target);
                         }
                     });
@@ -278,7 +280,7 @@ window.onload = function(){
 
                         if (eventName !== 'Button Hovered') {
                             window.analytics.track(eventName, hoverProperties);
-                            console.log('Hover:',eventName,hoverProperties);
+                            console.log('Hover:',eventName, hoverProperties);
                         }
                     })
                 };
@@ -314,7 +316,7 @@ window.onload = function(){
 
                     if (eventName !== 'Element Clicked') {
                         window.analytics.track(eventName, clickProperties);
-                        console.log('Click:',eventName,clickProperties);
+                        console.log('Click:',eventName, clickProperties);
                     }
                 }, false);
 
@@ -349,7 +351,7 @@ window.onload = function(){
                     });
 
                     window.analytics.track(form.id + ' Submitted', formProperties);
-                    console.log('Form:',form.id,'Submitted',formProperties);
+                    console.log('Form:',form.id,'Submitted', formProperties);
                 });
 
                 window.analytics.ready(function() {
