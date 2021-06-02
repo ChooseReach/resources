@@ -185,7 +185,7 @@ window.onload = function(){
         for(var methods=["load","page","track","identify","reset"],i=0;i<methods.length;i++){var method=methods[i];rudderanalytics[method]=function(t){return function(){rudderanalytics.push([t,...arguments])}}(method)}
 
         // Load CDI
-        rudderanalytics.load("1tGRNuBHhBGOGivTSOik0wPj0te","https://reachcdi.com");
+        rudderanalytics.load(reachConfig.writeKey,"https://reachcdi.com");
         
         // Page Events
         rudderanalytics.page(location.pathname + ' (Loaded)', pageProperties);
