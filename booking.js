@@ -27,4 +27,4 @@ var xhrobj = new XMLHttpRequest();
 xhrobj.open("POST", 'https://api.choosereach.com/webhooks/fareharbor/conversion', true);
 xhrobj.setRequestHeader("Content-type", "application/json");
 xhrobj.send(JSON.stringify(bookingProperties));
-console.log('Booking:',bookingItemName,'Booked', bookingProperties);
+console.log('Booking: ' + bookingItemName + ' Booked', bookingProperties);
