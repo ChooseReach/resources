@@ -1,3 +1,5 @@
+console.log("booking", booking);
+
 const bookingProperties = {
     bookingId: booking.pk,
     bookingPriceCents: booking.priceInCents,
