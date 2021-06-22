@@ -314,9 +314,6 @@ window.onload = function(){
             if (!event.target.matches('form')) return;
 
             var form = event.target;
-            var conversionCategory = form.dataset.reachConversionCategory;
-            var conversionType = form.dataset.reachConversionType;
-            var conversionName = form.dataset.reachConversionName;
 
             var maybeNameElement = form.querySelector("[data-reach-input='name']");
             var maybeEmailElement = form.querySelector("[data-reach-input='email']");
@@ -326,9 +323,6 @@ window.onload = function(){
                 track_category: 'Form',
                 form_id: form.id,
                 form_name: form.name,
-                conversion_category: conversionCategory,
-                conversion_type: conversionType,
-                conversion_name: conversionName,
                 formData: JSON.stringify($(form).serializeArray())
             };
 
