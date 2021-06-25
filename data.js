@@ -6,6 +6,8 @@ window.onload = function(){
         // Because Webflow uses `useCapture` for their embed form event listener on `document`..
         //   we need to remove the listener, and re-add it without useCapture so that our event handling will work.
         // This could break some event handling, so I don't love it but I believe it's the only way.
+        /**
+        Damn get event listeners only works when chrome dev tools is open... Need to figure out a way around that.
         (getEventListeners(document).click || [])
             .forEach(clickEventListener => {
                 if (clickEventListener.useCapture === true) {
@@ -16,6 +18,7 @@ window.onload = function(){
                     document.addEventListener("click", listener, false);
                 }
             })
+        */
         
         // Console Header
         console.log('--');
