@@ -2,6 +2,21 @@
 window.onload = function(){
     window.setTimeout(function(){
 
+        // This allows us to track click events that open Farehabor's lightframe
+        // Because Webflow uses `useCapture` for their embed form event listener on `document`..
+        //   we need to remove the listener, and re-add it without useCapture so that our event handling will work.
+        // This could break some event handling, so I don't love it but I believe it's the only way.
+        (getEventListeners(document).click || [])
+            .forEach(clickEventListener => {
+                if (clickEventListener.useCapture === true) {
+                    const listener = clickEventListener.listener;
+                    // Remove the event listener configured with "useCapture"
+                    document.removeEventListener("click", listener, true);
+                    // Re-add the same event listener without "useCapture"
+                    document.addEventListener("click", listener, false);
+                }
+            })
+        
         // Console Header
         console.log('--');
         console.log('%c%s','font-weight: bold;font-size:1.3em;',location.hostname.toUpperCase());
