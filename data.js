@@ -290,11 +290,9 @@ window.onload = function(){
             })
         };
 
-        
-        // Click Events
-        document.addEventListener('click', function (event) {
-            var closestAnchorTag = event.target.closest('a');
-            var closestButtonTag = event.target.closest('button');
+        function trackClick(element) {
+            var closestAnchorTag = element.closest('a');
+            var closestButtonTag = element.closest('button');
             var clickedElement = closestAnchorTag || closestButtonTag || event.target;
             var clickedElementTag = clickedElement.tagName.toLowerCase();
             var clickedElementClass = clickedElement.className;
@@ -324,6 +322,14 @@ window.onload = function(){
                 rudderanalytics.track(eventName, clickProperties);
                 console.log('Click:',eventName, clickProperties);
             }
+        }
+
+        // Track "Book Now" Fareharbor click events
+        FH.autoLightframe({callback: trackClick});
+        
+        // Click Events
+        document.addEventListener('click', function (event) {
+            trackClick(event.target);
         }, false);
 
 
