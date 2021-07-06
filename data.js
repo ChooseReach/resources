@@ -242,7 +242,7 @@ window.onload = function(){
 
         
         // Impression Events
-        const impressionEvents = document.querySelectorAll("form,[data-reach-track='impression']");
+        const impressionEvents = document.querySelectorAll("form,section,[data-reach-track='impression']");
 
         impressionObserver = new IntersectionObserver(entries => {
             entries.forEach(entry => {
