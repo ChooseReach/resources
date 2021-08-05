@@ -231,8 +231,8 @@ window.onload = function(){
         scrollObserver = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    rudderanalytics.track(location.pathname + ' (' + entry.target.dataset.reachScroll + '% Scrolled)', scrollProperties);
-                    console.log('Scroll: ' + location.pathname + ' (' + entry.target.dataset.reachScroll + '% Scrolled)', scrollProperties);
+                    rudderanalytics.track('Scrolled ' + entry.target.dataset.reachScroll + '%', scrollProperties);
+                    console.log('Scrolled ' + entry.target.dataset.reachScroll + '%', scrollProperties);
                     //scrollObserver.unobserve(entry.target);
                 }
             })
@@ -325,7 +325,7 @@ window.onload = function(){
         }
 
         // Track "Book Now" Fareharbor click events
-        !!window.FH && !!window.FH.autoLightframe({callback: trackClick});
+        !!FH && FH.autoLightframe({callback: trackClick});
         
         function trackClickConversion(eventName) {
           rudderanalytics.track(eventName, {track_category: 'Click'});
