@@ -325,7 +325,7 @@ window.onload = function(){
         }
 
         // Track "Book Now" Fareharbor click events
-        !!FH && FH.autoLightframe({callback: trackClick});
+        !!window.FH && !!window.FH.autoLightframe({callback: trackClick});
         
         function trackClickConversion(eventName) {
           rudderanalytics.track(eventName, {track_category: 'Click'});
