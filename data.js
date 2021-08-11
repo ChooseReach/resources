@@ -332,10 +332,10 @@ window.onload = function(){
         }
 
         // Track Beacon Chat Initiation
-        Beacon('once', 'chat-started', function () { trackClickConversion('Beacon Chat Started')});
+        !!window.Beacon && Beacon('once', 'chat-started', function () { trackClickConversion('Beacon Chat Started')});
 
         // Track Beacon Emails
-        Beacon('once', 'email-sent', function () {trackClickConversion('Beacon Email Sent')});
+        !!window.Beacon && Beacon('once', 'email-sent', function () {trackClickConversion('Beacon Email Sent')});
         
         // Click Events
         document.addEventListener('click', function (event) {
