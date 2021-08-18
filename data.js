@@ -272,6 +272,15 @@ window.onload = function(){
             })
         };
 
+        
+        function trackConversion (eventName, additionalProperties) {
+            const conversionProperties = Object.assign({
+                "conversion": eventName,
+            }, additionalProperties)
+            console.log("Conversion:", eventName, conversionProperties)
+            rudderanalytics.track("Conversion", conversionProperties)
+        }
+        
         function trackClick(element) {
             var closestAnchorTag = element.closest('a');
             var closestButtonTag = element.closest('button');
@@ -300,6 +309,12 @@ window.onload = function(){
             else if (clickedElementTag === 'textarea' && clickedElementId !== '') {eventName = clickedElementId + ' Clicked';}
             else if (clickedElementTag === 'textarea') {eventName = 'Form Textarea Clicked';}
 
+            // Track a conversion if the button has 'data-reach-conversion' set
+            const maybeConversion = element.dataset.reachConversion
+            if (maybeConversion !== undefined) {
+                trackConversion(eventName, clickProperties)
+            }
+            
             if (eventName !== 'Element Clicked') {
                 rudderanalytics.track(eventName, clickProperties);
                 console.log('Click:',eventName, clickProperties);
@@ -374,11 +389,7 @@ window.onload = function(){
             // Track a conversion if the form has 'data-reach-conversion' set
             const maybeConversion = form.dataset.reachConversion
             if (maybeConversion !== undefined) {
-                const conversionProperties = Object.assign({
-                    "conversion": eventName,
-                }, identity)
-                rudderanalytics.track("Conversion", conversionProperties)
-                console.log("Conversion:", eventName, conversionProperties)
+                trackConversion(eventName, identity)
             }
 
             // Identify the user
