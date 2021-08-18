@@ -325,31 +325,77 @@ window.onload = function(){
         }, false);
 
 
-        // Form Events
-        document.addEventListener('submit', function(event) {
+        // Form Events - TODO clean this up after new form handler is complete
+//         document.addEventListener('submit', function(event) {
+//             if (!event.target.matches('form')) return;
+
+//             var form = event.target;
+
+//             var maybeNameElement = form.querySelector("[data-reach-input='name']");
+//             var maybeEmailElement = form.querySelector("[data-reach-input='email']");
+//             var maybePhoneElement = form.querySelector("[data-reach-input='phone']");
+
+//             const formProperties = {
+//                 track_category: 'Form',
+//                 form_id: form.id,
+//                 form_name: form.name,
+//                 formData: JSON.stringify($(form).serializeArray())
+//             };
+
+//             rudderanalytics.identify({
+//                 name: maybeNameElement && maybeNameElement.value,
+//                 email: maybeEmailElement && maybeEmailElement.value,
+//                 phone: maybePhoneElement && maybePhoneElement.value,
+//             });
+
+//             rudderanalytics.track(form.id + ' Submitted', formProperties);
+//             console.log('Form:',form.id,'Submitted', formProperties);
+//         });
+        
+        function onFormSubmitted (event) {
             if (!event.target.matches('form')) return;
 
             var form = event.target;
 
+            // The event name is "[Form-ID] Submitted"
+            const eventName = form.id + ' Submitted';
+
+            // Grab name, phone, email from the form if the form has those fields
             var maybeNameElement = form.querySelector("[data-reach-input='name']");
             var maybeEmailElement = form.querySelector("[data-reach-input='email']");
             var maybePhoneElement = form.querySelector("[data-reach-input='phone']");
 
+            const identity = {
+                name: maybeNameElement && maybeNameElement.value,
+                email: maybeEmailElement && maybeEmailElement.value,
+                phone: maybePhoneElement && maybePhoneElement.value,
+            }
+
+            // Track a conversion if the form has 'data-reach-conversion' set
+            const maybeConversion = form.dataset.reachConversion
+            if (maybeConversion !== undefined) {
+                const conversionProperties = Object.assign({
+                    "conversion": eventName,
+                }, identity)
+                rudderanalytics.track("Conversion", conversionProperties)
+                console.log("Conversion:", eventName, conversionProperties)
+            }
+
+            // Identify the user
+            console.log("Identify:", JSON.stringify(identity, null, 2))
+            rudderanalytics.identify(identity) 
+
+            // Track the form submission
             const formProperties = {
                 track_category: 'Form',
                 form_id: form.id,
                 form_name: form.name,
                 formData: JSON.stringify($(form).serializeArray())
             };
+            rudderanalytics.track(eventName, formProperties);
+            console.log('Form:', eventName, formProperties);
+        }
 
-            rudderanalytics.identify({
-                name: maybeNameElement && maybeNameElement.value,
-                email: maybeEmailElement && maybeEmailElement.value,
-                phone: maybePhoneElement && maybePhoneElement.value,
-            });
-
-            rudderanalytics.track(form.id + ' Submitted', formProperties);
-            console.log('Form:',form.id,'Submitted', formProperties);
-        });
+        document.addEventListener('submit', onFormSubmitted)
     });
 };
