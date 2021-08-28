@@ -25,7 +25,10 @@ const locations = [
 /**
   * Find the closest location to a target location out of an array of locations
   *
-  * Expected input: ({...,"latitude": 23.456, "longitude": -117.833}, [{...,"latitude": 23.456, "longitude": -117.833}, {...,"latitude": 23.456, "longitude": -117.833}])
+  * Example input:  (
+  *                   {...,"latitude": 23.456, "longitude": -117.833},
+  *                   [{...,"latitude": 23.456, "longitude": -117.833}, {...,"latitude": 23.456, "longitude": -117.833}, ...]
+  *                 )
   */
 function closestCoordinate(targetLocation, locationData) {
     function vectorDistance(dx, dy) {
@@ -46,22 +49,21 @@ function closestCoordinate(targetLocation, locationData) {
     });
 }
 
-function findClosestLocation() {
+// Find the closest location to a user's location and execute the callback function with it
+function findClosestLocation(callback) {
   function success(position) {
-    const latitude  = position.coords.latitude;
-    const longitude = position.coords.longitude;
-
     // Get the closest location to the user's location based on geo coordinates
     const closestLocation = closestCoordinate(position.coords, locations);
-    console.log(closestLocation);
+    console.log("Closest location: " + JSON.stringify(closestLocation));
+    callback(closestLocation)
   }
 
   function error() {
-    status.textContent = 'Unable to retrieve your location';
+    console.log('Unable to retrieve your location');
   }
 
   if(!navigator.geolocation) {
-    status.textContent = 'Geolocation is not supported by your browser';
+    console.log('Geolocation is not supported by your browser')
   } else {
     status.textContent = 'Locating…';
     navigator.geolocation.getCurrentPosition(success, error);
