@@ -1,3 +1,4 @@
+// This is the format I need the locations in
 const locations = [
     {
         name: "Oceanside",
@@ -23,6 +24,8 @@ const locations = [
 
 /**
   * Find the closest location to a target location out of an array of locations
+  *
+  * Expected input: ({...,"latitude": 23.456, "longitude": -117.833}, [{...,"latitude": 23.456, "longitude": -117.833}, {...,"latitude": 23.456, "longitude": -117.833}])
   */
 function closestCoordinate(targetLocation, locationData) {
     function vectorDistance(dx, dy) {
