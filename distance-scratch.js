@@ -21,11 +21,12 @@ const locations = [
     }
 ]
 
-function closestLocation(targetLocation, locationData) {
+/**
+  * Find the closest location to a target location out of an array of locations
+  */
+function closestCoordinate(targetLocation, locationData) {
     function vectorDistance(dx, dy) {
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        console.log("Distance: " + distance)
-        return distance;
+        return Math.sqrt(dx * dx + dy * dy);
     }
 
     function locationDistance(location1, location2) {
@@ -42,22 +43,14 @@ function closestLocation(targetLocation, locationData) {
     });
 }
 
-function geoFindMe() {
-
-//   const status = document.querySelector('#status');
-//   const mapLink = document.querySelector('#map-link');
-
-//   mapLink.href = '';
-//   mapLink.textContent = '';
-
+function findClosestLocation() {
   function success(position) {
     const latitude  = position.coords.latitude;
     const longitude = position.coords.longitude;
 
-    console.log(position.coords)
-
-    const closestLoc = closestLocation(position.coords, locations);
-    console.log(closestLoc);
+    // Get the closest location to the user's location based on geo coordinates
+    const closestLocation = closestCoordinate(position.coords, locations);
+    console.log(closestLocation);
   }
 
   function error() {
