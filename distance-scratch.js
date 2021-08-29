@@ -59,6 +59,30 @@ function displayClosestLocation(nameElement, linkElement) {
     }
 }
 
+
+ var myLocationButton = document.getElementById("Use-My-Location-Button");
+ var myLocationLoader = document.getElementById("myLocationLoader");
+ var myLocationTop = document.getElementById("myLocationTop");
+ var myLocationBottom = document.getElementById("myLocationBottom");
+
+ myLocationButton.onclick = function getLocation() {
+   if (navigator.geolocation) {
+     navigator.geolocation.watchPosition(showPosition);
+     myLocationLoader.style.display = "block";
+   } else { 
+     myLocationBottom.innerHTML = "Unavailable";
+   }
+ }
+
+ function showPosition(position) {
+   console.log(position);
+   myLocationButton.classList.remove("nav__location--inactive");
+   myLocationLoader.style.display = "none";
+   myLocationButton.href = "/location/1500-north-green-valley-pkwy-suite-110-henderson-nv-89074"
+   myLocationTop.innerHTML = "Location nearest you:"
+   myLocationBottom.innerHTML = "Green Valley Pkwy";
+ }
+
 const nameElement = document.querySelector("#We-Are-Hiring-Button")
 const linkElement = document.querySelector("#We-Are-Hiring-Button")
 
