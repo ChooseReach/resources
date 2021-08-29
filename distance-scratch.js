@@ -57,37 +57,28 @@ var myLocationLoader = document.getElementById("myLocationLoader");
 var myLocationTop = document.getElementById("myLocationTop");
 var myLocationBottom = document.getElementById("myLocationBottom");
 
-// Shows the loading icon, then calls a callback
-function showLoaderAndThen(callback) {
-  myLocationLoader.style.display = "block";
-}
 
 // Injects the closet location name and link into the store locator button
-function displayClosestLocation(nameElement, linkElement) {
-    return function (closestLocation, err) {
+function displayClosestLocation() {
+
+    myLocationLoader.style.display = "block";
+    findClosestLocation(
+    locations,
+    function (closestLocation, err) {
         myLocationLoader.style.display = "none";
         if (!!err) {
-         console.error(err);
+          myLocationBottom.innerHTML = "Unavailable";
+          console.error(err);
         } else {
          console.log(closestLocation);         
          myLocationButton.classList.remove("nav__location--inactive");
          myLocationLoader.style.display = "none";
-         linkElement.href = "/location/1500-north-green-valley-pkwy-suite-110-henderson-nv-89074"
+         myLocationBottom.href = "/location/1500-north-green-valley-pkwy-suite-110-henderson-nv-89074"
          myLocationTop.innerHTML = "Location nearest you:"
-         nameElement.innerHTML = "Green Valley Pkwy";
+         myLocationBottom.innerHTML = "Green Valley Pkwy";
         }
     }
+    )
 }
 
-myLocationButton.onclick = function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(showPosition);
-  } else { 
-    myLocationBottom.innerHTML = "Unavailable";
-  }
-}
-
-const nameElement = document.querySelector("#We-Are-Hiring-Button")
-const linkElement = document.querySelector("#We-Are-Hiring-Button")
-
-document.querySelector("#Download-App-Button").addEventListener('click', showLoaderAndThen(findClosestLocation(locations, displayClosestLocation(myLocationButton, myLocationBottom))));
+myLocationButton.addEventListener('click', displayClosestLocation);
