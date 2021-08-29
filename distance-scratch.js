@@ -47,11 +47,13 @@ function findClosestLocation(locations, callback) {
 
 }
 
-const locations = window.geoLocations.filter(location => location.geoEnabled)
+// Grab the list of locations from the dynamically generated list based on webflow cms
+const locations = Array.from(document.querySelectorAll("#geoList div.w-embed")).map(element => JSON.parse(element.innerHTML))
 
 // Injects the closet location name and link into the store locator button
 function displayClosestLocation(nameElement, linkElement) {
     return function (closestLocation) {
+        console.log(closestLocation);
         nameElement.innerHtml = closetLocation.name;
         linkElement.innerHtml = closetLocation.link;
     }
