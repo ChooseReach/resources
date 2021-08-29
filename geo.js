@@ -1,11 +1,9 @@
-/**
-  * Find the closest location to a target location out of an array of locations
-  *
-  * Example input:  (
-  *                   {...,"latitude": 23.456, "longitude": -117.833},
-  *                   [{...,"latitude": 23.456, "longitude": -117.833}, {...,"latitude": 23.456, "longitude": -117.833}, ...]
-  *                 )
-  */
+const myLocationButton = document.getElementById("Use-My-Location-Button");
+
+// Get list of locations from Webflow CMS items on page load
+const allLocations = Array.from(document.querySelectorAll("#geoList div.w-embed")).map(element => JSON.parse(element.innerHTML))
+
+// Find the closest location to a target location out of an array of locations
 function closestCoordinate(targetLocation, locationData) {
     function vectorDistance(dx, dy) {
         return Math.sqrt(dx * dx + dy * dy);
@@ -26,11 +24,11 @@ function closestCoordinate(targetLocation, locationData) {
 }
 
 // Find the closest location to a user's location and execute the callback function with it
-function findClosestLocation(locations, callback) {
+function findClosestLocation(allLocations, callback) {
   function success(position) {
     // Get the closest location to the user's location based on geo coordinates
-    const closestLocation = closestCoordinate(position.coords, locations);
-    console.log("Closest location: " + JSON.stringify(closestLocation));
+    const closestLocation = closestCoordinate(position.coords, allLocations);
+    //console.log("Closest location: " + JSON.stringify(closestLocation));
     callback(closestLocation, null)
   }
 
@@ -48,36 +46,31 @@ function findClosestLocation(locations, callback) {
 
 }
 
- var myLocationButton = document.getElementById("Use-My-Location-Button");
-
-// Injects the closet location name and link into the store locator button
+// Update button details with text, link, and id of closest location.
 function displayClosestLocation() {
-    // Grab the list of locations from the dynamically generated list based on webflow cms
-    const locations = Array.from(document.querySelectorAll("#geoList div.w-embed")).map(element => JSON.parse(element.innerHTML))
-
-
     var myLocationLoader = document.getElementById("myLocationLoader");
     var myLocationTop = document.getElementById("myLocationTop");
     var myLocationBottom = document.getElementById("myLocationBottom");
 
-
     myLocationLoader.style.display = "block";
     findClosestLocation(
-    locations,
-    function (closestLocation, err) {
-        myLocationLoader.style.display = "none";
-        if (!!err) {
-          myLocationBottom.innerHTML = "Unavailable";
-          console.error(err);
-        } else {
-         console.log(closestLocation);         
-         myLocationButton.classList.remove("nav__location--inactive");
-         myLocationLoader.style.display = "none";
-         myLocationBottom.href = "/location/1500-north-green-valley-pkwy-suite-110-henderson-nv-89074"
-         myLocationTop.innerHTML = "Location nearest you:"
-         myLocationBottom.innerHTML = "Green Valley Pkwy";
+        allLocations,
+        function (closestLocation, err) {
+            myLocationLoader.style.display = "none";
+            if (!!err) {
+              myLocationBottom.innerHTML = "GeoLocation Unavailable";
+              console.error(err);
+            } else {
+             window.closestLocation = closestLocation;
+             console.log('Geo: User Location Requested', closestLocation);       
+             myLocationButton.classList.remove("nav__location--inactive");
+             myLocationLoader.style.display = "none";
+             myLocationButton.href = window.closestLocation.link;
+             myLocationButton.id = "Location-Nearest-You-Button"
+             myLocationTop.innerHTML = "Location nearest you:"
+             myLocationBottom.innerHTML = window.closestLocation.name;
+            }
         }
-    }
     )
 }
 
