@@ -48,6 +48,8 @@ function findClosestLocation(locations, callback) {
 
 }
 
+myLocationButton.addEventListener('click', displayClosestLocation);
+
 // Injects the closet location name and link into the store locator button
 function displayClosestLocation() {
     // Grab the list of locations from the dynamically generated list based on webflow cms
@@ -79,5 +81,3 @@ function displayClosestLocation() {
     }
     )
 }
-
-myLocationButton.addEventListener('click', displayClosestLocation);
