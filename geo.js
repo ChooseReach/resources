@@ -48,7 +48,7 @@ function findClosestLocation(locations, callback) {
 
 }
 
-myLocationButton.addEventListener('click', displayClosestLocation);
+ var myLocationButton = document.getElementById("Use-My-Location-Button");
 
 // Injects the closet location name and link into the store locator button
 function displayClosestLocation() {
@@ -56,7 +56,6 @@ function displayClosestLocation() {
     const locations = Array.from(document.querySelectorAll("#geoList div.w-embed")).map(element => JSON.parse(element.innerHTML))
 
 
-    var myLocationButton = document.getElementById("Use-My-Location-Button");
     var myLocationLoader = document.getElementById("myLocationLoader");
     var myLocationTop = document.getElementById("myLocationTop");
     var myLocationBottom = document.getElementById("myLocationBottom");
@@ -81,3 +80,5 @@ function displayClosestLocation() {
     }
     )
 }
+
+myLocationButton.addEventListener('click', displayClosestLocation);
