@@ -54,12 +54,12 @@ const locations = Array.from(document.querySelectorAll("#geoList div.w-embed")).
 function displayClosestLocation(nameElement, linkElement) {
     return function (closestLocation) {
         console.log(closestLocation);
-        nameElement.innerHTML = closetLocation.name;
-        linkElement.href = closetLocation.link;
+        nameElement.innerHTML = closestLocation.name;
+        linkElement.href = closestLocation.link;
     }
 }
 
-const nameElement = document.querySelector("We-Are-Hiring-Button")
-const linkElement = document.querySelector("We-Are-Hiring-Button")
+const nameElement = document.querySelector("#We-Are-Hiring-Button")
+const linkElement = document.querySelector("#We-Are-Hiring-Button")
 
 document.querySelector("#Download-App-Button").addEventListener('click', findClosestLocation(locations, displayClosestLocation(nameElement, linkElement)));
