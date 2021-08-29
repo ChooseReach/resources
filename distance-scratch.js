@@ -48,18 +48,17 @@ function findClosestLocation(locations, callback) {
 
 }
 
-// Grab the list of locations from the dynamically generated list based on webflow cms
-const locations = Array.from(document.querySelectorAll("#geoList div.w-embed")).map(element => JSON.parse(element.innerHTML))
-
-
-var myLocationButton = document.getElementById("Use-My-Location-Button");
-var myLocationLoader = document.getElementById("myLocationLoader");
-var myLocationTop = document.getElementById("myLocationTop");
-var myLocationBottom = document.getElementById("myLocationBottom");
-
-
 // Injects the closet location name and link into the store locator button
 function displayClosestLocation() {
+    // Grab the list of locations from the dynamically generated list based on webflow cms
+    const locations = Array.from(document.querySelectorAll("#geoList div.w-embed")).map(element => JSON.parse(element.innerHTML))
+
+
+    var myLocationButton = document.getElementById("Use-My-Location-Button");
+    var myLocationLoader = document.getElementById("myLocationLoader");
+    var myLocationTop = document.getElementById("myLocationTop");
+    var myLocationBottom = document.getElementById("myLocationBottom");
+
 
     myLocationLoader.style.display = "block";
     findClosestLocation(
