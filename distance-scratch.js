@@ -1,27 +1,3 @@
-// This is the format I need the locations in
-const locations = [
-    {
-        name: "Oceanside",
-        latitude: 33.1959,
-        longitude: -117.3795
-    },
-    {
-        name: "La Jolla",
-        latitude: 32.50336264,
-        longitude: -117.15279612
-    },
-    {
-        name: "Home",
-        latitude: 32.7187786,
-        longitude: -117.1689295
-    },
-    {
-        name: "Downtown",
-        latitude: 32.7167,
-        longitude: -117.1661
-    }
-]
-
 /**
   * Find the closest location to a target location out of an array of locations
   *
@@ -50,7 +26,7 @@ function closestCoordinate(targetLocation, locationData) {
 }
 
 // Find the closest location to a user's location and execute the callback function with it
-function findClosestLocation(callback) {
+function findClosestLocation(locations, callback) {
   function success(position) {
     // Get the closest location to the user's location based on geo coordinates
     const closestLocation = closestCoordinate(position.coords, locations);
@@ -71,4 +47,14 @@ function findClosestLocation(callback) {
 
 }
 
-document.querySelector("#Download-App-Button").addEventListener('click', geoFindMe);
+const locations = window.geoLocations.filter(location => location.geoEnabled)
+
+// Injects the closet location name and link into the store locator button
+function displayClosestLocation(nameElement, linkElement) {
+    return function (closestLocation) {
+        nameElement.innerHtml = closetLocation.name;
+        linkElement.innerHtml = closetLocation.link;
+    }
+}
+
+document.querySelector("#Download-App-Button").addEventListener('click', geoFindMe(locations, );
