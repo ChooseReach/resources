@@ -59,4 +59,4 @@ function displayClosestLocation(nameElement, linkElement) {
     }
 }
 
-document.querySelector("#Download-App-Button").addEventListener('click', geoFindMe(locations, );
+document.querySelector("#Download-App-Button").addEventListener('click', findClosestLocation(1,2));
