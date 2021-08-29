@@ -59,4 +59,4 @@ function displayClosestLocation(nameElement, linkElement) {
     }
 }
 
-document.querySelector("#Download-App-Button").addEventListener('click', findClosestLocation(1,2));
+document.querySelector("#Download-App-Button").addEventListener('click', findClosestLocation(locations, displayClosestLocation(1,2)));
