@@ -310,9 +310,9 @@ window.onload = function(){
             else if (clickedElementTag === 'textarea') {eventName = 'Form Textarea Clicked';}
 
             // Track a conversion if the button has 'data-reach-conversion' set
-            const maybeConversion = element.dataset.reachConversion
-            if (maybeConversion !== undefined) {
-                trackConversion(eventName, clickProperties)
+            const maybeConversionName = element.dataset.reachConversion
+            if (maybeConversionName !== undefined) {
+                trackConversion(maybeConversionName || eventName, clickProperties)
             }
             
             if (eventName !== 'Element Clicked') {
@@ -387,9 +387,9 @@ window.onload = function(){
             }
 
             // Track a conversion if the form has 'data-reach-conversion' set
-            const maybeConversion = form.dataset.reachConversion
-            if (maybeConversion !== undefined) {
-                trackConversion(eventName, identity)
+            const maybeConversionName = form.dataset.reachConversion
+            if (maybeConversionName !== undefined) {
+                trackConversion(maybeConversionName || eventName, identity)
             }
 
             // Identify the user
