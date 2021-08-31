@@ -100,7 +100,11 @@ if (!!maybeSavedClosestLocation) {
     // If we're able to restore the closest location from local storage, display it
     window.closestLocation = maybeSavedClosestLocation;
     displayClosestLocation();
+    // Show the button with the user's closest location
+    myLocationButton.style.opacity = 1;
 } else {
+    // Show the button so users can be prompted to share their location
+    myLocationButton.style.opacity = 1;
     // Otherwise, allow users to click on the "User my location" button to find it
     myLocationButton.addEventListener('click', findAndDisplayClosestLocation);
 }
