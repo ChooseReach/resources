@@ -46,11 +46,28 @@ function findClosestLocation(allLocations, callback) {
 
 }
 
-// Update button details with text, link, and id of closest location.
+var myLocationLoader = document.getElementById("myLocationLoader");
+var myLocationTop = document.getElementById("myLocationTop");
+var myLocationBottom = document.getElementById("myLocationBottom");
+
 function displayClosestLocation() {
-    var myLocationLoader = document.getElementById("myLocationLoader");
-    var myLocationTop = document.getElementById("myLocationTop");
-    var myLocationBottom = document.getElementById("myLocationBottom");
+  console.log('Geo: User Location Requested', window.closestLocation);       
+  myLocationButton.classList.remove("nav__location--inactive");
+  myLocationLoader.style.display = "none";
+  myLocationButton.href = window.closestLocation.link;
+  myLocationButton.id = "Location-Nearest-You-Button"
+  myLocationTop.innerHTML = "Location nearest you:"
+  myLocationBottom.innerHTML = window.closestLocation.name;
+}
+
+const closestLocationStorageKey = "reach.closestLocation"
+
+function saveClosestLocation(closestLocation) {
+    localStorage.setItem(closestLocationStorageKey, JSON.stringify(closestLocation))
+}
+
+// Update button details with text, link, and id of closest location.
+function findAndDisplayClosestLocation() {
 
     myLocationLoader.style.display = "block";
     findClosestLocation(
@@ -61,17 +78,29 @@ function displayClosestLocation() {
               myLocationBottom.innerHTML = "GeoLocation Unavailable";
               console.error(err);
             } else {
-             window.closestLocation = closestLocation;
-             console.log('Geo: User Location Requested', closestLocation);       
-             myLocationButton.classList.remove("nav__location--inactive");
-             myLocationLoader.style.display = "none";
-             myLocationButton.href = window.closestLocation.link;
-             myLocationButton.id = "Location-Nearest-You-Button"
-             myLocationTop.innerHTML = "Location nearest you:"
-             myLocationBottom.innerHTML = window.closestLocation.name;
+              saveClosestLocation(closestLocation)
+              window.closestLocation = closestLocation;
+              displayClosestLocation();
             }
         }
     )
 }
 
-myLocationButton.addEventListener('click', displayClosestLocation);
+// Grab the closest location from local storage if available
+function restoreSavedClosestLocation() {
+    const stringifiedLocation = localStorage.getItem(closestLocationStorageKey);
+    const maybeClosestLocation = !!stringifiedLocation ? JSON.parse(stringifiedLocation) : null;
+
+    return maybeClosestLocation
+}
+
+const maybeSavedClosestLocation = restoreSavedClosestLocation()
+
+if (!!maybeSavedClosestLocation) {
+    // If we're able to restore the closest location from local storage, display it
+    window.closestLocation = maybeSavedClosestLocation;
+    displayClosestLocation();
+} else {
+    // Otherwise, allow users to click on the "User my location" button to find it
+    myLocationButton.addEventListener('click', findAndDisplayClosestLocation);
+}
