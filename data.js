@@ -376,9 +376,9 @@ window.onload = function(){
             const eventName = form.id + ' Submitted';
 
             // Grab name, phone, email from the form if the form has those fields
-            var maybeNameElement = form.querySelector("[name='name']");
-            var maybeEmailElement = form.querySelector("[name='email']");
-            var maybePhoneElement = form.querySelector("[name='phone']");
+            var maybeNameElement = form.querySelector("[name='name'],[name='Name']");
+            var maybeEmailElement = form.querySelector("[name='email'],[name='Email']");
+            var maybePhoneElement = form.querySelector("[name='phone'],[name='Phone']");
 
             const identity = {
                 name: maybeNameElement && maybeNameElement.value,
