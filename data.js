@@ -367,6 +367,28 @@ window.onload = function(){
 //             console.log('Form:',form.id,'Submitted', formProperties);
 //         });
         
+        // Track the first time an input on a form is focused
+        document.querySelectorAll("form").forEach(function(formElement) {
+          formElement.querySelectorAll("input, select").forEach(inputElement => {
+            inputElement.addEventListener("click", function() {
+              const properties = {
+                track_category: "Form Focused",
+                element_id: inputElement.id,
+                element_class: inputElement.className,
+              };
+              rudderanalytics.track(
+                formElement.id + " Focused",
+                properties
+              );
+              console.log(
+                "Form: " + formElement.id + " Focused",
+                properties
+              );
+            })
+          })
+        })
+
+        
         function onFormSubmitted (event) {
             if (!event.target.matches('form')) return;
 
