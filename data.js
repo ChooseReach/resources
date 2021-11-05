@@ -369,21 +369,26 @@ window.onload = function(){
         
         // Track the first time an input on a form is focused
         document.querySelectorAll("form").forEach(function(formElement) {
-          formElement.querySelectorAll("input, select").forEach(inputElement => {
+          // Only fire this event the first time the form is interacted with.
+          var alreadyTracked = false;
+          formElement.querySelectorAll("input, select, textarea").forEach(inputElement => {
             inputElement.addEventListener("click", function() {
-              const properties = {
-                track_category: "Form Focused",
-                element_id: inputElement.id,
-                element_class: inputElement.className,
-              };
-              rudderanalytics.track(
-                formElement.id + " Focused",
-                properties
-              );
-              console.log(
-                "Form: " + formElement.id + " Focused",
-                properties
-              );
+              if (!alreadyTracked) {
+                  const properties = {
+                    track_category: "Form Focused",
+                    element_id: inputElement.id,
+                    element_class: inputElement.className,
+                  };
+                  rudderanalytics.track(
+                    formElement.id + " Focused",
+                    properties
+                  );
+                  console.log(
+                    "Form: " + formElement.id + " Focused",
+                    properties
+                  );
+              }
+              alreadyTracked = true;
             })
           })
         })
