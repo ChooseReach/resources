@@ -420,8 +420,10 @@ window.onload = function(){
             }
 
             // Identify the user
-            console.log("Identify:", JSON.stringify(identity, null, 2))
-            rudderanalytics.identify(identity) 
+            if (!!maybeNameElement || maybeEmailElement || maybePhoneElement) {
+                console.log("Identify:", JSON.stringify(identity, null, 2))
+                rudderanalytics.identify(identity) 
+            }
 
             // Track the form submission
             const formProperties = {
