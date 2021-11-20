@@ -420,7 +420,7 @@ window.onload = function(){
             }
 
             // Identify the user
-            if (!!maybeNameElement || maybeEmailElement || maybePhoneElement) {
+            if (!!maybeNameElement || !!maybeEmailElement || !!maybePhoneElement) {
                 console.log("Identify:", JSON.stringify(identity, null, 2))
                 rudderanalytics.identify(identity) 
             }
