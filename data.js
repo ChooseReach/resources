@@ -215,7 +215,7 @@ window.onload = function(){
         console.log('Page: ' + location.pathname + ' (Loaded)', pageProperties);
 
         // Helper function adds utm information to Rudderstack context
-        const rudderstackTrack = (event, properties) {
+        const rudderstackTrack = (event, properties) => {
             if (!!rudderstackCampaignDetails) {
                 // If we have stored campaign details, add them to the track call context
                 rudderanalytics.track(event, properties, {
