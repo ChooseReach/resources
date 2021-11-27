@@ -1,0 +1,11 @@
+{
+  "name": "resources",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:nater1067/resources.git",
+  "author": "Nate Turner <nater1992@gmail.com>",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "prettier": "^2.5.0"
+  }
+}
