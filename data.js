@@ -16,9 +16,7 @@ window.onload = function(){
         }
         var maybeRudderstackCampaignDetails = localStorage.getItem("reach.rudderstackCampaignDetails")
         var rudderstackCampaignDetails = !!maybeRudderstackCampaignDetails ? JSON.parse(maybeRudderstackCampaignDetails) : undefined
-        // TODO - clean up this line after we know this works.
-        console.log("maybeRudderstackCampaignDetails", maybeRudderstackCampaignDetails)
-        
+
         // Console Header
         console.log('--');
         console.log('%c%s','font-weight: bold;font-size:1.3em;',location.hostname.toUpperCase());
@@ -216,7 +214,18 @@ window.onload = function(){
         console.log('--');
         console.log('Page: ' + location.pathname + ' (Loaded)', pageProperties);
 
-        
+        // Helper function adds utm information to Rudderstack context
+        const rudderstackTrack = (event, properties) {
+            if (!!rudderstackCampaignDetails) {
+                // If we have stored campaign details, add them to the track call context
+                rudderanalytics.track(event, properties, {
+                    context: {campaign: rudderstackCampaignDetails}
+                });
+            } else {
+                rudderanalytics.track(event, properties);
+            }
+        }
+
         // Scroll Events
         var scrollWrapper = document.querySelector('main');
         var scrollTracker = document.getElementById('scrollTracker');
@@ -230,7 +239,7 @@ window.onload = function(){
         scrollObserver = new IntersectionObserver(entries => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    rudderanalytics.track('Scrolled ' + entry.target.dataset.reachScroll + '%', scrollProperties);
+                    rudderstackTrack('Scrolled ' + entry.target.dataset.reachScroll + '%', scrollProperties);
                     console.log('Scrolled ' + entry.target.dataset.reachScroll + '%', scrollProperties);
                     //scrollObserver.unobserve(entry.target);
                 }
@@ -251,7 +260,7 @@ window.onload = function(){
                         element_id: entry.target.id,
                         element_class: entry.target.className
                     };
-                    rudderanalytics.track(entry.target.id + ' Viewed', impressionProperties);
+                    rudderstackTrack(entry.target.id + ' Viewed', impressionProperties);
                     console.log('Impression: ' + entry.target.id + ' Viewed', impressionProperties);
                     //impressionObserver.unobserve(entry.target);
                 }
@@ -283,7 +292,7 @@ window.onload = function(){
                 if (hoveredElementId !== '') {eventName = hoveredElementId + ' Hovered';}
 
                 if (eventName !== 'Button Hovered') {
-                    rudderanalytics.track(eventName, hoverProperties);
+                    rudderstackTrack(eventName, hoverProperties);
                     console.log('Hover:',eventName, hoverProperties);
                 }
             })
@@ -295,7 +304,7 @@ window.onload = function(){
                 "conversion": eventName,
             }, additionalProperties)
             console.log("Conversion:", eventName, conversionProperties)
-            rudderanalytics.track("Conversion", conversionProperties)
+            rudderstackTrack("Conversion", conversionProperties)
         }
         
         function trackClick(element) {
@@ -333,7 +342,7 @@ window.onload = function(){
             }
             
             if (eventName !== 'Element Clicked') {
-                rudderanalytics.track(eventName, clickProperties);
+                rudderstackTrack(eventName, clickProperties);
                 console.log('Click:',eventName, clickProperties);
             }
         }
@@ -342,7 +351,7 @@ window.onload = function(){
         !!window.FH && window.FH.autoLightframe({callback: trackClick});
         
         function trackClickConversion(eventName) {
-          rudderanalytics.track(eventName, {track_category: 'Click'});
+          rudderstackTrack(eventName, {track_category: 'Click'});
         }
 
         // Track Beacon Chat Initiation
@@ -396,7 +405,7 @@ window.onload = function(){
                     element_id: inputElement.id,
                     element_class: inputElement.className,
                   };
-                  rudderanalytics.track(
+                  rudderstackTrack(
                     formElement.id + " Focused",
                     properties
                   );
@@ -449,7 +458,7 @@ window.onload = function(){
                 form_name: form.name,
                 formData: JSON.stringify($(form).serializeArray())
             };
-            rudderanalytics.track(eventName, formProperties);
+            rudderstackTrack(eventName, formProperties);
             console.log('Form:', eventName, formProperties);
         }
 
