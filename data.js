@@ -2,6 +2,23 @@
 window.onload = function(){
     window.setTimeout(function(){
         
+        // Store marketing tags for use by Rudderstack on subsequent page loads.
+        var urlSearchParams = new URLSearchParams(window.location.search);
+        var params = Object.fromEntries(urlSearchParams.entries());
+        var rudderstackCampaignDetails = {}
+        Object.keys(params).forEach(key => {
+            if (key.includes("utm") || key.includes("gclid") || key.includes("fbclid")) {
+                rudderstackCampaignDetails[key.replace("utm_", "")] = params[key]
+            }
+        });
+        if (Object.keys(rudderstackCampaignDetails).length > 0) {
+            localStorage.setItem("reach.rudderstackCampaignDetails", JSON.stringify(rudderstackCampaignDetails))
+        }
+        var maybeRudderstackCampaignDetails = localStorage.getItem("reach.rudderstackCampaignDetails")
+        var rudderstackCampaignDetails = !!maybeRudderstackCampaignDetails ? JSON.parse(maybeRudderstackCampaignDetails) : undefined
+        // TODO - clean up this line after we know this works.
+        console.log("maybeRudderstackCampaignDetails", maybeRudderstackCampaignDetails)
+        
         // Console Header
         console.log('--');
         console.log('%c%s','font-weight: bold;font-size:1.3em;',location.hostname.toUpperCase());
