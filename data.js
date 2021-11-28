@@ -257,8 +257,8 @@ window.onload = function(){
         console.log('%c%s','font-weight: bold;font-size:1.3em;',location.hostname.toUpperCase());
         console.log('Powered By Reach');
         console.log('Data Driven Marketing');
-        console.log('Request a performance review at www.ChooseReach.com/consultation');
-        console.log('Version 1.0.0');
+        console.log('Request a performance review at consultations@choosereach.com');
+        console.log('Version 1.0.3');
         console.log('--');
 
         // Rounds values to nearest hundredth decimal place.
