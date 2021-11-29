@@ -1,3 +1,5 @@
+//newline
+
 // Store marketing tags for use by Rudderstack on subsequent page loads.
 var urlSearchParams = new URLSearchParams(window.location.search);
 var params = Object.fromEntries(urlSearchParams.entries());
