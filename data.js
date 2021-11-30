@@ -45,11 +45,13 @@ const rudderstackTrack = (event, properties) => {
 
 // Element Definitions
 const 
-    ctaElements = document.querySelectorAll("button,.button,.w-button,[data-reach-track='cta']"),
+    ctaElements = Array.from(document.querySelectorAll("button,.button,.w-button,[data-reach-track='cta']")),
+    nonCtaClickElements = Array.from(document.querySelectorAll("a")).filter(linkElement => !ctaElements.includes(linkElement)),
     sectionElements = document.querySelectorAll("section,[data-reach-track='section']"),
     menuElements = document.querySelectorAll(".w-dropdown-list,.w-nav-menu,[data-reach-track='menu']"),
     cartElements = document.querySelectorAll(".w-commerce-commercecartcontainerwrapper,[data-reach-track='cart']"),
     formElements = document.querySelectorAll("form,[data-reach-track='cart']"),
+    inputElements = document.querySelectorAll("input, select, textarea"),
     scrollWrapper = document.querySelector('main'),
     scrollTracker = document.getElementById('scrollTracker'),
     scrollEvents = document.querySelectorAll('[data-reach-scroll]');
@@ -92,25 +94,27 @@ ctaElements.forEach(impression => {ctaViewedObserver.observe(impression);});
 
 
 // CTA Hovered
-for (var i = 0 ; i < ctaElements.length; i++) {
-    ctaElements[i].addEventListener('mouseenter', event => {
-        const ctaHoveredProperties = {
-            element_id: event.target.id,
-            element_class: event.target.className,
-            element_href: event.target.href,
-            element_tag: event.target.tagName.toLowerCase()
-        };
-        rudderstackTrack('CTA Hovered', ctaHoveredProperties);
-        console.log('CTA Hovered:', event.target.id, ctaHoveredProperties);
-    })
-};
+// for (var i = 0 ; i < ctaElements.length; i++) {
+//     ctaElements[i].addEventListener('mouseenter', event => {
+//         const ctaHoveredProperties = {
+//             element_id: event.target.id,
+//             element_class: event.target.className,
+//             element_href: event.target.href,
+//             element_tag: event.target.tagName.toLowerCase()
+//         };
+//         rudderstackTrack('CTA Hovered', ctaHoveredProperties);
+//         console.log('CTA Hovered:', event.target.id, ctaHoveredProperties);
+//     })
+// };
 
 
-/*
 // CTA Hovered (With timeout) *Doesn't Work
 for (var i = 0 ; i < ctaElements.length; i++) {
-    ctaElements[i].addEventListener('mouseenter', event => {
-        setTimeout(function(){
+    const ctaElement = ctaElements[i];
+    ctaElement.addEventListener('mouseenter', event => {
+        let mouseExitListener;
+
+        const mouseEnterTimer = window.setTimeout(function(){
             const ctaHoveredProperties = {
                 element_id: event.target.id,
                 element_class: event.target.className,
@@ -119,10 +123,15 @@ for (var i = 0 ; i < ctaElements.length; i++) {
             };
             rudderstackTrack('CTA Hovered', ctaHoveredProperties);
             console.log('CTA Hovered:', event.target.id, ctaHoveredProperties);
+            ctaElement.removeEventListener('mouseleave', mouseExitListener)
         }, 500);
+
+        mouseExitListener = ctaElement.addEventListener('mouseleave', event => {
+            window.clearTimeout(mouseEnterTimer)
+        })
     })
 };
-*/
+
 
 
 // CTA Clicked
@@ -140,35 +149,62 @@ function trackCtaClick(element) {
     console.log('CTA Clicked:', clickedCTA.id, ctaClickProperties);
 }
 
+// CTA Click Events
+ctaElements.forEach(element => {
+    element.addEventListener('click', function (event) {
+        trackCtaClick(event.currentTarget)
+    })
+})
+
 // Fareharbor CTA Clicked
 !!window.FH && window.FH.autoLightframe({callback: trackCtaClick});
 
 
 // All Other Link Clicks
-function trackLinkClick(element) {
-    var clickedLink = element.closest('a');
+function trackLinkClick(clickedLink) {
 
     const linkClickProperties = {
-        element_id: clickedLink.target.id,
-        element_class: clickedLink.target.className,
-        element_href: clickedLink.target.href,
-        element_tag: clickedLink.target.tagName.toLowerCase()
+        element_id: clickedLink.id,
+        element_class: clickedLink.className,
+        element_href: clickedLink.href,
+        element_tag: clickedLink.tagName.toLowerCase()
     };
 
     rudderstackTrack('Link Clicked', linkClickProperties);
-    console.log('Link Clicked:', clickedLink.target.id, linkClickProperties);
+    console.log('Link Clicked:', clickedLink.id, linkClickProperties);
 }
 
-// Click Events
-document.addEventListener('click', function (event) {
-    const clickedElement = event.target;
+// Non-CTA Click Events
+nonCtaClickElements.forEach(element => {
+    element.addEventListener('click', function (event) {
+        trackLinkClick(event.currentTarget)
+    })
+})
 
-    if (Array.from(ctaElements).includes(clickedElement)){return trackCtaClick(clickedElement)}
-    else if (event.target.tagName = 'a'){return trackLinkClick(event.target);}
-    // need to add else if here for clicks that are neither a CTA or a link
+// Input Element Clicks
+function trackInputClick(clickedInput) {
 
-}, false);
+    const formElement = clickedInput.closest('form')
 
+    const inputClickProperties = {
+        element_id: clickedInput.id,
+        element_class: clickedInput.className,
+        element_href: clickedInput.href,
+        element_tag: clickedInput.tagName.toLowerCase(),
+        form_id: !!formElement && formElement.id,
+        form_name: !!formElement && formElement.dataset.name
+    };
+
+    rudderstackTrack('Input Clicked', inputClickProperties);
+    console.log('Input Clicked:', clickedInput.id, inputClickProperties);
+}
+
+// Input Click Events
+inputElements.forEach(element => {
+    element.addEventListener('focus', function (event) {
+        trackInputClick(event.currentTarget)
+    })
+})
 
 // Section Viewed
 sectionViewedObserver = new IntersectionObserver(entries => {
@@ -240,22 +276,6 @@ formViewedObserver = new IntersectionObserver(entries => {
 });
 
 formElements.forEach(impression => {formViewedObserver.observe(impression);});
-
-
-// Form Engaged
-document.querySelectorAll("form").forEach(function(formElement) {
-    formElement.querySelectorAll("input, select, textarea").forEach(inputElement => {
-        inputElement.addEventListener("click", function() {
-            const formEngagedProperties = {
-                element_id: inputElement.id,
-                element_class: inputElement.className
-            };
-            rudderstackTrack('Form Engaged', formEngagedProperties);
-            console.log('Form Engaged:', inputElement.id, formEngagedProperties);
-        })
-    })
-})
-
 
 // Form Submitted
 function onFormSubmitted (event) {
