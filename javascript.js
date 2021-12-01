@@ -23,7 +23,7 @@ const lazyVideoOptions = {root: null, rootMargin: "0px", threshold: 0},
         e.forEach(e => {
             e.isIntersecting ? (e.target.querySelectorAll("source").forEach(function (i) {
                 i.dataset.src && (i.src = i.dataset.src, delete i.dataset.src, e.target.load())
-            }), playVideo(e.target)) : (e.target.pause() && console.log("Video Paused"))
+            }), playVideo(e.target)) : (e.target.pause() || console.log("Video Paused"))
         })
     }, lazyVideoOptions);
 
