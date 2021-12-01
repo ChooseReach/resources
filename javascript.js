@@ -2,7 +2,38 @@
 /* Form Animations */ $("form").submit(()=>{setTimeout(()=>{$(".form__success--trigger").click()},1000)});
 
 /* LazyVideos.js by Reach (0.0.0 - 569B) */
-const lazyVideoOptions={root:null,rootMargin:"0px",threshold:0},videoObserver=new IntersectionObserver(function(e,i){e.forEach(e=>{e.isIntersecting?(e.target.querySelectorAll("source").forEach(function(i){i.dataset.src&&(i.src=i.dataset.src,delete i.dataset.src,e.target.load())}),e.target.play()):e.target.pause()})},lazyVideoOptions);function initializeVideos(){Array.from(document.querySelectorAll("video")).filter(e=>!e.className.includes("video-initialized")).forEach(e=>{e.className=e.className+" video-initialized",videoObserver.observe(e)})}initializeVideos();
+// Plays a video but catches noisy soft errors
+const playVideo = (video) => {
+    const playPromise = video.play()
+    if (playPromise !== undefined) {
+        return playPromise.then(_ => {
+            // Automatic playback started!
+            // Show playing UI.
+            console.log("Video Playing")
+        })
+            .catch(error => {
+                // Auto-play was prevented
+                // Show paused UI.
+                // Catch errors so they don't pollute our log
+            });
+    }
+}
+const lazyVideoOptions = {root: null, rootMargin: "0px", threshold: 0},
+    videoObserver = new IntersectionObserver(function (e, i) {
+        e.forEach(e => {
+            e.isIntersecting ? (e.target.querySelectorAll("source").forEach(function (i) {
+                i.dataset.src && (i.src = i.dataset.src, delete i.dataset.src, e.target.load())
+            }), playVideo(e.target)) : (e.target.pause() && console.log("Video Paused"))
+        })
+    }, lazyVideoOptions);
+
+function initializeVideos() {
+    Array.from(document.querySelectorAll("video")).filter(e => !e.className.includes("video-initialized")).forEach(e => {
+        e.className = e.className + " video-initialized", videoObserver.observe(e)
+    })
+}
+
+initializeVideos();
 
 /* ReadingTime.js by Michael Lynch (2.0.0 - 1.8KB) */
 !function(e){e.fn.readingTime=function(n){var t={readingTimeTarget:".eta",wordCountTarget:null,wordsPerMinute:270,round:!0,lang:"en",lessThanAMinuteString:"",prependTimeString:"",prependWordString:"",remotePath:null,remoteTarget:null,success:function(){},error:function(){}},i=this,r=e(this);i.settings=e.extend({},t,n);var a=i.settings;if(!this.length)return a.error.call(this),this;if("it"==a.lang)var s=a.lessThanAMinuteString||"Meno di un minuto",l="min";else if("fr"==a.lang)var s=a.lessThanAMinuteString||"Moins d'une minute",l="min";else if("de"==a.lang)var s=a.lessThanAMinuteString||"Weniger als eine Minute",l="min";else if("es"==a.lang)var s=a.lessThanAMinuteString||"Menos de un minuto",l="min";else if("nl"==a.lang)var s=a.lessThanAMinuteString||"Minder dan een minuut",l="min";else if("sk"==a.lang)var s=a.lessThanAMinuteString||"Menej než minútu",l="min";else if("cz"==a.lang)var s=a.lessThanAMinuteString||"Méně než minutu",l="min";else if("hu"==a.lang)var s=a.lessThanAMinuteString||"Kevesebb mint egy perc",l="perc";else var s=a.lessThanAMinuteString||"Less than a minute",l="min";var u=function(n){if(""!==n){var t=n.trim().split(/\s+/g).length,i=a.wordsPerMinute/60,r=t/i;if(a.round===!0)var u=Math.round(r/60);else var u=Math.floor(r/60);var g=Math.round(r-60*u);if(a.round===!0)e(a.readingTimeTarget).text(u>0?a.prependTimeString+u+" "+l:a.prependTimeString+s);else{var o=u+":"+g;e(a.readingTimeTarget).text(a.prependTimeString+o)}""!==a.wordCountTarget&&void 0!==a.wordCountTarget&&e(a.wordCountTarget).text(a.prependWordString+t),a.success.call(this)}else a.error.call(this,"The element is empty.")};r.each(function(){null!=a.remotePath&&null!=a.remoteTarget?e.get(a.remotePath,function(n){u(e("<div>").html(n).find(a.remoteTarget).text())}):u(r.text())})}}(jQuery);
