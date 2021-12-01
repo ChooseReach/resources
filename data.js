@@ -45,122 +45,130 @@ const rudderstackTrack = (event, properties) => {
 
 // Element Definitions
 const 
-    ctaElements = Array.from(document.querySelectorAll("button,.button,.w-button,[data-reach-track='cta']")),
-    nonCtaClickElements = Array.from(document.querySelectorAll("a")).filter(linkElement => !ctaElements.includes(linkElement)),
+    buttonElements = Array.from(document.querySelectorAll("button,a.button,.w-button,[data-reach-track='button']")),
+    linkElements = Array.from(document.querySelectorAll("a")).filter(linkElement => !buttonElements.includes(linkElement)),
     sectionElements = document.querySelectorAll("section,[data-reach-track='section']"),
     menuElements = document.querySelectorAll(".w-dropdown-list,.w-nav-menu,[data-reach-track='menu']"),
     cartElements = document.querySelectorAll(".w-commerce-commercecartcontainerwrapper,[data-reach-track='cart']"),
-    formElements = document.querySelectorAll("form,[data-reach-track='cart']"),
-    inputElements = document.querySelectorAll("input, select, textarea"),
+    formElements = document.querySelectorAll("form,[data-reach-track='form']"),
+    inputElements = document.querySelectorAll("input, select, textarea,[data-reach-track='input']"),
+    specialElements = document.querySelectorAll("[data-reach-track='impression']"),
+    imageElements = document.querySelectorAll("img,[data-reach-track='image']"),
+    zoomElements = document.querySelectorAll("[data-action='zoom']"),
     scrollWrapper = document.querySelector('main'),
     scrollTracker = document.getElementById('scrollTracker'),
-    scrollEvents = document.querySelectorAll('[data-reach-scroll]');
+    scrollElements = document.querySelectorAll('[data-reach-scroll]');
 
+
+// Page Scrolled
 if(scrollTracker){scrollWrapper.appendChild(scrollTracker)};
 
-scrollObserver = new IntersectionObserver(entries => {
+pageScrolledObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-        const scrollProperties = {
+        const pageScrolledProperties = {
             scroll_depth: entry.target.dataset.reachScroll
-            //scroll_direction: scrollDirection (@nathan)
+            //scroll_direction (@nathan)
         };
         if (entry.isIntersecting) {
-            rudderstackTrack('Page Scrolled', scrollProperties);
-            console.log('Page Scrolled: ' + entry.target.dataset.reachScroll + '%', scrollProperties);
+            rudderstackTrack('Page Scrolled', pageScrolledProperties);
+            console.log('Page Scrolled: ' + entry.target.dataset.reachScroll + '%', pageScrolledProperties);
         }
-    })
-})
+    });
+});
 
-scrollEvents.forEach(scroll => {scrollObserver.observe(scroll)})
+scrollElements.forEach(scroll => {pageScrolledObserver.observe(scroll)})
 
 
-// CTA Viewed
-ctaViewedObserver = new IntersectionObserver(entries => {
+// Element Viewed
+elementViewedObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-        const ctaViewedProperties = {
+        const elementViewedProperties = {
             element_id: entry.target.id,
             element_class: entry.target.className,
             element_href: entry.target.href,
             element_tag: entry.target.tagName.toLowerCase()
         };
         if (entry.isIntersecting) {
-            rudderstackTrack('CTA Viewed', ctaViewedProperties);
-            console.log('CTA Viewed:', entry.target.id, ctaViewedProperties);
+            rudderstackTrack('Element Viewed', elementViewedProperties);
+            console.log('Element Viewed:', entry.target.id, elementViewedProperties);
         }
     });
 });
 
-ctaElements.forEach(impression => {ctaViewedObserver.observe(impression);});
+specialElements.forEach(impression => {elementViewedObserver.observe(impression);});
 
 
-// CTA Hovered
-// for (var i = 0 ; i < ctaElements.length; i++) {
-//     ctaElements[i].addEventListener('mouseenter', event => {
-//         const ctaHoveredProperties = {
-//             element_id: event.target.id,
-//             element_class: event.target.className,
-//             element_href: event.target.href,
-//             element_tag: event.target.tagName.toLowerCase()
-//         };
-//         rudderstackTrack('CTA Hovered', ctaHoveredProperties);
-//         console.log('CTA Hovered:', event.target.id, ctaHoveredProperties);
-//     })
-// };
+// Button Viewed
+buttonViewedObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        const buttonViewedProperties = {
+            element_id: entry.target.id,
+            element_class: entry.target.className,
+            element_href: entry.target.href,
+            element_tag: entry.target.tagName.toLowerCase()
+        };
+        if (entry.isIntersecting) {
+            rudderstackTrack('Button Viewed', buttonViewedProperties);
+            console.log('Button Viewed:', entry.target.id, buttonViewedProperties);
+        }
+    });
+});
+
+buttonElements.forEach(impression => {buttonViewedObserver.observe(impression);});
 
 
-// CTA Hovered (With timeout) *Doesn't Work
-for (var i = 0 ; i < ctaElements.length; i++) {
-    const ctaElement = ctaElements[i];
-    ctaElement.addEventListener('mouseenter', event => {
+// Button Hovered 
+for (var i = 0 ; i < buttonElements.length; i++) {
+    const buttonElement = buttonElements[i];
+    buttonElement.addEventListener('mouseenter', event => {
         let mouseExitListener;
 
         const mouseEnterTimer = window.setTimeout(function(){
-            const ctaHoveredProperties = {
+            const buttonHoveredProperties = {
                 element_id: event.target.id,
                 element_class: event.target.className,
                 element_href: event.target.href,
                 element_tag: event.target.tagName.toLowerCase()
             };
-            rudderstackTrack('CTA Hovered', ctaHoveredProperties);
-            console.log('CTA Hovered:', event.target.id, ctaHoveredProperties);
-            ctaElement.removeEventListener('mouseleave', mouseExitListener)
+            rudderstackTrack('Button Hovered', buttonHoveredProperties);
+            console.log('Button Hovered:', event.target.id, buttonHoveredProperties);
+            buttonElement.removeEventListener('mouseleave', mouseExitListener)
         }, 500);
 
-        mouseExitListener = ctaElement.addEventListener('mouseleave', event => {
+        mouseExitListener = buttonElement.addEventListener('mouseleave', event => {
             window.clearTimeout(mouseEnterTimer)
         })
     })
 };
 
 
+// Button Clicked
+function trackButtonClick(element) {
+    var clickedButton = element;
 
-// CTA Clicked
-function trackCtaClick(element) {
-    var clickedCTA = element;
-
-    const ctaClickProperties = {
-        element_id: clickedCTA.id,
-        element_class: clickedCTA.className,
-        element_href: clickedCTA.href,
-        element_tag: clickedCTA.tagName.toLowerCase()
+    const buttonClickProperties = {
+        element_id: clickedButton.id,
+        element_class: clickedButton.className,
+        element_href: clickedButton.href,
+        element_tag: clickedButton.tagName.toLowerCase()
     };
 
-    rudderstackTrack('CTA Clicked', ctaClickProperties);
-    console.log('CTA Clicked:', clickedCTA.id, ctaClickProperties);
+    rudderstackTrack('Button Clicked', buttonClickProperties);
+    console.log('Button Clicked:', clickedButton.id, buttonClickProperties);
 }
 
-// CTA Click Events
-ctaElements.forEach(element => {
+buttonElements.forEach(element => {
     element.addEventListener('click', function (event) {
-        trackCtaClick(event.currentTarget)
+        trackButtonClick(event.currentTarget)
     })
-})
-
-// Fareharbor CTA Clicked
-!!window.FH && window.FH.autoLightframe({callback: trackCtaClick});
+});
 
 
-// All Other Link Clicks
+// Fareharbor Button Clicked
+!!window.FH && window.FH.autoLightframe({callback: trackButtonClick});
+
+
+// Link Clicked
 function trackLinkClick(clickedLink) {
 
     const linkClickProperties = {
@@ -174,37 +182,12 @@ function trackLinkClick(clickedLink) {
     console.log('Link Clicked:', clickedLink.id, linkClickProperties);
 }
 
-// Non-CTA Click Events
-nonCtaClickElements.forEach(element => {
+linkElements.forEach(element => {
     element.addEventListener('click', function (event) {
         trackLinkClick(event.currentTarget)
     })
-})
+});
 
-// Input Element Clicks
-function trackInputClick(clickedInput) {
-
-    const formElement = clickedInput.closest('form')
-
-    const inputClickProperties = {
-        element_id: clickedInput.id,
-        element_class: clickedInput.className,
-        element_href: clickedInput.href,
-        element_tag: clickedInput.tagName.toLowerCase(),
-        form_id: !!formElement && formElement.id,
-        form_name: !!formElement && formElement.dataset.name
-    };
-
-    rudderstackTrack('Input Clicked', inputClickProperties);
-    console.log('Input Clicked:', clickedInput.id, inputClickProperties);
-}
-
-// Input Click Events
-inputElements.forEach(element => {
-    element.addEventListener('focus', function (event) {
-        trackInputClick(event.currentTarget)
-    })
-})
 
 // Section Viewed
 sectionViewedObserver = new IntersectionObserver(entries => {
@@ -277,30 +260,40 @@ formViewedObserver = new IntersectionObserver(entries => {
 
 formElements.forEach(impression => {formViewedObserver.observe(impression);});
 
+
+// Form Engaged
+function trackFormEngagement(focusedInput) {
+    const parentForm = focusedInput.closest('form')
+    const inputFocusedProperties = {
+        element_id: focusedInput.id,
+        element_class: focusedInput.className,
+        element_href: focusedInput.href,
+        element_tag: focusedInput.tagName.toLowerCase(),
+        element_name: focusedInput.name,
+        form_id: !!parentForm && parentForm.id,
+        form_name: !!parentForm && parentForm.dataset.name
+    };
+
+    rudderstackTrack('Form Engaged', inputFocusedProperties);
+    console.log('Form Engaged:', focusedInput.id, inputFocusedProperties);
+}
+
+inputElements.forEach(element => {
+    element.addEventListener('focus', function (event) {
+        trackFormEngagement(event.currentTarget)
+    })
+});
+
+
 // Form Submitted
 function onFormSubmitted (event) {
     if (!event.target.matches('form')) return;
-
     var form = event.target;
 
-    // Grab name, phone, email from the form if the form has those fields
-    var maybeNameElement = form.querySelector("[name='name'],[name='Name']");
-    var maybeEmailElement = form.querySelector("[name='email'],[name='Email']");
-    var maybePhoneElement = form.querySelector("[name='phone'],[name='Phone']");
+    var maybeNameElement = form.querySelector("[name='name'],[name='Name'],[data-reach-track='name']");
+    var maybeEmailElement = form.querySelector("[name='email'],[name='Email'],[type='email'],[data-reach-track='email']");
+    var maybePhoneElement = form.querySelector("[name='phone'],[name='Phone'],[type='tel'],[data-reach-track='phone']");
 
-    const identity = {
-        name: maybeNameElement && maybeNameElement.value,
-        email: maybeEmailElement && maybeEmailElement.value,
-        phone: maybePhoneElement && maybePhoneElement.value,
-    }
-
-    // Identify the user
-    if (!!maybeNameElement || !!maybeEmailElement || !!maybePhoneElement) {
-        rudderanalytics.identify(identity);
-        console.log('Identify: ', JSON.stringify(identity, null, 2));
-    }
-
-    // Track the form submission
     const formProperties = {
         form_id: form.id,
         form_name: form.name,
@@ -308,13 +301,72 @@ function onFormSubmitted (event) {
     };
     rudderstackTrack('Form Submitted', formProperties);
     console.log('Form Submitted:', form.id, formProperties);
+
+    // Identify the user
+    const identity = {
+        name: maybeNameElement && maybeNameElement.value,
+        email: maybeEmailElement && maybeEmailElement.value,
+        phone: maybePhoneElement && maybePhoneElement.value,
+    };
+
+    if (!!maybeNameElement || !!maybeEmailElement || !!maybePhoneElement) {
+        rudderanalytics.identify(identity);
+        console.log('Identify User', identity);
+    };
 }
 
 document.addEventListener('submit', onFormSubmitted)
 
 
-// Page Speed Insights
-// Makes sure page is fully loaded before running
+// Image Hovered
+for (var i = 0 ; i < imageElements.length; i++) {
+    const imageElement = imageElements[i];
+    imageElement.addEventListener('mouseenter', event => {
+        let mouseExitListener;
+
+        const mouseEnterTimer = window.setTimeout(function(){
+            const imageHoveredProperties = {
+                element_class: event.target.className,
+                element_href: event.target.href,
+                element_source: event.target.src,
+                element_alt: event.target.alt,
+                element_tag: event.target.tagName.toLowerCase()
+            };
+            rudderstackTrack('Image Hovered', imageHoveredProperties);
+            console.log('Image Hovered', imageHoveredProperties);
+            imageElement.removeEventListener('mouseleave', mouseExitListener)
+        }, 1000);
+
+        mouseExitListener = imageElement.addEventListener('mouseleave', event => {
+            window.clearTimeout(mouseEnterTimer)
+        })
+    })
+};
+
+
+// Image Zoomed
+function trackImageZoom(element) {
+    var zoomedImage = element;
+
+    const imageZoomedProperties = {
+        element_class: zoomedImage.className,
+        element_href: zoomedImage.href,
+        element_source: zoomedImage.src,
+        element_tag: zoomedImage.tagName.toLowerCase()
+    };
+
+    rudderstackTrack('Image Zoomed', imageZoomedProperties);
+    console.log('Image Zoomed', imageZoomedProperties);
+}
+
+zoomElements.forEach(element => {
+    element.addEventListener('click', function (event) {
+        trackImageZoom(event.currentTarget)
+    })
+});
+
+
+// Insights
 window.onload = function(){
     window.setTimeout(function(){
 
@@ -324,22 +376,24 @@ window.onload = function(){
         // Return only distinct values in an array.
         function reachDistinct(values) {var acc = {}; values.forEach(function(value) {acc[value] = 1;}); return Object.keys(acc);}
 
-        // Store Data from Navigator and Performance Web APIs
+        // Insights Definitions
         const
             connection = navigator.connection,
             time = performance.getEntriesByType('navigation')[0],
             paint = performance.getEntriesByType('paint'),
-
+            traits = rudderanalytics.getUserTraits(),
+            userAnonId = rudderanalytics.getAnonymousId(),
+            userName = traits.name,
+            userEmail = traits.email,
+            userPhone = traits.phone,
             platform = navigator.platform,
             vendor = navigator.vendor,
             memory = navigator.deviceMemory,
             windowWidth = visualViewport.width,
             windowHeight = visualViewport.height,
-
             connectionType = connection.effectiveType,
             downLink = connection.downlink,
             roundTrip = connection.rtt,
-
             startTime = time.startTime,
             redirectStart = time.redirectStart,
             redirectEnd = time.redirectEnd,
@@ -358,7 +412,6 @@ window.onload = function(){
             domComplete = time.domComplete,
             loadStart = time.loadEventStart,
             loadEnd = time.loadEventEnd,
-
             redirect_time = redirectEnd - redirectStart,
             fetch_time = dnsStart - fetchStart,
             dns_time = dnsEnd - dnsStart,
@@ -370,7 +423,6 @@ window.onload = function(){
             processing_time = domComplete - domInteractive,
             domContent_time = domContentEnd - domContentStart,
             load_time = loadEnd - loadStart,
-
             firstByte = responseStart - startTime,
             firstPaint = paint[0].startTime,
             firstContentfulPaint = paint[1].startTime,
@@ -378,7 +430,6 @@ window.onload = function(){
             transferSize = time.transferSize,
             decodedBodySize = time.decodedBodySize;
 
-        // Page Insights Properties Object
         const pageInsightsProperties = {
             platform: platform,
             vendor: vendor,
@@ -425,11 +476,15 @@ window.onload = function(){
             decodedBodySize: decodedBodySize
         };
 
-        rudderanalytics.track('Page Insights', pageInsightsProperties);
-
-        // Page Insights Console Logs
         console.log('--');
-        console.log('%cPage Insights','font-weight: bold;font-size:1.2em;');
+        console.log('%cInsights','font-weight: bold;font-size:1.2em;');
+        console.log('--');
+
+        console.log('%cUser','font-weight: bold;font-size:1.1em;');
+        console.log('AnonymousId:', userAnonId);
+        console.log('Name:', userName);
+        console.log('Email:', userEmail);
+        console.log('Phone:', userPhone);
         console.log('--');
 
         console.log('%cDevice','font-weight: bold;font-size:1.1em;');
@@ -481,7 +536,7 @@ window.onload = function(){
         console.log('Load Time: ' + round(load_time,2) + 'ms');
         console.log('--');
 
-        console.log('%cKey Performance Indicators','font-weight: bold;font-size:1.1em;');
+        console.log('%cKey Metrics','font-weight: bold;font-size:1.1em;');
         console.log('First Byte: ' + round(firstByte/1000,2) + 'sec');
         console.log('First Paint: ' + round(firstPaint/1000,2) + 'sec');
         console.log('First Contentful Paint: ' + round(firstContentfulPaint/1000,2) + 'sec');
@@ -489,5 +544,8 @@ window.onload = function(){
         console.log('Transfer Size: ' + round(transferSize/1000,2) + 'kb');
         console.log('Decoded Body Size: ' + round(decodedBodySize/1000,2) + 'kb');
         console.log('--');
+
+        rudderanalytics.track('Page Insights', pageInsightsProperties);
+        console.log('Page Insights', pageInsightsProperties);
     });
 };
