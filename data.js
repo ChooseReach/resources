@@ -282,8 +282,6 @@ inputElements.forEach(element => {
 
 // Form Submitted
 function onFormSubmitted (form,callback) {
-    if (!event.target.matches('form')) return;
-    var form = event.target;
 
     var maybeNameElement = form.querySelector("[name='name'],[name='Name'],[data-reach-track='name']");
     var maybeEmailElement = form.querySelector("[name='email'],[name='Email'],[type='email'],[data-reach-track='email']");
