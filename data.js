@@ -45,6 +45,7 @@ const
     linkElements = Array.from(document.querySelectorAll("a")).filter(linkElement => !buttonElements.includes(linkElement)),
     sectionElements = document.querySelectorAll("section,[data-reach-track='section']"),
     menuElements = document.querySelectorAll(".w-dropdown-list,.w-nav-menu,[data-reach-track='menu']"),
+    lightboxElements = document.querySelectorAll(".w-lightbox-container,[data-reach-track='lightbox']"),
     cartElements = document.querySelectorAll(".w-commerce-commercecartcontainerwrapper,[data-reach-track='cart']"),
     formElements = document.querySelectorAll("form,[data-reach-track='form']"),
     inputElements = document.querySelectorAll("input:not(.w-button), select, textarea,[data-reach-track='input']"),
@@ -237,6 +238,24 @@ cartViewedObserver = new IntersectionObserver(entries => {
 });
 
 cartElements.forEach(impression => {cartViewedObserver.observe(impression);});
+
+
+// Lightbox Viewed
+lightboxViewedObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        const lightboxViewedProperties = {
+            element_id: entry.target.id,
+            element_class: entry.target.className,
+            element_tag: entry.target.tagName.toLowerCase()
+        };
+        if (entry.isIntersecting) {
+            rudderstackTrack('Lightbox Viewed', lightboxViewedProperties);
+            console.log('Lightbox Viewed:', entry.target.id, lightboxViewedProperties);
+        }
+    });
+});
+
+lightboxElements.forEach(impression => {lightboxViewedObserver.observe(impression);});
 
 
 // Form Viewed
