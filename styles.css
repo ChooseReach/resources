@@ -49,6 +49,7 @@ video {display:block;outline:none;line-height:0;}
 
 /* Stripe */
 .ElementsApp {font-size:5vw !important;}
+.__PrivateStripeElement {width:100%;}
 
 /* Colorize */
 .colorize {-webkit-animation:colorize 20s infinite;animation:colorize 10s infinite;-webkit-animation-direction:alternate;animation-direction:alternate;}
