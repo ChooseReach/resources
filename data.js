@@ -6,7 +6,7 @@ console.log('Data Driven Marketing');
 console.log('Request a performance review at consultations@choosereach.com');
 console.log('Version 1.0.3');
 console.log('--');
-console.log('%cAbove The Fold','font-weight: bold;font-size:1.2em;');
+console.log('%cAbove The Fold Events','font-weight: bold;font-size:1.2em;');
 console.log('--');
 
 
@@ -547,7 +547,7 @@ window.onload = function(){
         console.log('Page Insights', pageInsightsProperties);
 
         console.log('--');
-        console.log('%cBelow The Fold','font-weight: bold;font-size:1.2em;');
+        console.log('%cBelow The Fold Events','font-weight: bold;font-size:1.2em;');
         console.log('--');
     });
 };
