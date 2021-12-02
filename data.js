@@ -250,7 +250,7 @@ lightboxViewedObserver = new IntersectionObserver(entries => {
         };
         if (entry.isIntersecting) {
             rudderstackTrack('Lightbox Viewed', lightboxViewedProperties);
-            console.log('Lightbox Viewed:', entry.target.id, lightboxViewedProperties);
+            console.log('Lightbox Viewed', lightboxViewedProperties);
         }
     });
 });
