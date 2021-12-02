@@ -6,6 +6,8 @@ console.log('Data Driven Marketing');
 console.log('Request a performance review at consultations@choosereach.com');
 console.log('Version 1.0.3');
 console.log('--');
+console.log('%cAbove The Fold','font-weight: bold;font-size:1.2em;');
+console.log('--');
 
 
 // Store marketing tags for use by Rudderstack on subsequent page loads.
@@ -26,7 +28,7 @@ var rudderstackCampaignDetails = !!maybeRudderstackCampaignDetails ? JSON.parse(
 // Load RudderStack
 !function(){var e=window.rudderanalytics=window.rudderanalytics||[];e.methods=["load","page","track","identify","alias","group","ready","reset","getAnonymousId","setAnonymousId"],e.factory=function(t){return function(){var r=Array.prototype.slice.call(arguments);return r.unshift(t),e.push(r),e}};for(var t=0;t<e.methods.length;t++){var r=e.methods[t];e[r]=e.factory(r)}e.loadJS=function(e,t){var r=document.createElement("script");r.type="text/javascript",r.async=!0,r.src="https://cdn.rudderlabs.com/v1/rudder-analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(r,a)},e.loadJS(),
     e.load(reachConfig.writeKey, "https://reachcdi.com"),
-        e.page('Page Loaded')}();
+    e.page('Page Loaded')}();
 
 // Helper function adds utm information to Rudderstack context
 const rudderstackTrack = (event, properties) => {
@@ -45,7 +47,7 @@ const
     menuElements = document.querySelectorAll(".w-dropdown-list,.w-nav-menu,[data-reach-track='menu']"),
     cartElements = document.querySelectorAll(".w-commerce-commercecartcontainerwrapper,[data-reach-track='cart']"),
     formElements = document.querySelectorAll("form,[data-reach-track='form']"),
-    inputElements = document.querySelectorAll("input, select, textarea,[data-reach-track='input']"),
+    inputElements = document.querySelectorAll("input:not(.w-button), select, textarea,[data-reach-track='input']"),
     specialElements = document.querySelectorAll("[data-reach-track='impression']"),
     imageElements = document.querySelectorAll("img,[data-reach-track='image']"),
     zoomElements = document.querySelectorAll("[data-action='zoom']"),
@@ -261,7 +263,6 @@ function trackFormEngagement(focusedInput) {
     const inputFocusedProperties = {
         element_id: focusedInput.id,
         element_class: focusedInput.className,
-        element_href: focusedInput.href,
         element_tag: focusedInput.tagName.toLowerCase(),
         element_name: focusedInput.name,
         form_id: !!parentForm && parentForm.id,
@@ -280,7 +281,7 @@ inputElements.forEach(element => {
 
 
 // Form Submitted
-function onFormSubmitted (event) {
+function onFormSubmitted (form,callback) {
     if (!event.target.matches('form')) return;
     var form = event.target;
 
@@ -307,9 +308,16 @@ function onFormSubmitted (event) {
         rudderanalytics.identify(identity);
         console.log('Identify User', identity);
     };
+
+    !!callback && callback()
 }
 
-document.addEventListener('submit', onFormSubmitted)
+document.addEventListener('submit', function(event){
+    if (!event.target.matches('form')) return;
+    var form = event.target;
+    
+    onFormSubmitted(form)
+})
 
 
 // Image Hovered
@@ -321,7 +329,6 @@ for (var i = 0 ; i < imageElements.length; i++) {
         const mouseEnterTimer = window.setTimeout(function(){
             const imageHoveredProperties = {
                 element_class: event.target.className,
-                element_href: event.target.href,
                 element_source: event.target.src,
                 element_alt: event.target.alt,
                 element_tag: event.target.tagName.toLowerCase()
@@ -344,7 +351,6 @@ function trackImageZoom(element) {
 
     const imageZoomedProperties = {
         element_class: zoomedImage.className,
-        element_href: zoomedImage.href,
         element_source: zoomedImage.src,
         element_tag: zoomedImage.tagName.toLowerCase()
     };
@@ -541,5 +547,9 @@ window.onload = function(){
 
         rudderanalytics.track('Page Insights', pageInsightsProperties);
         console.log('Page Insights', pageInsightsProperties);
+
+        console.log('--');
+        console.log('%cBelow The Fold','font-weight: bold;font-size:1.2em;');
+        console.log('--');
     });
 };
