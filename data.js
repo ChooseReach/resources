@@ -323,7 +323,7 @@ function onFormSubmitted (form,callback) {
 
     if (!!maybeNameElement || !!maybeEmailElement || !!maybePhoneElement) {
         rudderanalytics.identify(identity);
-        console.log('Identify User', identity);
+        console.log('User Profile Updated');
     };
 
     !!callback && callback()
