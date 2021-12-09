@@ -1,4 +1,4 @@
-/* Copyright Year */ if(document.querySelector("#-Copyright-Year")){document.querySelector("#Agency-Copyright-Year").textContent = "" + new Date().getFullYear();};
+/* Copyright Year */ if(document.querySelector("#Agency-Copyright-Year")){document.querySelector("#Agency-Copyright-Year").textContent = "" + new Date().getFullYear();};
 /* Form Animations */ $("form").submit(()=>{setTimeout(()=>{$(".form__success--trigger").click()},1000)});
 
 /* LazyVideos.js by Reach (0.0.0 - 569B) */
