@@ -11,6 +11,9 @@ body::-webkit-scrollbar {display: none;}
 .w-richtext-figure-type-video {border-radius:.5em !important;overflow:hidden !important;}
 .w-embed:before, .w-embed:after {display:none !important;}
 
+/* Lists */
+li, .w-dyn-item {column-break-inside:avoid !important;}
+
 /* Forms */
 * {-webkit-tap-highlight-color:rgba(0, 0, 0, 0);}
 input[type=text],input[type=number],input[type=email],input[type=tel],input[type=url],input[type=search],input[type=radio],input[type=file],textarea,select {-webkit-appearance:none;}
