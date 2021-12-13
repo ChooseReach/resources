@@ -12,7 +12,7 @@ body::-webkit-scrollbar {display: none;}
 .w-embed:before, .w-embed:after {display:none !important;}
 
 /* Lists */
-li, .w-dyn-item {column-break-inside:avoid !important;}
+li, .w-dyn-item {break-inside:avoid !important;}
 
 /* Forms */
 * {-webkit-tap-highlight-color:rgba(0, 0, 0, 0);}
