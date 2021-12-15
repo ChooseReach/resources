@@ -62,6 +62,7 @@ video {display:block;outline:none;line-height:0;}
 
 /* Colorize */
 .colorize {-webkit-animation:colorize 20s infinite;animation:colorize 10s infinite;-webkit-animation-direction:alternate;animation-direction:alternate;}
+@keyframes colorize {0% {color: var(--colorize0);} 25% {color: var(--colorize25);} 50% {color: var(--colorize50);} 75% {color: var(--colorize75);} 100% {color: var(--colorize100);}}
 
 /* Lightbox */
 .w-lightbox-backdrop {background: white;}
