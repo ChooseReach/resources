@@ -81,3 +81,11 @@ img[data-action="zoom"] {cursor:zoom-in;}
 
 /* Hide Elements with Empty Src Attributes */
 img[src=''],iframe[src=''],video[src=''] {display:none}
+
+/* Isotope */
+.isotope-item:nth-child(7n+1) {width: var(--isotope-nth-child);}
+
+/* Mobile Styles */
+@media screen and (max-width: 479px) {
+  .isotope-item:nth-child(7n+1) {width: var(--isotope-nth-child-mobile);}
+}
