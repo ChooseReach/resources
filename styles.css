@@ -27,6 +27,7 @@ input:focus, button:focus, a:focus {outline:0;}
 input[type=url]:invalid {border: 1px solid red;}
 button {background-color:transparent;}
 .w-checkbox-input {box-shadow: none !important;}
+.w-form-label {pointer-events: none !important;}
 
 /* Videos */
 video {display:block;outline:none;line-height:0;}
