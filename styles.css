@@ -1,6 +1,9 @@
-/* Mobile */  
+/* Native */  
 body {-webkit-overflow-scrolling:touch;-ms-overflow-style:none;scrollbar-width:none;}
 body::-webkit-scrollbar {display: none;}
+
+/* Scroll */
+.scroll {top: 100vh;}
 
 /* Captcha */
 .grecaptcha-badge {display: none;}
