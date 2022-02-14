@@ -66,7 +66,9 @@ video {display:block;outline:none;line-height:0;}
 
 /* Colorize */
 .colorize {animation:colorize var(--colorize-duration, 20s) infinite alternate;}
+.colorize-bg {animation:colorize-bg var(--colorize-bg-duration, 20s) infinite alternate;}
 @keyframes colorize {0% {color: var(--colorize0);} 25% {color: var(--colorize25);} 50% {color: var(--colorize50);} 75% {color: var(--colorize75);} 100% {color: var(--colorize100);}}
+@keyframes colorize-bg {0% {background-color: var(--colorize0);} 25% {background-color: var(--colorize25);} 50% {background-color: var(--colorize50);} 75% {background-color: var(--colorize75);} 100% {background-color: var(--colorize100);}}
 
 /* Lightbox */
 .w-lightbox-backdrop {background: var(--lightbox-backdrop, white);}
