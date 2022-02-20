@@ -38,7 +38,7 @@ const rudderstackTrack = (event, properties) => {
 
 // Element Definitions
 const 
-    buttonElements = Array.from(document.querySelectorAll("button,a.button,.w-button,.w-dropdown-toggle,[data-reach-track='button']")),
+    buttonElements = Array.from(document.querySelectorAll("button,a.button,.w-button,.w-nav-button,.w-dropdown-toggle,[data-reach-track='button']")),
     linkElements = Array.from(document.querySelectorAll("a")).filter(linkElement => !buttonElements.includes(linkElement)),
     sectionElements = document.querySelectorAll("section,[data-reach-track='section']"),
     menuElements = document.querySelectorAll(".w-dropdown-list,.w-nav-menu,[data-reach-track='menu']"),
