@@ -49,6 +49,7 @@ const
     specialElements = document.querySelectorAll("[data-reach-track='impression']"),
     imageElements = document.querySelectorAll("img,[data-reach-track='image']"),
     zoomElements = document.querySelectorAll("[data-action='zoom']"),
+    tooltipElements = document.querySelectorAll(".tooltip"),
     scrollWrapper = document.querySelector('main'),
     scrollTracker = document.getElementById('scrollTracker'),
     scrollElements = document.querySelectorAll('[data-reach-scroll]');
@@ -164,14 +165,12 @@ buttonElements.forEach(element => {
 
 // Link Clicked
 function trackLinkClick(clickedLink) {
-
     const linkClickProperties = {
         element_id: clickedLink.id,
         element_class: clickedLink.className,
         element_href: clickedLink.href,
         element_tag: clickedLink.tagName.toLowerCase()
     };
-
     rudderstackTrack('Link Clicked', linkClickProperties);
     console.log('Link Clicked:', clickedLink.id, linkClickProperties);
 }
@@ -376,6 +375,24 @@ function trackImageZoom(element) {
 zoomElements.forEach(element => {
     element.addEventListener('click', function (event) {
         trackImageZoom(event.currentTarget)
+    })
+});
+
+
+// Tooltip Clicked
+function trackTooltipClick(clickedTooltip) {
+    const tooltipClickProperties = {
+        element_id: clickedTooltip.id,
+        element_class: clickedTooltip.className,
+        element_tag: clickedTooltip.tagName.toLowerCase()
+    };
+    rudderstackTrack('Tooltip Clicked', tooltipClickProperties);
+    console.log('Tooltip Clicked:', clickedTooltip.id, tooltipClickProperties);
+}
+
+tooltipElements.forEach(element => {
+    element.addEventListener('click', function (event) {
+        trackTooltipClick(event.currentTarget)
     })
 });
 
