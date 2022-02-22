@@ -396,6 +396,36 @@ tooltipElements.forEach(element => {
     })
 });
 
+// Associate tracking number with segment io user id so we can attribute calls to ad campaigns
+// (waits 10 seconds for call rail and segment code snippets to fire first)
+window.setTimeout(function() {
+    typeof rudderanalytics !== "undefined" && (function() {
+        var userId = rudderanalytics.getAnonymousId()
+
+        function distinct(values) { var acc = {}; values.forEach(function(value) { acc[value] = 1; }); return Object.keys(acc);}
+
+        var allPhoneNumbers = Array.from(document.querySelectorAll("a")).filter(function(a) { return a.href.includes("tel:"); }).map(function(a) { return a.href.replace("tel:", "")});
+
+        var distinctPhoneNumbers = distinct(allPhoneNumbers)
+
+        if (!!userId) {
+            distinctPhoneNumbers.forEach(function(trackingNumber) {
+
+                $.ajax( {
+                    method: "POST",
+                    url: "https://api.choosereach.com/v7/analytics/segmentIOAndTrackingNumber" ,
+                    data: JSON.stringify({
+                        segmentIOUserId: userId,
+                        trackingNumber: trackingNumber
+                    }),
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                });
+            })
+        }
+    })();
+}, 10000);
 
 // Insights
 window.onload = function(){
@@ -580,3 +610,4 @@ window.onload = function(){
         console.log('Page Insights', pageInsightsProperties);
     });
 };
+
