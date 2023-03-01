@@ -74,7 +74,7 @@ video {display:block;outline:none;line-height:0;}
 @keyframes colorize-hue {0% {filter: hue-rotate(0deg);}50% {filter: hue-rotate(300deg);}100% {filter: hue-rotate(0deg);}}
 
 /* Lightbox */
-.w-lightbox-backdrop {background: var(--lightbox-backdrop, white);}
+.w-lightbox-backdrop {background: var(--lightbox-backdrop, #ffffffc9);}
 .w-lightbox-frame {border-radius: var(--lightbox-border-radius, .5em); overflow: hidden;}
 
 /* Zoom */  
