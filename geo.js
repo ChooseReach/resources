@@ -91,7 +91,7 @@ function initStoreLocator(geoElement) {
     findClosestLocation(allLocations, function (closestLocation, err) {
       myLocationLoader.style.display = "none";
       if (!!err) {
-        myLocationBottom.innerHTML = "GeoLocation Unavailable";
+        myLocationBottom.innerHTML = "Enable Location Services";
         console.error(err);
       } else {
         saveClosestLocation(closestLocation);
