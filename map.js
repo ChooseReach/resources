@@ -12,8 +12,8 @@ const template = `
                     </div>
                     </div>
                     <div class="search__details">
-                    <h2 class="search__title"><%= listing.properties.address %></h2>
-                    <div class="search__address"><%= listing.properties.city %>, <%= listing.properties.state %> <%= listing.properties.zip %> | Under Construction</div>
+                    <h2 class="search__title"><%= listing.properties.addressShort %></h2>
+                    <div class="search__address"><%= listing.properties.city %>, <%= listing.properties.state %> <%= listing.properties.zip %></div>
                     <div class="search__label">
                     <div>View&nbsp;Details&nbsp;&nbsp;</div>
                     <div class="icon w-embed">
@@ -35,7 +35,7 @@ function renderListingsTemplate(listings) {
 const geocoderContainerId = 'Search-Map-Form';
 const mapContainerId = 'map';
 const mapboxAccessToken = 'pk.eyJ1IjoiY2hvb3NlcmVhY2giLCJhIjoiY2tzMmZwaXRoMDB3czJxcDlpbTgyY2I3MiJ9.lG3fr5o7dEr-9Cj3C4dgbg';
-const mapboxStyle = 'mapbox://styles/mapbox/light-v11';
+const mapboxStyle = 'mapbox://styles/choosereach/ckrjazfmp4px617p0h6oyj9dd';
 // Center the map on Green Valley Parkway HHC by default
 const mapCenter = [-115.08585, 36.02941];
 const mapZoom = 13;
@@ -50,8 +50,6 @@ const map = new mapboxgl.Map({
     zoom: mapZoom,
     scrollZoom: true
 });
-
-const allLocations = JSON.parse('[{"name":"Louetta Rd","openStatus":"Now Hiring","map":"https://assets-global.website-files.com/60f9c1b675841a19d29d576e/63b9ce958e4ca008d22f89b2_fziXi8FuSPrbE7VA8yGa9JbG9rbFEKXwPsQlKJ-GdU4.jpeg","street":"Louetta Rd","crossStreets":"Tomball Pkwy &amp; Louetta Rd","addressLong":"10111 Louetta Rd #800, Houston, Texas, 77070","addressShort":"10111 Louetta Rd #800","city":"Houston","state":"Texas","zip":"77070","latitude":30.00017,"longitude":-95.56084,"geoEnabled":true,"link":"https://www.hhc.ooo/location/10111-louetta-rd-800-houston-texas-77070"},{"name":"Traverse Pkwy","openStatus":"Now Open","map":"https://assets-global.website-files.com/60f9c1b675841a19d29d576e/638152ab122a500c2b6ec455_jHxJpBVYi9jpAHfkfuUVzoQj-qWToK1EczddfxAylXo.jpeg","street":"Traverse Pkwy","crossStreets":"I-15 &amp; Route 92","addressLong":"1712 West Traverse Pkwy, Lehi, Utah, 84043","addressShort":"1712 West Traverse Pkwy","city":"Lehi","state":"Utah","zip":"84043","latitude":40.43331,"longitude":-111.87755,"geoEnabled":true,"link":"https://www.hhc.ooo/location/1712-west-traverse-pkwy-lehi-utah-84043"},{"name":"Friant Rd","openStatus":"Now Hiring","map":"https://assets-global.website-files.com/60f9c1b675841a19d29d576e/62d5dab08be8a77dc40b28e1_fresno.jpeg","street":"Friant Rd","crossStreets":"Yosemite Fwy &amp; Friant Rd","addressLong":"8482 N Friant Rd #107, Fresno, California, 93720","addressShort":"8482 N Friant Rd #107","city":"Fresno","state":"California","zip":"93720","latitude":36.859,"longitude":-119.783182,"geoEnabled":true,"link":"https://www.hhc.ooo/location/8482-n-friant-rd-107-fresno-california-93720"},{"name":"Village Center Cir","openStatus":"Now Open","map":"https://assets-global.website-files.com/60f9c1b675841a19d29d576e/62d5daacb0ec997e52079d77_summerlin.jpeg","street":"Village Center Cir","crossStreets":"Summerlin Pkwy &amp; Town Center","addressLong":"1910 Village Center Circle #1, Las Vegas, Nevada, 89134","addressShort":"1910 Village Center Circle #1","city":"Las Vegas","state":"Nevada","zip":"89134","latitude":36.193299,"longitude":-115.303101,"geoEnabled":true,"link":"https://www.hhc.ooo/location/1910-village-center-circle-1-las-vegas-nevada-89134"},{"name":"University Dr","openStatus":"Now Open","map":"https://assets-global.website-files.com/60f9c1b675841a19d29d576e/62aa5114698030df79841916_hhc-university-drive-thumb.jpeg","street":"University Dr","crossStreets":"University Dr &amp; Rural Rd","addressLong":"927 E University Dr, Tempe, Arizona, 85281","addressShort":"927 E University Dr","city":"Tempe","state":"Arizona","zip":"85281","latitude":33.421705,"longitude":-111.925357,"geoEnabled":true,"link":"https://www.hhc.ooo/location/927-e-university-dr-tempe-arizona-85281"},{"name":"Sahara Blvd","openStatus":"Now Hiring","map":"https://assets-global.website-files.com/60f9c1b675841a19d29d576e/6258a80bfe0d564d9f6efa19_map_0005_sahara_png.jpeg","street":"Sahara Blvd","crossStreets":"Sahara Ave &amp; Jones Blvd","addressLong":"5915 West Sahara Ave, Las Vegas, Nevada, 89146","addressShort":"5915 West Sahara Ave","city":"Las Vegas","state":"Nevada","zip":"89146","latitude":36.14384,"longitude":-115.22275,"geoEnabled":true,"link":"https://www.hhc.ooo/location/5915-west-sahara-ave-las-vegas-nevada-89146"},{"name":"Ann Rd","openStatus":"Now Open","map":"https://assets-global.website-files.com/60f9c1b675841a19d29d576e/6258a8060a79b6d3f07944c1_map_0008_westann_png.jpeg","street":"Ann Rd","crossStreets":"US-95 &amp; Ann Road","addressLong":"7155 West Ann Rd, Las Vegas, Nevada, 89130","addressShort":"7155 West Ann Rd","city":"Las Vegas","state":"Nevada","zip":"89130","latitude":36.26203,"longitude":-115.24965,"geoEnabled":true,"link":"https://www.hhc.ooo/location/7155-west-ann-rd-las-vegas-nevada-89130"},{"name":"Green Valley Pkwy","openStatus":"Now Open","map":"https://assets-global.website-files.com/60f9c1b675841a19d29d576e/6258a8055984272145602dd9_map_0001_green-valley_png.jpeg","street":"Green Valley Pkwy","crossStreets":"I-215 &amp; Green Valley Pkwy","addressLong":"1500 N Green Valley Pkwy #110, Henderson, Nevada, 89074","addressShort":"1500 N Green Valley Pkwy #110","city":"Henderson","state":"Nevada","zip":"89074","latitude":36.02941,"longitude":-115.08585,"geoEnabled":true,"link":"https://www.hhc.ooo/location/1500-n-green-valley-pkwy-110-henderson-nevada-89074"}]');
 
 function mapHHCLocationToMapboxFormat(hccLocation) {
     return {
@@ -77,11 +75,14 @@ stores.features.forEach(function (store, i) {
     store.properties.id = i;
 });
 
+
+
 map.on('load', () => {
+
     /* Add the data to your map as a layer */
     map.addLayer({
         id: 'locations',
-        type: 'circle',
+        type: 'fill',
         /* Add a GeoJSON source containing place coordinates and information. */
         source: {
             type: 'geojson',
@@ -126,7 +127,8 @@ const geocoder = new MapboxGeocoder({
     mapboxgl: mapboxgl
 })
 
-document.getElementById(geocoderContainerId).appendChild(geocoder.onAdd(map));
+const geocoderInput = geocoder.onAdd(map);
+document.getElementById(geocoderContainerId).appendChild(geocoderInput);
 
 // When a location is selected from the dropdown, sort the listings by distance to that location
 geocoder.on('result', function(result) {
@@ -169,27 +171,25 @@ function buildLocationList(stores) {
     const listings = document.getElementById('Search-Map-List');
     listings.innerHTML = "";
 
-    debugger
-
     listings.innerHTML = renderListingsTemplate(stores)
 
-    for (const store of stores.features) {
-        /* Add a new listing section to the sidebar. */
+    // for (const store of stores.features) {
+    //     /* Add a new listing section to the sidebar. */
 
-        link.addEventListener('click', function () {
-            for (const feature of stores.features) {
-                if (this.id === `link-${feature.properties.id}`) {
-                    flyToStore(feature);
-                    createPopUp(feature);
-                }
-            }
-            const activeItem = document.getElementsByClassName('active');
-            if (activeItem[0]) {
-                activeItem[0].classList.remove('active');
-            }
-            this.parentNode.classList.add('active');
-        });
-    }
+    //     link.addEventListener('click', function () {
+    //         for (const feature of stores.features) {
+    //             if (this.id === `link-${feature.properties.id}`) {
+    //                 flyToStore(feature);
+    //                 createPopUp(feature);
+    //             }
+    //         }
+    //         const activeItem = document.getElementsByClassName('active');
+    //         if (activeItem[0]) {
+    //             activeItem[0].classList.remove('active');
+    //         }
+    //         this.parentNode.classList.add('active');
+    //     });
+    // }
 }
 
 function flyToStore(currentFeature) {
@@ -200,14 +200,7 @@ function flyToStore(currentFeature) {
 }
 
 function createPopUp(currentFeature) {
-    const popUps = document.getElementsByClassName('mapboxgl-popup');
-    /** Check if there is already a popup on the map and if so, remove it */
-    if (popUps[0]) popUps[0].remove();
-
-    const popup = new mapboxgl.Popup({ closeOnClick: false })
-        .setLngLat(currentFeature.geometry.coordinates)
-        .setHTML(`<h3>Sweetgreen</h3><h4>${currentFeature.properties.address}</h4>`)
-        .addTo(map);
+    window.location.href = currentFeature.properties.link
 }
 
 function calculateDistanceBetweenTwoCoordinates(latt1, lonn1, latt2, lonn2)
