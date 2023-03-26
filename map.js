@@ -32,6 +32,7 @@ function renderListingsTemplate(listings) {
 }
 
 // Set these variables during migration to hhc.ooo
+const geocoderContainerId = 'Search-Map-Form';
 const mapContainerId = 'map';
 const mapboxAccessToken = 'pk.eyJ1IjoiY2hvb3NlcmVhY2giLCJhIjoiY2tzMmZwaXRoMDB3czJxcDlpbTgyY2I3MiJ9.lG3fr5o7dEr-9Cj3C4dgbg';
 const mapboxStyle = 'mapbox://styles/mapbox/light-v11';
@@ -125,7 +126,7 @@ const geocoder = new MapboxGeocoder({
     mapboxgl: mapboxgl
 })
 
-document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+document.getElementById(geocoderContainerId).appendChild(geocoder.onAdd(map));
 
 // When a location is selected from the dropdown, sort the listings by distance to that location
 geocoder.on('result', function(result) {
