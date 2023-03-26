@@ -1,4 +1,6 @@
-const template = `
+document.addEventListener('DOMContentLoaded', function () {
+
+    const template = `
 <% for (let listing of listings) { %>
     <div class="search__item">
     <article>
@@ -27,199 +29,199 @@ const template = `
 <% } %>
 `
 
-function renderListingsTemplate(listings) {
-    return ejs.render(template, {listings: listings.features });
-}
+    function renderListingsTemplate(listings) {
+        return ejs.render(template, {listings: listings.features});
+    }
 
 // Set these variables during migration to hhc.ooo
-const geocoderContainerId = 'Search-Map-Form';
-const mapContainerId = 'map';
-const mapboxAccessToken = 'pk.eyJ1IjoiY2hvb3NlcmVhY2giLCJhIjoiY2tzMmZwaXRoMDB3czJxcDlpbTgyY2I3MiJ9.lG3fr5o7dEr-9Cj3C4dgbg';
-const mapboxStyle = 'mapbox://styles/choosereach/ckrjazfmp4px617p0h6oyj9dd';
+    const geocoderContainerId = 'Search-Map-Form';
+    const mapContainerId = 'map';
+    const mapboxAccessToken = 'pk.eyJ1IjoiY2hvb3NlcmVhY2giLCJhIjoiY2tzMmZwaXRoMDB3czJxcDlpbTgyY2I3MiJ9.lG3fr5o7dEr-9Cj3C4dgbg';
+    const mapboxStyle = 'mapbox://styles/choosereach/ckrjazfmp4px617p0h6oyj9dd';
 // Center the map on Green Valley Parkway HHC by default
-const mapCenter = [-115.08585, 36.02941];
-const mapZoom = 13;
+    const mapCenter = [-115.08585, 36.02941];
+    const mapZoom = 13;
 // TODO - Need to figure out how to adopt HHC mapbox styles !!!
 
-mapboxgl.accessToken = mapboxAccessToken
+    mapboxgl.accessToken = mapboxAccessToken
 
-const map = new mapboxgl.Map({
-    container: mapContainerId,
-    style: mapboxStyle,
-    center: mapCenter,
-    zoom: mapZoom,
-    scrollZoom: true
-});
+    const map = new mapboxgl.Map({
+        container: mapContainerId,
+        style: mapboxStyle,
+        center: mapCenter,
+        zoom: mapZoom,
+        scrollZoom: true
+    });
 
-function mapHHCLocationToMapboxFormat(hccLocation) {
-    return {
-        type: "Feature",
-        geometry: {
-            type: "Point",
-            coordinates: [
-                hccLocation.longitude,
-                hccLocation.latitude,
-            ]
-        },
-        "properties": hccLocation
-    }
-}
-//
-const stores = {
-    "type": "FeatureCollection",
-    "features": allLocations.map(mapHHCLocationToMapboxFormat)
-}
-
-/* Assign a unique ID to each store */
-stores.features.forEach(function (store, i) {
-    store.properties.id = i;
-});
-
-
-
-map.on('load', () => {
-
-    /* Add the data to your map as a layer */
-    map.addLayer({
-        id: 'locations',
-        type: 'fill',
-        /* Add a GeoJSON source containing place coordinates and information. */
-        source: {
-            type: 'geojson',
-            data: stores
+    function mapHHCLocationToMapboxFormat(hccLocation) {
+        return {
+            type: "Feature",
+            geometry: {
+                type: "Point",
+                coordinates: [
+                    hccLocation.longitude,
+                    hccLocation.latitude,
+                ]
+            },
+            "properties": hccLocation
         }
-    });
-
-    buildLocationList(stores);
-});
-
-map.on('click', (event) => {
-    /* Determine if a feature in the "locations" layer exists at that point. */
-    const features = map.queryRenderedFeatures(event.point, {
-        layers: ['locations']
-    });
-
-    /* If it does not exist, return */
-    if (!features.length) return;
-
-    const clickedPoint = features[0];
-
-    /* Fly to the point */
-    flyToStore(clickedPoint);
-
-    /* Close all other popups and display popup for clicked store */
-    // Optionally enable popups
-    createPopUp(clickedPoint);
-
-    /* Highlight listing in sidebar (and remove highlight for all other listings) */
-    const activeItem = document.getElementsByClassName('active');
-    if (activeItem[0]) {
-        activeItem[0].classList.remove('active');
     }
-    const listing = document.getElementById(
-        `listing-${clickedPoint.properties.id}`
-    );
-    listing.classList.add('active');
-});
 
-const geocoder = new MapboxGeocoder({
-    accessToken: mapboxgl.accessToken,
-    mapboxgl: mapboxgl
-})
+//
+    const stores = {
+        "type": "FeatureCollection",
+        "features": allLocations.map(mapHHCLocationToMapboxFormat)
+    }
 
-const geocoderInput = geocoder.onAdd(map);
-document.getElementById(geocoderContainerId).appendChild(geocoderInput);
+    /* Assign a unique ID to each store */
+    stores.features.forEach(function (store, i) {
+        store.properties.id = i;
+    });
+
+
+    map.on('load', () => {
+
+        /* Add the data to your map as a layer */
+        map.addLayer({
+            id: 'locations',
+            type: 'fill',
+            /* Add a GeoJSON source containing place coordinates and information. */
+            source: {
+                type: 'geojson',
+                data: stores
+            }
+        });
+
+        buildLocationList(stores);
+    });
+
+    map.on('click', (event) => {
+        /* Determine if a feature in the "locations" layer exists at that point. */
+        const features = map.queryRenderedFeatures(event.point, {
+            layers: ['locations']
+        });
+
+        /* If it does not exist, return */
+        if (!features.length) return;
+
+        const clickedPoint = features[0];
+
+        /* Fly to the point */
+        flyToStore(clickedPoint);
+
+        /* Close all other popups and display popup for clicked store */
+        // Optionally enable popups
+        createPopUp(clickedPoint);
+
+        /* Highlight listing in sidebar (and remove highlight for all other listings) */
+        const activeItem = document.getElementsByClassName('active');
+        if (activeItem[0]) {
+            activeItem[0].classList.remove('active');
+        }
+        const listing = document.getElementById(
+            `listing-${clickedPoint.properties.id}`
+        );
+        listing.classList.add('active');
+    });
+
+    const geocoder = new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+    })
+
+    const geocoderInput = geocoder.onAdd(map);
+    document.getElementById(geocoderContainerId).appendChild(geocoderInput);
 
 // When a location is selected from the dropdown, sort the listings by distance to that location
-geocoder.on('result', function(result) {
-    console.log(result);
-    const address = result.result
+    geocoder.on('result', function (result) {
+        console.log(result);
+        const address = result.result
 
-    // If we successfully found an address from the search box
-    if (address) {
-        const latitude = address.center[0];
-        const longitude = address.center[1];
+        // If we successfully found an address from the search box
+        if (address) {
+            const latitude = address.center[0];
+            const longitude = address.center[1];
 
-        console.log(latitude, longitude);
+            console.log(latitude, longitude);
 
-        console.log(stores)
+            console.log(stores)
 
-        const sortedStores = stores.features.sort((store1, store2) => {
-            const store1Lat = store1.geometry.coordinates[0]
-            const store1Lon = store1.geometry.coordinates[1]
-            const store2Lat = store2.geometry.coordinates[0]
-            const store2Lon = store2.geometry.coordinates[1]
+            const sortedStores = stores.features.sort((store1, store2) => {
+                const store1Lat = store1.geometry.coordinates[0]
+                const store1Lon = store1.geometry.coordinates[1]
+                const store2Lat = store2.geometry.coordinates[0]
+                const store2Lon = store2.geometry.coordinates[1]
 
-            const store1Distance = calculateDistanceBetweenTwoCoordinates(store1Lat, store1Lon, latitude, longitude)
-            const store2Distance = calculateDistanceBetweenTwoCoordinates(store2Lat, store2Lon, latitude, longitude)
+                const store1Distance = calculateDistanceBetweenTwoCoordinates(store1Lat, store1Lon, latitude, longitude)
+                const store2Distance = calculateDistanceBetweenTwoCoordinates(store2Lat, store2Lon, latitude, longitude)
 
-            return store1Distance - store2Distance
-        })
+                return store1Distance - store2Distance
+            })
 
-        // Rebuild the listings sorted by distance
-        buildLocationList({
-            "type": "FeatureCollection",
-            "features": sortedStores
+            // Rebuild the listings sorted by distance
+            buildLocationList({
+                "type": "FeatureCollection",
+                "features": sortedStores
+            });
+        }
+
+    })
+
+
+    function buildLocationList(stores) {
+
+        const listings = document.getElementById('Search-Map-List');
+        listings.innerHTML = "";
+
+        listings.innerHTML = renderListingsTemplate(stores)
+
+        // for (const store of stores.features) {
+        //     /* Add a new listing section to the sidebar. */
+
+        //     link.addEventListener('click', function () {
+        //         for (const feature of stores.features) {
+        //             if (this.id === `link-${feature.properties.id}`) {
+        //                 flyToStore(feature);
+        //                 createPopUp(feature);
+        //             }
+        //         }
+        //         const activeItem = document.getElementsByClassName('active');
+        //         if (activeItem[0]) {
+        //             activeItem[0].classList.remove('active');
+        //         }
+        //         this.parentNode.classList.add('active');
+        //     });
+        // }
+    }
+
+    function flyToStore(currentFeature) {
+        map.flyTo({
+            center: currentFeature.geometry.coordinates,
+            zoom: 15
         });
     }
 
-})
+    function createPopUp(currentFeature) {
+        window.location.href = currentFeature.properties.link
+    }
 
+    function calculateDistanceBetweenTwoCoordinates(latt1, lonn1, latt2, lonn2) {
+        const R = 6371; // km
+        const dLat = toRad(latt2 - latt1);
+        const dLon = toRad(lonn2 - lonn1);
+        const lat1 = toRad(latt1);
+        const lat2 = toRad(latt2);
 
-function buildLocationList(stores) {
-
-    const listings = document.getElementById('Search-Map-List');
-    listings.innerHTML = "";
-
-    listings.innerHTML = renderListingsTemplate(stores)
-
-    // for (const store of stores.features) {
-    //     /* Add a new listing section to the sidebar. */
-
-    //     link.addEventListener('click', function () {
-    //         for (const feature of stores.features) {
-    //             if (this.id === `link-${feature.properties.id}`) {
-    //                 flyToStore(feature);
-    //                 createPopUp(feature);
-    //             }
-    //         }
-    //         const activeItem = document.getElementsByClassName('active');
-    //         if (activeItem[0]) {
-    //             activeItem[0].classList.remove('active');
-    //         }
-    //         this.parentNode.classList.add('active');
-    //     });
-    // }
-}
-
-function flyToStore(currentFeature) {
-    map.flyTo({
-        center: currentFeature.geometry.coordinates,
-        zoom: 15
-    });
-}
-
-function createPopUp(currentFeature) {
-    window.location.href = currentFeature.properties.link
-}
-
-function calculateDistanceBetweenTwoCoordinates(latt1, lonn1, latt2, lonn2)
-{
-    const R = 6371; // km
-    const dLat = toRad(latt2-latt1);
-    const dLon = toRad(lonn2-lonn1);
-    const lat1 = toRad(latt1);
-    const lat2 = toRad(latt2);
-
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    const d = R * c;
-    return d;
-}
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const d = R * c;
+        return d;
+    }
 
 // Converts numeric degrees to radians
-function toRad(Value)
-{
-    return Value * Math.PI / 180;
-}
+    function toRad(Value) {
+        return Value * Math.PI / 180;
+    }
+
+}, false)
