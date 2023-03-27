@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+$(document).ready(function () {
 
     const template = `
 <% for (let listing of listings) { %>
@@ -224,4 +224,4 @@ document.addEventListener('DOMContentLoaded', function () {
         return Value * Math.PI / 180;
     }
 
-}, false)
+});
