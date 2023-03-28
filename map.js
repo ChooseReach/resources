@@ -1,4 +1,12 @@
-$(document).ready(function () {
+function waitUntilAllLocationsInitialized(cb) {
+    if (typeof allLocations !== "undefined") {
+        cb();
+    } else {
+        window.setTimeout(waitUntilAllLocationsInitialized(cb), 100);
+    }
+}
+
+waitUntilAllLocationsInitialized(function () {
 
     const template = `
 <% for (let listing of listings) { %>
