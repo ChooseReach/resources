@@ -2,7 +2,7 @@ function waitUntilAllLocationsInitialized(cb) {
     if (typeof allLocations !== "undefined") {
         cb();
     } else {
-        window.setTimeout(waitUntilAllLocationsInitialized(cb), 100);
+        window.setTimeout(function () { waitUntilAllLocationsInitialized(cb) }, 100);
     }
 }
 
