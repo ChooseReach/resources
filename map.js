@@ -103,6 +103,7 @@ waitUntilAllLocationsInitialized(function () {
         buildLocationList(stores);
     });
 
+    // When we click on a marker for an HHC location, navigate to the listing's page.
     map.on('click', (event) => {
         /* Determine if a feature in the "locations" layer exists at that point. */
         const features = map.queryRenderedFeatures(event.point, {
@@ -114,22 +115,8 @@ waitUntilAllLocationsInitialized(function () {
 
         const clickedPoint = features[0];
 
-        /* Fly to the point */
-        flyToStore(clickedPoint);
-
-        /* Close all other popups and display popup for clicked store */
-        // Optionally enable popups
-        createPopUp(clickedPoint);
-
-        /* Highlight listing in sidebar (and remove highlight for all other listings) */
-        const activeItem = document.getElementsByClassName('active');
-        if (activeItem[0]) {
-            activeItem[0].classList.remove('active');
-        }
-        const listing = document.getElementById(
-            `listing-${clickedPoint.properties.id}`
-        );
-        listing.classList.add('active');
+        // Navigate to the listing's page
+        window.location.href = clickedPoint.properties.link;
     });
 
     const geocoder = new MapboxGeocoder({
