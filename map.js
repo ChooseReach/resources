@@ -126,6 +126,7 @@ waitUntilAllLocationsInitialized(function () {
 
     const geocoderInput = geocoder.onAdd(map);
     document.getElementById(geocoderContainerId).appendChild(geocoderInput);
+    geocoderInput.placeholder = "Search by city, state, zipcode etc"
 
 // When a location is selected from the dropdown, sort the listings by distance to that location
     geocoder.on('result', function (result) {
