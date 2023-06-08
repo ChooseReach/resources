@@ -543,9 +543,6 @@ window.onload = function(){
 
         console.log('%cUser','font-weight: bold;font-size:1.1em;');
         console.log('AnonymousId:', userAnonId);
-        console.log('Name:', userName);
-        console.log('Email:', userEmail);
-        console.log('Phone:', userPhone);
         console.log('--');
 
         console.log('%cDevice','font-weight: bold;font-size:1.1em;');
