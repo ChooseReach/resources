@@ -2,7 +2,9 @@ function waitUntilAllLocationsInitialized(cb) {
     if (typeof allLocations !== "undefined") {
         cb();
     } else {
-        window.setTimeout(function () { waitUntilAllLocationsInitialized(cb) }, 100);
+        window.setTimeout(function () {
+            waitUntilAllLocationsInitialized(cb)
+        }, 100);
     }
 }
 
@@ -46,10 +48,9 @@ waitUntilAllLocationsInitialized(function () {
     const mapContainerId = 'map';
     const mapboxAccessToken = 'pk.eyJ1IjoiY2hvb3NlcmVhY2giLCJhIjoiY2tzMmZwaXRoMDB3czJxcDlpbTgyY2I3MiJ9.lG3fr5o7dEr-9Cj3C4dgbg';
     const mapboxStyle = 'mapbox://styles/choosereach/ckrjazfmp4px617p0h6oyj9dd';
-// Center the map on Green Valley Parkway HHC by default
-    const mapCenter = [-115.08585, 36.02941];
-    const mapZoom = 13;
-// TODO - Need to figure out how to adopt HHC mapbox styles !!!
+    // Center the map on Green Valley Parkway HHC by default
+    const mapCenter = [-98.178549, 37.409927];
+    const mapZoom = 3.85;
 
     mapboxgl.accessToken = mapboxAccessToken
 
@@ -61,7 +62,9 @@ waitUntilAllLocationsInitialized(function () {
         scrollZoom: true
     });
 
+
     function mapHHCLocationToMapboxFormat(hccLocation) {
+
         return {
             type: "Feature",
             geometry: {
@@ -71,7 +74,10 @@ waitUntilAllLocationsInitialized(function () {
                     hccLocation.latitude,
                 ]
             },
-            "properties": hccLocation
+            "properties": {
+                'icon': 'hhc-chicken-icon-original',
+                ...hccLocation
+            }
         }
     }
 
@@ -86,38 +92,30 @@ waitUntilAllLocationsInitialized(function () {
         store.properties.id = i;
     });
 
-
     map.on('load', () => {
+        map.addSource('stores', {
+            'type': 'geojson',
+            'data': stores
+        })
 
-        /* Add the data to your map as a layer */
         map.addLayer({
-            id: 'locations',
-            type: 'fill',
-            /* Add a GeoJSON source containing place coordinates and information. */
-            source: {
-                type: 'geojson',
-                data: stores
+            'id': 'stores',
+            'type': 'symbol',
+            'source': 'stores',
+            'layout': {
+                'icon-image': ['get', 'icon'],
+                'icon-allow-overlap': true
             }
         });
 
+        // Build the left side list of locations
         buildLocationList(stores);
-    });
 
-    // When we click on a marker for an HHC location, navigate to the listing's page.
-    map.on('click', (event) => {
-        /* Determine if a feature in the "locations" layer exists at that point. */
-        const features = map.queryRenderedFeatures(event.point, {
-            layers: ['locations']
+        map.on('click', 'stores', (e) => {
+            window.location.href = e.features[0].properties.link
         });
-
-        /* If it does not exist, return */
-        if (!features.length) return;
-
-        const clickedPoint = features[0];
-
-        // Navigate to the listing's page
-        window.location.href = clickedPoint.properties.link;
     });
+
 
     const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -128,9 +126,13 @@ waitUntilAllLocationsInitialized(function () {
     document.getElementById(geocoderContainerId).appendChild(geocoderInput);
     geocoderInput.placeholder = "Search by city, state, zipcode etc"
 
-// When a location is selected from the dropdown, sort the listings by distance to that location
+    // When a location is selected from the dropdown, sort the listings by distance to that location
     geocoder.on('result', function (result) {
-        console.log(result);
+
+        // State / Neighborhood / County / Etc
+        // Example: ['Summerlin South', 'Las Vegas', 'Clark County', 'Nevada', 'United States']
+        const contexts = result.result.context.map(x => x['text_en-US'])
+
         const address = result.result
 
         // If we successfully found an address from the search box
@@ -138,21 +140,54 @@ waitUntilAllLocationsInitialized(function () {
             const latitude = address.center[0];
             const longitude = address.center[1];
 
-            console.log(latitude, longitude);
+            // Append the distance of each store from the geocoder search result so that we can filter out far away locations
+            stores.features.forEach(store => {
+                const storeLat = store.geometry.coordinates[0]
+                const storeLon = store.geometry.coordinates[1]
 
-            console.log(stores)
-
-            const sortedStores = stores.features.sort((store1, store2) => {
-                const store1Lat = store1.geometry.coordinates[0]
-                const store1Lon = store1.geometry.coordinates[1]
-                const store2Lat = store2.geometry.coordinates[0]
-                const store2Lon = store2.geometry.coordinates[1]
-
-                const store1Distance = calculateDistanceBetweenTwoCoordinates(store1Lat, store1Lon, latitude, longitude)
-                const store2Distance = calculateDistanceBetweenTwoCoordinates(store2Lat, store2Lon, latitude, longitude)
-
-                return store1Distance - store2Distance
+                store.distanceFromSearch = calculateDistanceBetweenTwoCoordinates(storeLat, storeLon, latitude, longitude)
             })
+
+            // Filter to stores that are within 50 miles of the geocoder search, or within the same state
+            const filteredStores = stores.features.filter(store => {
+                return store.distanceFromSearch <= 100 || contexts.includes(store.properties.state);
+            })
+
+            // Sort stores from closest to furthest
+            const sortedStores = filteredStores.sort((store1, store2) => {
+                return store1.distanceFromSearch - store2.distanceFromSearch
+            })
+
+            const closestStore = sortedStores[0]
+
+            // Resize map to fit closet store and geocoder search result location
+            if (!!closestStore) {
+
+                // const coordinates = [
+                //     // Closest Store
+                //     [sortedStores[0].geometry.coordinates[0], sortedStores[0].geometry.coordinates[1]],
+                //     // Geocoder Search Result Location
+                //     [latitude, longitude]
+                // ]
+                //
+                // const bounds = getBoundsOfCoordinates(coordinates)
+                //
+                // map.fitBounds(bounds, {
+                //     padding: {top: 50, bottom:50, left: 50, right: 50} // Padding in pixels
+                // });
+            }
+
+            // Resize map to fit all stores within the mile range
+            if (sortedStores.length > 0) {
+                const storeCoordinates = filteredStores.map((store) => store.geometry.coordinates);
+
+                const bounds = getBoundsOfCoordinates(storeCoordinates.concat([address.center]))
+
+                map.fitBounds(bounds, {
+                    padding: {top: 50, bottom:100, left: 50, right: 50} // Padding in pixels
+                });
+            }
+
 
             // Rebuild the listings sorted by distance
             buildLocationList({
@@ -160,47 +195,42 @@ waitUntilAllLocationsInitialized(function () {
                 "features": sortedStores
             });
         }
-
     })
+
+    // Gets geographical area containing all supplied coordinates
+    function getBoundsOfCoordinates(coordinates) {
+        let ne = [coordinates[0][0], coordinates[0][1]]
+        let sw = [coordinates[0][0], coordinates[0][1]]
+
+        coordinates.map((coordinate) => {
+            if (coordinate[0] > ne[0]){
+                ne[0] = coordinate[0];
+            }
+            if (coordinate[1] > ne[1]){
+                ne[1] = coordinate[1];
+            }
+            if (coordinate[0] < sw[0]){ //sw = south west
+                sw[0] = coordinate[0];
+            }
+            if (coordinate[1] < sw[1]){
+                sw[1] = coordinate[1];
+            }
+        });
+
+        // Add some padding around bound
+
+        return [ne,sw]
+    }
 
 
     function buildLocationList(stores) {
-
         const listings = document.getElementById('Search-Map-List');
         listings.innerHTML = "";
 
         listings.innerHTML = renderListingsTemplate(stores)
-
-        // for (const store of stores.features) {
-        //     /* Add a new listing section to the sidebar. */
-
-        //     link.addEventListener('click', function () {
-        //         for (const feature of stores.features) {
-        //             if (this.id === `link-${feature.properties.id}`) {
-        //                 flyToStore(feature);
-        //                 createPopUp(feature);
-        //             }
-        //         }
-        //         const activeItem = document.getElementsByClassName('active');
-        //         if (activeItem[0]) {
-        //             activeItem[0].classList.remove('active');
-        //         }
-        //         this.parentNode.classList.add('active');
-        //     });
-        // }
     }
 
-    function flyToStore(currentFeature) {
-        map.flyTo({
-            center: currentFeature.geometry.coordinates,
-            zoom: 15
-        });
-    }
-
-    function createPopUp(currentFeature) {
-        window.location.href = currentFeature.properties.link
-    }
-
+    // Returns distance in miles between two coordinates
     function calculateDistanceBetweenTwoCoordinates(latt1, lonn1, latt2, lonn2) {
         const R = 6371; // km
         const dLat = toRad(latt2 - latt1);
@@ -215,9 +245,20 @@ waitUntilAllLocationsInitialized(function () {
         return d;
     }
 
-// Converts numeric degrees to radians
+    // Converts numeric degrees to radians
     function toRad(Value) {
         return Value * Math.PI / 180;
     }
-
 });
+
+
+
+
+
+
+
+
+
+
+
+
