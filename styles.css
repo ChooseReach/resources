@@ -13,6 +13,7 @@ body::-webkit-scrollbar {display: none;}
 .smallcaps {font-variant: small-caps}
 .crumbs li:last-child {background:none;padding:0;margin:0;}
 .ellipsis {text-overflow: ellipsis;}
+.knockout {-webkit-background-clip: text; -webkit-text-fill-color: transparent;}
 
 /* Richtext */
 .w-richtext-figure-type-video {border-radius:.5em !important;overflow:hidden !important;}
