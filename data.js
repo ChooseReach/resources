@@ -56,8 +56,6 @@ const
 
 
 // Page Scrolled
-if(scrollTracker){scrollWrapper.appendChild(scrollTracker)};
-
 pageScrolledObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
         const pageScrolledProperties = {
