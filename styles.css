@@ -1,5 +1,5 @@
 /* Native */  
-body {-webkit-overflow-scrolling:touch;-ms-overflow-style:none;scrollbar-width:none;}
+body {-webkit-overflow-scrolling:touch;-ms-overflow-style:none;scrollbar-width:none;/*done*/}
 body::-webkit-scrollbar {display: none;}
 
 /* Scroll */
@@ -15,7 +15,7 @@ body::-webkit-scrollbar {display: none;}
 
 /* Text */
 .dropcaps p:first-of-type::first-letter {float:left;font-weight:bold;margin-right:.1em;font-size:var(--dropcaps-size,3em);line-height:var(--dropcaps-height,.9em);}
-.smallcaps {font-variant: small-caps}
+.smallcaps {font-variant: small-caps;/*done*/}
 .crumbs li:last-child {background:none;padding:0;margin:0;}
 .ellipsis {text-overflow: ellipsis;}
 .knockout {-webkit-background-clip: text; -webkit-text-fill-color: transparent;}
