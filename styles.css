@@ -15,10 +15,10 @@ body::-webkit-scrollbar {display: none;}
 
 /* Text */
 .dropcaps p:first-of-type::first-letter {float:left;font-weight:bold;margin-right:.1em;font-size:var(--dropcaps-size,3em);line-height:var(--dropcaps-height,.9em);}
-.smallcaps {font-variant: small-caps;/*done*/}
+.smallcaps {font-variant: small-caps;}/*done*/
 .crumbs li:last-child {background:none;padding:0;margin:0;}
-.ellipsis {text-overflow: ellipsis;/*done*/}
-.knockout {-webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+.ellipsis {text-overflow: ellipsis;}/*done*/
+.knockout {-webkit-background-clip: text; -webkit-text-fill-color: transparent;}/*done*/
 
 /* Richtext */
 .w-richtext-figure-type-video {border-radius:.5em !important;overflow:hidden !important;}
