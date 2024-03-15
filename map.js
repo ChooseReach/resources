@@ -112,19 +112,19 @@ window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
             source: 'stores',
             layout: {
                 'icon-image': ['get', 'icon'],
-                'icon-allow-overlap': true
+                'icon-allow-overlap': false// TODO - ensure this is better than true
             },
-            filter: ['has', 'store_count'],
+            filter: ['has', 'point_count'],
         });
 
         // Add a text field inside chicken to show how many locations are in a cluster
         map.addLayer({
             id: 'cluster-count',
             type: 'symbol',
-            source: 'earthquakes',
-            filter: ['has', 'store_count'],
+            source: 'stores',
+            filter: ['has', 'point_count'],
             layout: {
-                'text-field': ['get', 'store_count_abbreviated'],
+                'text-field': ['get', 'point_count_abbreviated'],
                 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
                 'text-size': 12
             }
@@ -136,7 +136,7 @@ window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
             'source': 'stores',
             'layout': {
                 'icon-image': ['get', 'icon'],
-                'icon-allow-overlap': true
+                'icon-allow-overlap': false // TODO - ensure this is better than true
             }
         });
 
