@@ -8,7 +8,8 @@ function waitUntilAllLocationsInitialized(cb) {
     }
 }
 
-waitUntilAllLocationsInitialized(function () {
+// Enable reachDebugMap to disable script for live debugging
+window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
 
     const template = `
 <% for (let listing of listings) { %>
@@ -95,8 +96,39 @@ waitUntilAllLocationsInitialized(function () {
     map.on('load', () => {
         map.addSource('stores', {
             'type': 'geojson',
-            'data': stores
+            'data': stores,
+            // Group close stores under the same marker
+            cluster: true,
+            // Max zoom to cluster points on
+            clusterMaxZoom: 14,
+            // Radius of each cluster when clustering points
+            clusterRadius: 50
         })
+
+        // Create a layer to cluster close stores together
+        map.addLayer({
+            id: 'clusters',
+            type: 'symbol',
+            source: 'stores',
+            layout: {
+                'icon-image': ['get', 'icon'],
+                'icon-allow-overlap': true
+            },
+            filter: ['has', 'store_count'],
+        });
+
+        // Add a text field inside chicken to show how many locations are in a cluster
+        map.addLayer({
+            id: 'cluster-count',
+            type: 'symbol',
+            source: 'earthquakes',
+            filter: ['has', 'store_count'],
+            layout: {
+                'text-field': ['get', 'store_count_abbreviated'],
+                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-size': 12
+            }
+        });
 
         map.addLayer({
             'id': 'stores',
@@ -113,6 +145,26 @@ waitUntilAllLocationsInitialized(function () {
 
         map.on('click', 'stores', (e) => {
             window.location.href = e.features[0].properties.link
+        });
+
+        // Zoom into a cluster of stores when clicked
+        // Example cluster app here: https://docs.mapbox.com/mapbox-gl-js/example/cluster/
+        map.on('click', 'clusters', (e) => {
+            const features = map.queryRenderedFeatures(e.point, {
+                layers: ['clusters']
+            });
+            const clusterId = features[0].properties.cluster_id;
+            map.getSource('stores').getClusterExpansionZoom(
+                clusterId,
+                (err, zoom) => {
+                    if (err) return;
+
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                }
+            );
         });
     });
 
@@ -132,6 +184,9 @@ waitUntilAllLocationsInitialized(function () {
         // State / Neighborhood / County / Etc
         // Example: ['Summerlin South', 'Las Vegas', 'Clark County', 'Nevada', 'United States']
         const contexts = result.result.context.map(x => x['text_en-US'])
+        // The address selected by the user
+        // This could be a State like 'Texas' or a full street address
+        const searchText = result.result['text_en-US']
 
         const address = result.result
 
@@ -148,9 +203,14 @@ waitUntilAllLocationsInitialized(function () {
                 store.distanceFromSearch = calculateDistanceBetweenTwoCoordinates(storeLat, storeLon, latitude, longitude)
             })
 
-            // Filter to stores that are within 50 miles of the geocoder search, or within the same state
+            // Filter to stores that:
             const filteredStores = stores.features.filter(store => {
-                return store.distanceFromSearch <= 100 || contexts.includes(store.properties.state);
+                // Are within 100 miles of the geocoder search
+                return store.distanceFromSearch <= 100 ||
+                    // Are within the same state
+                    contexts.includes(store.properties.state) ||
+                    // Are an exact state match
+                    searchText === store.properties.state
             })
 
             // Sort stores from closest to furthest
@@ -250,15 +310,3 @@ waitUntilAllLocationsInitialized(function () {
         return Value * Math.PI / 180;
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
