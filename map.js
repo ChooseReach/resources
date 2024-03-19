@@ -8,7 +8,8 @@ function waitUntilAllLocationsInitialized(cb) {
     }
 }
 
-waitUntilAllLocationsInitialized(function () {
+// Enable reachDebugMap to disable script for live debugging
+window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
 
     const template = `
 <% for (let listing of listings) { %>
@@ -95,14 +96,56 @@ waitUntilAllLocationsInitialized(function () {
     map.on('load', () => {
         map.addSource('stores', {
             'type': 'geojson',
-            'data': stores
+            'data': stores,
+            // Group close stores under the same marker
+            cluster: true,
+            // Max zoom to cluster points on
+            clusterMaxZoom: 14,
+            // Radius of each cluster when clustering points
+            clusterRadius: 50
         })
 
+        // Create a layer to cluster close stores together
         map.addLayer({
-            'id': 'stores',
+            id: 'clusters',
+            filter: ['has', 'point_count'],
             'type': 'symbol',
             'source': 'stores',
             'layout': {
+                'icon-image': 'hhc-chicken-icon-original',
+                'icon-allow-overlap': true
+            }
+
+        });
+
+        // Add a text field inside chicken to show how many locations are in a cluster
+        map.addLayer({
+            id: 'cluster-count',
+            type: 'symbol',
+            source: 'stores',
+            filter: ['has', 'point_count'],
+            layout: {
+                'text-field': ['get', 'point_count_abbreviated'],
+                'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+                'text-size': 16,
+                // Position text in center of cluster chicken
+                'text-offset': [-.1, .6]
+            },
+            paint: {
+                'text-color': '#FFFFFF',
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": .5
+            }
+        });
+
+        // Add a layer for individual stores (not clusters)
+        map.addLayer({
+            'id': 'unclustered_stores',
+            'type': 'symbol',
+            'source': 'stores',
+            'filter': ['!', ['has', 'point_count']],
+            'layout': {
+                'icon-anchor': 'bottom',
                 'icon-image': ['get', 'icon'],
                 'icon-allow-overlap': true
             }
@@ -111,11 +154,45 @@ waitUntilAllLocationsInitialized(function () {
         // Build the left side list of locations
         buildLocationList(stores);
 
-        map.on('click', 'stores', (e) => {
+        // Open a store page when clicking on a store
+        map.on('click', 'unclustered_stores', (e) => {
             window.location.href = e.features[0].properties.link
+        });
+
+        // Zoom into a cluster of stores when clicked
+        // Example cluster app here: https://docs.mapbox.com/mapbox-gl-js/example/cluster/
+        map.on('click', 'clusters', (e) => {
+            const features = map.queryRenderedFeatures(e.point, {
+                layers: ['clusters']
+            });
+            const clusterId = features[0].properties.cluster_id;
+            map.getSource('stores').getClusterExpansionZoom(
+                clusterId,
+                (err, zoom) => {
+                    if (err) return;
+
+                    map.easeTo({
+                        center: features[0].geometry.coordinates,
+                        zoom: zoom
+                    });
+                }
+            );
         });
     });
 
+    // Change cursor while hovering over clusters or stores
+    map.on('mouseenter', 'clusters', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'clusters', () => {
+        map.getCanvas().style.cursor = '';
+    });
+    map.on('mouseenter', 'unclustered_stores', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'unclustered_stores', () => {
+        map.getCanvas().style.cursor = '';
+    });
 
     const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -132,6 +209,9 @@ waitUntilAllLocationsInitialized(function () {
         // State / Neighborhood / County / Etc
         // Example: ['Summerlin South', 'Las Vegas', 'Clark County', 'Nevada', 'United States']
         const contexts = result.result.context.map(x => x['text_en-US'])
+        // The address selected by the user
+        // This could be a State like 'Texas' or a full street address
+        const searchText = result.result['text_en-US']
 
         const address = result.result
 
@@ -148,9 +228,14 @@ waitUntilAllLocationsInitialized(function () {
                 store.distanceFromSearch = calculateDistanceBetweenTwoCoordinates(storeLat, storeLon, latitude, longitude)
             })
 
-            // Filter to stores that are within 50 miles of the geocoder search, or within the same state
+            // Filter to stores that:
             const filteredStores = stores.features.filter(store => {
-                return store.distanceFromSearch <= 100 || contexts.includes(store.properties.state);
+                // Are within 100 miles of the geocoder search
+                return store.distanceFromSearch <= 100 ||
+                    // Are within the same state
+                    contexts.includes(store.properties.state) ||
+                    // Are an exact state match
+                    searchText === store.properties.state
             })
 
             // Sort stores from closest to furthest
@@ -184,7 +269,7 @@ waitUntilAllLocationsInitialized(function () {
                 const bounds = getBoundsOfCoordinates(storeCoordinates.concat([address.center]))
 
                 map.fitBounds(bounds, {
-                    padding: {top: 50, bottom:100, left: 50, right: 50} // Padding in pixels
+                    padding: {top: 50, bottom: 100, left: 50, right: 50} // Padding in pixels
                 });
             }
 
@@ -203,23 +288,23 @@ waitUntilAllLocationsInitialized(function () {
         let sw = [coordinates[0][0], coordinates[0][1]]
 
         coordinates.map((coordinate) => {
-            if (coordinate[0] > ne[0]){
+            if (coordinate[0] > ne[0]) {
                 ne[0] = coordinate[0];
             }
-            if (coordinate[1] > ne[1]){
+            if (coordinate[1] > ne[1]) {
                 ne[1] = coordinate[1];
             }
-            if (coordinate[0] < sw[0]){ //sw = south west
+            if (coordinate[0] < sw[0]) { //sw = south west
                 sw[0] = coordinate[0];
             }
-            if (coordinate[1] < sw[1]){
+            if (coordinate[1] < sw[1]) {
                 sw[1] = coordinate[1];
             }
         });
 
         // Add some padding around bound
 
-        return [ne,sw]
+        return [ne, sw]
     }
 
 
@@ -250,15 +335,3 @@ waitUntilAllLocationsInitialized(function () {
         return Value * Math.PI / 180;
     }
 });
-
-
-
-
-
-
-
-
-
-
-
-
