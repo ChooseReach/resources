@@ -145,6 +145,7 @@ window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
             'source': 'stores',
             'filter': ['!', ['has', 'point_count']],
             'layout': {
+                'icon-anchor': 'bottom',
                 'icon-image': ['get', 'icon'],
                 'icon-allow-overlap': true
             }
