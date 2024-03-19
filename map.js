@@ -108,13 +108,14 @@ window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
         // Create a layer to cluster close stores together
         map.addLayer({
             id: 'clusters',
-            type: 'symbol',
-            source: 'stores',
-            layout: {
-                'icon-image': ['get', 'icon'],
-                'icon-allow-overlap': false// TODO - ensure this is better than true
-            },
             filter: ['has', 'point_count'],
+            'type': 'symbol',
+            'source': 'stores',
+            'layout': {
+                'icon-image': 'hhc-chicken-icon-original',
+                'icon-allow-overlap': true
+            }
+
         });
 
         // Add a text field inside chicken to show how many locations are in a cluster
@@ -126,24 +127,34 @@ window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
             layout: {
                 'text-field': ['get', 'point_count_abbreviated'],
                 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-                'text-size': 12
+                'text-size': 16,
+                // Position text in center of cluster chicken
+                'text-offset': [-.1, .6]
+            },
+            paint: {
+                'text-color': '#FFFFFF',
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": .5
             }
         });
 
+        // Add a layer for individual stores (not clusters)
         map.addLayer({
-            'id': 'stores',
+            'id': 'unclustered_stores',
             'type': 'symbol',
             'source': 'stores',
+            'filter': ['!', ['has', 'point_count']],
             'layout': {
                 'icon-image': ['get', 'icon'],
-                'icon-allow-overlap': false // TODO - ensure this is better than true
+                'icon-allow-overlap': true
             }
         });
 
         // Build the left side list of locations
         buildLocationList(stores);
 
-        map.on('click', 'stores', (e) => {
+        // Open a store page when clicking on a store
+        map.on('click', 'unclustered_stores', (e) => {
             window.location.href = e.features[0].properties.link
         });
 
@@ -168,6 +179,19 @@ window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
         });
     });
 
+    // Change cursor while hovering over clusters or stores
+    map.on('mouseenter', 'clusters', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'clusters', () => {
+        map.getCanvas().style.cursor = '';
+    });
+    map.on('mouseenter', 'unclustered_stores', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'unclustered_stores', () => {
+        map.getCanvas().style.cursor = '';
+    });
 
     const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -244,7 +268,7 @@ window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
                 const bounds = getBoundsOfCoordinates(storeCoordinates.concat([address.center]))
 
                 map.fitBounds(bounds, {
-                    padding: {top: 50, bottom:100, left: 50, right: 50} // Padding in pixels
+                    padding: {top: 50, bottom: 100, left: 50, right: 50} // Padding in pixels
                 });
             }
 
@@ -263,23 +287,23 @@ window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
         let sw = [coordinates[0][0], coordinates[0][1]]
 
         coordinates.map((coordinate) => {
-            if (coordinate[0] > ne[0]){
+            if (coordinate[0] > ne[0]) {
                 ne[0] = coordinate[0];
             }
-            if (coordinate[1] > ne[1]){
+            if (coordinate[1] > ne[1]) {
                 ne[1] = coordinate[1];
             }
-            if (coordinate[0] < sw[0]){ //sw = south west
+            if (coordinate[0] < sw[0]) { //sw = south west
                 sw[0] = coordinate[0];
             }
-            if (coordinate[1] < sw[1]){
+            if (coordinate[1] < sw[1]) {
                 sw[1] = coordinate[1];
             }
         });
 
         // Add some padding around bound
 
-        return [ne,sw]
+        return [ne, sw]
     }
 
 
