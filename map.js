@@ -9,7 +9,9 @@ function waitUntilAllLocationsInitialized(cb) {
 }
 
 // Enable reachDebugMap to disable script for live debugging
-window.reachDebugMap !== true && waitUntilAllLocationsInitialized(function () {
+const debugEnabled = localStorage && (localStorage.getItem("reach.debug.map") === 'true')
+
+!debugEnabled && waitUntilAllLocationsInitialized(function () {
 
     const template = `
 <% for (let listing of listings) { %>
