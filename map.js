@@ -51,20 +51,18 @@ const debugEnabled = localStorage && (localStorage.getItem("reach.debug.map") ==
     const mapContainerId = 'map';
     const mapboxAccessToken = 'pk.eyJ1IjoiY2hvb3NlcmVhY2giLCJhIjoiY2tzMmZwaXRoMDB3czJxcDlpbTgyY2I3MiJ9.lG3fr5o7dEr-9Cj3C4dgbg';
     const mapboxStyle = 'mapbox://styles/choosereach/ckrjazfmp4px617p0h6oyj9dd';
-    // Center the map on Green Valley Parkway HHC by default
-    const mapCenter = [-98.178549, 37.409927];
-    const mapZoom = 3.85;
+    // Coordinates that cover the lower continental United States
+    const unitedStatesBounds = [-126, 18.5, -65, 50]
 
     mapboxgl.accessToken = mapboxAccessToken
 
     const map = new mapboxgl.Map({
         container: mapContainerId,
         style: mapboxStyle,
-        center: mapCenter,
-        zoom: mapZoom,
+        // Zoom to United States by default
+        bounds: unitedStatesBounds,
         scrollZoom: true
     });
-
 
     function mapHHCLocationToMapboxFormat(hccLocation) {
 
@@ -96,6 +94,7 @@ const debugEnabled = localStorage && (localStorage.getItem("reach.debug.map") ==
     });
 
     map.on('load', () => {
+
         map.addSource('stores', {
             'type': 'geojson',
             'data': stores,
