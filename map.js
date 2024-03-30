@@ -197,7 +197,11 @@ const debugEnabled = localStorage && (localStorage.getItem("reach.debug.map") ==
 
     const geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
-        mapboxgl: mapboxgl
+        mapboxgl: mapboxgl,
+        proximity: "ip",
+        countries: "us",
+        // https://docs.mapbox.com/api/search/geocoding/#data-types
+        types: "country,region,postcode,district,place,locality,neighborhood"
     })
 
     const geocoderInput = geocoder.onAdd(map);
