@@ -1,4 +1,4 @@
-// Get list of locations from Webflow CMS items on page load
+// Get list of locations from collection list on page load
 const allLocations = Array.from(
   document.querySelectorAll("#geoList div.w-embed")
 ).map((element) => JSON.parse(element.innerHTML));
@@ -23,7 +23,7 @@ function closestCoordinate(targetLocation, locationData) {
   });
 }
 
-// Find the closest location to a user's location and execute the callback function with it
+// Find the closest location to the user's location and execute the callback function with it
 function findClosestLocation(allLocations, callback) {
   function success(position) {
     // Get the closest location to the user's location based on geo coordinates
@@ -81,7 +81,7 @@ function initStoreLocator(geoElement) {
     myLocationLoader.style.display = "none";
     myLocationButton.href = window.closestLocation.link;
     myLocationButton.id = "Location-Nearest-You-Button";
-    myLocationTop.innerHTML = "Location nearest you:";
+    myLocationTop.innerHTML = "Location near you:";
     myLocationBottom.innerHTML = window.closestLocation.name;
   }
 
@@ -115,10 +115,10 @@ function initStoreLocator(geoElement) {
     // Show the button so users can be prompted to share their location
     geoElement.style.opacity = 1;
     geoElement.style.display = "block";
-    // Otherwise, allow users to click on the "User my location" button to find it
+    // Otherwise, allow users to click on the "Use my location" button to find it
     myLocationButton.addEventListener("click", findAndDisplayClosestLocation);
   }
 }
 
-// Find all store locators on the page and initialize them
+// Find all geo location buttons on the page and initialize them
 Array.from(document.querySelectorAll(".geo")).forEach(initStoreLocator);
