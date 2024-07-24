@@ -152,7 +152,6 @@ const debugEnabled = localStorage && (localStorage.getItem("reach.debug.map") ==
             }
         });
 
-        // Build the left side list of locations
         buildLocationList(stores);
 
         // Open a store page when clicking on a store
@@ -314,10 +313,25 @@ const debugEnabled = localStorage && (localStorage.getItem("reach.debug.map") ==
 
 
     function buildLocationList(stores) {
-        const listings = document.getElementById('Search-Map-List');
-        listings.innerHTML = "";
 
-        listings.innerHTML = renderListingsTemplate(stores)
+        const emptyResultsMessage = document.querySelector("#Search-Map-Empty")
+        const listings = document.getElementById('Search-Map-List');
+
+        if (stores.features.length > 0) {
+            // If more than one store is displayed
+            // Hide the empty results message if it is displayed
+            emptyResultsMessage.style.display = "none";
+
+            // Build the left side list of locations
+
+            listings.innerHTML = "";
+            listings.innerHTML = renderListingsTemplate(stores)
+
+        } else {
+            // If there are no stores, show the empty results message and hide listings
+            emptyResultsMessage.style.display = "block";
+            listings.innerHTML = "";
+        }
     }
 
     // Returns distance in miles between two coordinates
