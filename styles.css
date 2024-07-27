@@ -1,9 +1,9 @@
 /* Native */  
-body {-webkit-overflow-scrolling:touch;-ms-overflow-style:none;/*done*/scrollbar-width:none;}
+body {-webkit-overflow-scrolling: touch;-ms-overflow-style: none;/*done*/scrollbar-width: none;}
 body::-webkit-scrollbar {display: none;}
 
 /* Scroll */
-.scroll {position: absolute; inset: 100vh 0% 0% 0%;}
+.scroll {position: absolute; inset: 100vh 0% 0% 0%; z-index: -1; opacity: 0.2;}
 .scroll-px {position: absolute; inset: 0% 0% auto;}
 .scroll-px.scroll-px-25 {top: 25%;}
 .scroll-px.scroll-px-50 {top: 50%;}
