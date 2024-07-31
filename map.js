@@ -242,7 +242,8 @@ const debugEnabled = localStorage && (localStorage.getItem("reach.debug.map") ==
 
         // State / Neighborhood / County / Etc
         // Example: ['Summerlin South', 'Las Vegas', 'Clark County', 'Nevada', 'United States']
-        const contexts = result.result.context.map(x => x['text_en-US'])
+        const hasContexts = !!result.result.context
+        const contexts = hasContexts ? result.result.context.map(x => x['text_en-US']) : []
         // The address selected by the user
         // This could be a State like 'Texas' or a full street address
         const searchText = result.result['text_en-US']
@@ -266,6 +267,8 @@ const debugEnabled = localStorage && (localStorage.getItem("reach.debug.map") ==
             const filteredStores = stores.features.filter(store => {
                 // Are within 100 miles of the geocoder search
                 return store.distanceFromSearch <= 100 ||
+                    // If this is a search for a country it won't have contexts, so just show everything
+                    !hasContexts ||
                     // Are within the same state
                     contexts.includes(store.properties.state) ||
                     // Are an exact state match
