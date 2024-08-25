@@ -1,3 +1,33 @@
+/* Client-Side Phone Field Validation */
+(function() {
+  try {
+    const phoneInputs = document.querySelectorAll('input[type="tel"]');
+    const phonePattern = /\+?([\d|\(][\h|\(\d{3}\)|\.|\-|\d]{4,}\d)/; // All Phone Number Formats
+    
+    phoneInputs.forEach(phoneInput => {
+      phoneInput.addEventListener("input", () => {
+        if (phonePattern.test(phoneInput.value)) {
+          phoneInput.setCustomValidity("");
+        } else {
+          phoneInput.setCustomValidity("Enter a valid phone number format.");
+        }
+      });
+
+      phoneInput.addEventListener("blur", () => {
+        if (phoneInput.value === "") {
+          phoneInput.setCustomValidity("Enter your phone number!");
+        } else if (!phonePattern.test(phoneInput.value)) {
+          phoneInput.setCustomValidity("Enter a valid phone number format.");
+        } else {
+          phoneInput.setCustomValidity("");
+        }
+      });
+    });
+  } catch (error) {
+    console.error('Phone validation script failed:', error);
+  }
+})();
+
 /* Scroll Tracker by Reach */
 const scrollTrackerHtml = '<div id="scrollTracker" class="scroll"><div class="scroll-px scroll-px-0">0</div><div class="scroll-px scroll-px-25">25</div><div class="scroll-px scroll-px-50">50</div><div class="scroll-px scroll-px-75">75</div><div class="scroll-px scroll-px-100">100</div></div>'
 const scrollTrackerElement = jQuery(scrollTrackerHtml)
