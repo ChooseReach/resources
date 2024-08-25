@@ -6,26 +6,18 @@
     
     phoneInputs.forEach(phoneInput => {
       phoneInput.addEventListener("input", () => {
-        if (phonePattern.test(phoneInput.value)) {
-          phoneInput.setCustomValidity("");
-        } else {
-          phoneInput.setCustomValidity("Enter a valid phone number format.");
-        }
+        if (phonePattern.test(phoneInput.value)) {phoneInput.setCustomValidity("");} 
+        else {phoneInput.setCustomValidity("Enter a valid phone number format.");}
       });
 
       phoneInput.addEventListener("blur", () => {
-        if (phoneInput.value === "") {
-          phoneInput.setCustomValidity("Enter your phone number!");
-        } else if (!phonePattern.test(phoneInput.value)) {
-          phoneInput.setCustomValidity("Enter a valid phone number format.");
-        } else {
-          phoneInput.setCustomValidity("");
-        }
+        if (phoneInput.value === "") {phoneInput.setCustomValidity("Enter your phone number!");} 
+        else if (!phonePattern.test(phoneInput.value)) {phoneInput.setCustomValidity("Enter a valid phone number format.");} 
+        else {phoneInput.setCustomValidity("");}
       });
     });
-  } catch (error) {
-    console.error('Phone validation script failed:', error);
-  }
+  } 
+  catch (error) {console.error('Phone validation script failed:', error);}
 })();
 
 /* Add Scroll Tracker HTML */
@@ -41,9 +33,15 @@
   catch (error) {console.error("An error occurred while initializing the scroll tracker:", error);}
 })();
 
-
-/* Copyright Year by Reach */ 
-if(document.querySelector("#Agency-Copyright-Year")){document.querySelector("#Agency-Copyright-Year").textContent = "" + new Date().getFullYear();};
+/* Calculate Copyright Year */
+(function() {
+	try {
+		const copyrightElement = document.querySelector("#Agency-Copyright-Year");
+		if (copyrightElement) {copyrightElement.textContent = "" + new Date().getFullYear();} 
+    else {console.error("Copyright element not found.");}
+	} 
+  catch (error) {console.error("An error occurred while setting the copyright year:", error);}
+})();
 
 /* Form Animations by Reach */
 $("form").submit(()=>{setTimeout(()=>{$(".form__success--trigger").click()},1000)});
