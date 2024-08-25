@@ -28,11 +28,19 @@
   }
 })();
 
-/* Scroll Tracker by Reach */
-const scrollTrackerHtml = '<div id="scrollTracker" class="scroll"><div class="scroll-px scroll-px-0">0</div><div class="scroll-px scroll-px-25">25</div><div class="scroll-px scroll-px-50">50</div><div class="scroll-px scroll-px-75">75</div><div class="scroll-px scroll-px-100">100</div></div>'
-const scrollTrackerElement = jQuery(scrollTrackerHtml)
-const mainElement = document.getElementsByTagName("main")[0];
-if (!!mainElement) { mainElement.appendChild(scrollTrackerElement[0]) }
+/* Add Scroll Tracker HTML */
+(function() {
+  try {
+    const scrollTrackerHtml = '<div id="scrollTracker" class="scroll"><div class="scroll-px scroll-px-0">0</div><div class="scroll-px scroll-px-25">25</div><div class="scroll-px scroll-px-50">50</div><div class="scroll-px scroll-px-75">75</div><div class="scroll-px scroll-px-100">100</div></div>';
+    const scrollTrackerElement = jQuery(scrollTrackerHtml);
+    const mainElement = document.getElementsByTagName("main")[0];
+    
+    if (mainElement) {mainElement.appendChild(scrollTrackerElement[0]);} 
+    else {console.error("<main> element not found.");}
+  } 
+  catch (error) {console.error("An error occurred while initializing the scroll tracker:", error);}
+})();
+
 
 /* Copyright Year by Reach */ 
 if(document.querySelector("#Agency-Copyright-Year")){document.querySelector("#Agency-Copyright-Year").textContent = "" + new Date().getFullYear();};
