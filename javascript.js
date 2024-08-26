@@ -7,12 +7,12 @@
     phoneInputs.forEach(phoneInput => {
       phoneInput.addEventListener("input", () => {
         if (phonePattern.test(phoneInput.value)) {phoneInput.setCustomValidity("");} 
-        else {phoneInput.setCustomValidity("Enter a valid international phone number format: 123-456-7890, +11234567890, +1(123)4567890, etc");}
+        else {phoneInput.setCustomValidity("Enter a valid U.S. or international phone number format: 123-456-7890, +11234567890, +1(123)4567890, etc");}
       });
 
       phoneInput.addEventListener("blur", () => {
         if (phoneInput.value === "") {phoneInput.setCustomValidity("Enter your phone number.");} 
-        else if (!phonePattern.test(phoneInput.value)) {phoneInput.setCustomValidity("Enter a valid international phone number format: 123-456-7890, +11234567890, +1(123)4567890, etc");} 
+        else if (!phonePattern.test(phoneInput.value)) {phoneInput.setCustomValidity("Enter a valid U.S. or international phone number format: 123-456-7890, +11234567890, +1(123)4567890, etc");} 
         else {phoneInput.setCustomValidity("");}
       });
     });
