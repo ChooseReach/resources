@@ -45,22 +45,27 @@
 
 /* Form Success Icon Animations */
 (function() {
-	try {
-		const formSuccessIcons = document.querySelectorAll('.form__success__icon');
-		if (formSuccessIcons.length > 0) {
-			formSuccessIcons.forEach(formSuccessIcon => {
-				const observer = new IntersectionObserver((entries, observer) => {
-					entries.forEach(entry => {
-						if (entry.isIntersecting) {entry.target.click();observer.unobserve(entry.target);}
-					});
-				});
-				observer.observe(formSuccessIcon);
-			});
-		} 
-		else {console.error("No form success icons found.");}
-	} 
-	catch (error) {console.error("An error occurred while initializing form success icon animations:", error);}
+  try {
+    const formSuccessIcons = document.querySelectorAll('.form__success__icon');
+    if (formSuccessIcons.length > 0) {
+      formSuccessIcons.forEach(formSuccessIcon => {
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.click();
+              observer.unobserve(entry.target);
+            }
+          });
+        });
+        observer.observe(formSuccessIcon);
+      });
+    } 
+    else {console.error("No form success icons found.");}
+  } 
+  catch (error) {console.error("An error occurred while initializing form success icon animations:", error);}
 })();
+
+
 
 /* Videos.js by Reach (0.0.2 - 897B) */
 const playVideo=e=>{let t=e.play();if(void 0!==t)return t.then(e=>{console.log("Video Playing")}).catch(e=>{})},lazyVideoOptions={root:null,rootMargin:"0px",threshold:0},videoObserver=new IntersectionObserver(function(e,t){e.forEach(e=>{let t=!e.target.dataset.reachVideo;e.isIntersecting?(e.target.querySelectorAll("source").forEach(function(t){t.dataset.src&&(t.src=t.dataset.src,delete t.dataset.src,e.target.load())}),t&&playVideo(e.target)):t&&e.target.pause()||console.log("Video Paused")})},lazyVideoOptions);function initializeVideos(){Array.from(document.querySelectorAll("video")).filter(e=>!e.className.includes("video-initialized")).forEach(e=>{e.className=e.className+" video-initialized","hover"===e.dataset.reachVideo&&(e.addEventListener("mouseover",function(){this.play()}),e.addEventListener("mouseleave",function(){this.pause()})),videoObserver.observe(e)})}initializeVideos();
