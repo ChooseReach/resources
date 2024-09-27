@@ -1,3 +1,17 @@
+/* Add aria-label to external links */
+(function() {
+  try {
+    const externalLinks = document.querySelectorAll('a[target="_blank"]');
+
+    if (externalLinks.length === 0) return;
+    
+    externalLinks.forEach(link => {
+      if (!link.hasAttribute('aria-label')) {link.setAttribute('aria-label', 'Opens in a new tab');}
+    });
+  } 
+  catch (error) {console.error("Error adding aria-labels to external links:", error);}
+})();
+
 /* Client-Side Phone Field Validation */
 (function() {
   try {
