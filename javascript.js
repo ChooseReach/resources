@@ -1,15 +1,39 @@
-/* Add aria-label to external links */
+/* Accessibility Modifiers */
 (function() {
   try {
+    // Add aria-label to external links
     const externalLinks = document.querySelectorAll('a[target="_blank"]');
+    if (externalLinks.length > 0) {
+      externalLinks.forEach(link => {
+        if (!link.hasAttribute('aria-label')) {link.setAttribute('aria-label', 'Opens in a new tab');}
+      });
+    }
 
-    if (externalLinks.length === 0) return;
-    
-    externalLinks.forEach(link => {
-      if (!link.hasAttribute('aria-label')) {link.setAttribute('aria-label', 'Opens in a new tab');}
-    });
-  } 
-  catch (error) {console.error("Error adding aria-labels to external links:", error);}
+    // Add role="presentation" to SVG elements
+    const svgTags = document.querySelectorAll('svg');
+    if (svgTags.length > 0) {
+      svgTags.forEach(svg => {
+        if (!svg.hasAttribute('role')) {svg.setAttribute('role', 'presentation');}
+      });
+    }
+
+    // Add aria-required="true" to required form fields
+    const requiredFields = document.querySelectorAll('input[required], select[required], textarea[required]');
+    if (requiredFields.length > 0) {
+      requiredFields.forEach(field => {
+        if (!field.hasAttribute('aria-required')) {field.setAttribute('aria-required', 'true');}
+      });
+    }
+
+    // Add aria-label to form fields using their name attribute
+    const formFields = document.querySelectorAll('input[name], select[name], textarea[name]');
+    if (formFields.length > 0) {
+      formFields.forEach(field => {
+        if (!field.hasAttribute('aria-label')) {field.setAttribute('aria-label', field.getAttribute('name'));}
+      });
+    }
+  }
+  catch (error) {console.error("Error processing accessibility updates:", error);}
 })();
 
 /* Client-Side Phone Field Validation */
