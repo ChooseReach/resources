@@ -1,5 +1,5 @@
 /* Native */  
-body {-webkit-overflow-scrolling: touch;-ms-overflow-style: none;/*done*/scrollbar-width: none;}
+body {-webkit-overflow-scrolling: touch;-ms-overflow-style: none;}
 body::-webkit-scrollbar {display: none;}
 
 /* Scroll */
@@ -15,10 +15,7 @@ body::-webkit-scrollbar {display: none;}
 
 /* Text */
 .dropcaps p:first-of-type::first-letter {float:left;font-weight:bold;margin-right:.1em;font-size:var(--dropcaps-size,3em);line-height:var(--dropcaps-height,.9em);}
-/*done*/.smallcaps {font-variant: small-caps;}
 .crumbs li:last-child {background:none;padding:0;margin:0;}
-/*done*/.ellipsis {text-overflow: ellipsis;}
-/*done*/.knockout {-webkit-background-clip: text; -webkit-text-fill-color: transparent;}
 
 /* Richtext */
 .w-richtext-figure-type-video {border-radius:.5em !important;overflow:hidden !important;}
