@@ -1,3 +1,25 @@
+/* Form Success Icon Animations */
+(function() {
+  try {
+    const formSuccessIcons = document.querySelectorAll('.form__success__icon');
+    if (formSuccessIcons.length > 0) {
+      formSuccessIcons.forEach(formSuccessIcon => {
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.click();
+              observer.unobserve(entry.target);
+            }
+          });
+        });
+        observer.observe(formSuccessIcon);
+      });
+    }
+  } catch (error) {
+    console.error('Error in observing form success icons:', error);
+  }
+})();
+
 /* Accessibility Modifiers */
 (function() {
   try {
