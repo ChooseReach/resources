@@ -125,8 +125,6 @@
   catch (error) {console.error("An error occurred while initializing form success icon animations:", error);}
 })();
 
-
-
 /* Initialize Videos When in Viewport */
 (function() {
   try {
