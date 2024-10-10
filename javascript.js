@@ -127,8 +127,49 @@
 
 
 
-/* Videos.js by Reach (0.0.2 - 897B) */
-const playVideo=e=>{let t=e.play();if(void 0!==t)return t.then(e=>{console.log("Video Playing")}).catch(e=>{})},lazyVideoOptions={root:null,rootMargin:"0px",threshold:0},videoObserver=new IntersectionObserver(function(e,t){e.forEach(e=>{let t=!e.target.dataset.reachVideo;e.isIntersecting?(e.target.querySelectorAll("source").forEach(function(t){t.dataset.src&&(t.src=t.dataset.src,delete t.dataset.src,e.target.load())}),t&&playVideo(e.target)):t&&e.target.pause()||console.log("Video Paused")})},lazyVideoOptions);function initializeVideos(){Array.from(document.querySelectorAll("video")).filter(e=>!e.className.includes("video-initialized")).forEach(e=>{e.className=e.className+" video-initialized","hover"===e.dataset.reachVideo&&(e.addEventListener("mouseover",function(){this.play()}),e.addEventListener("mouseleave",function(){this.pause()})),videoObserver.observe(e)})}initializeVideos();
+/* Initialize Videos When in Viewport */
+(function() {
+  try {
+    const playVideoElement = (videoElement) => {
+      const playPromise = videoElement.play();
+      if (playPromise !== undefined) {
+        return playPromise
+          .then(() => { console.log("Video is now playing."); })
+          .catch(error => { console.warn("Error playing the video:", error); });
+      }
+    };
+
+    const videoObserverOptions = { root: null, rootMargin: "0px", threshold: 0 };
+    const videoIntersectionObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        const shouldAutomaticallyPlay = !entry.target.dataset.manualControl;
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll("source").forEach(function(sourceElement) {
+            if (sourceElement.dataset.src) {
+              sourceElement.src = sourceElement.dataset.src;
+              delete sourceElement.dataset.src;
+              entry.target.load();
+            }
+          });
+          shouldAutomaticallyPlay && playVideoElement(entry.target);
+        } 
+        else {shouldAutomaticallyPlay && entry.target.pause() || console.log("Video paused.");}
+      });
+    }, videoObserverOptions);
+
+    function initializeVideoElements() {
+      Array.from(document.querySelectorAll("video"))
+        .filter(videoElement => !videoElement.className.includes("video-initialized") && !videoElement.hasAttribute("data-ignore-intersection"))
+        .forEach(videoElement => {
+          videoElement.className += " video-initialized";
+          videoIntersectionObserver.observe(videoElement);
+        });
+    }
+
+    initializeVideoElements();
+  } 
+  catch (error) {console.error("Error in the video observer script:", error);}
+})();
 
 /* ReadingTime.js by Michael Lynch (2.0.0 - 1.8KB) */
 !function(e){e.fn.readingTime=function(n){var t={readingTimeTarget:".eta",wordCountTarget:null,wordsPerMinute:270,round:!0,lang:"en",lessThanAMinuteString:"",prependTimeString:"",prependWordString:"",remotePath:null,remoteTarget:null,success:function(){},error:function(){}},i=this,r=e(this);i.settings=e.extend({},t,n);var a=i.settings;if(!this.length)return a.error.call(this),this;if("it"==a.lang)var s=a.lessThanAMinuteString||"Meno di un minuto",l="min";else if("fr"==a.lang)var s=a.lessThanAMinuteString||"Moins d'une minute",l="min";else if("de"==a.lang)var s=a.lessThanAMinuteString||"Weniger als eine Minute",l="min";else if("es"==a.lang)var s=a.lessThanAMinuteString||"Menos de un minuto",l="min";else if("nl"==a.lang)var s=a.lessThanAMinuteString||"Minder dan een minuut",l="min";else if("sk"==a.lang)var s=a.lessThanAMinuteString||"Menej než minútu",l="min";else if("cz"==a.lang)var s=a.lessThanAMinuteString||"Méně než minutu",l="min";else if("hu"==a.lang)var s=a.lessThanAMinuteString||"Kevesebb mint egy perc",l="perc";else var s=a.lessThanAMinuteString||"Less than a minute",l="min";var u=function(n){if(""!==n){var t=n.trim().split(/\s+/g).length,i=a.wordsPerMinute/60,r=t/i;if(a.round===!0)var u=Math.round(r/60);else var u=Math.floor(r/60);var g=Math.round(r-60*u);if(a.round===!0)e(a.readingTimeTarget).text(u>0?a.prependTimeString+u+" "+l:a.prependTimeString+s);else{var o=u+":"+g;e(a.readingTimeTarget).text(a.prependTimeString+o)}""!==a.wordCountTarget&&void 0!==a.wordCountTarget&&e(a.wordCountTarget).text(a.prependWordString+t),a.success.call(this)}else a.error.call(this,"The element is empty.")};r.each(function(){null!=a.remotePath&&null!=a.remoteTarget?e.get(a.remotePath,function(n){u(e("<div>").html(n).find(a.remoteTarget).text())}):u(r.text())})}}(jQuery);
