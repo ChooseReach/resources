@@ -55,85 +55,80 @@ const
     scrollElements = document.querySelectorAll('[data-reach-scroll]');
 
 
-// Page Scrolled
-pageScrolledObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        const pageScrolledProperties = {
-            scroll_depth: entry.target.dataset.reachScroll
-            //scroll_direction (@nathan)
-        };
-        if (entry.isIntersecting) {
-            rudderstackTrack('Page Scrolled', pageScrolledProperties);
-            console.log('Page Scrolled: ' + entry.target.dataset.reachScroll + '%', pageScrolledProperties);
-        }
-    });
-});
-
-scrollElements.forEach(scroll => {pageScrolledObserver.observe(scroll)})
-
-
-// Element Viewed
-elementViewedObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        const elementViewedProperties = {
-            element_id: entry.target.id,
-            element_class: entry.target.className,
-            element_href: entry.target.href,
-            element_tag: entry.target.tagName.toLowerCase()
-        };
-        if (entry.isIntersecting) {
-            rudderstackTrack('Element Viewed', elementViewedProperties);
-            console.log('Element Viewed:', entry.target.id, elementViewedProperties);
-        }
-    });
-});
-
-specialElements.forEach(impression => {elementViewedObserver.observe(impression);});
+// // Page Scrolled
+// pageScrolledObserver = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         const pageScrolledProperties = {
+//             scroll_depth: entry.target.dataset.reachScroll
+//             //scroll_direction (@nathan)
+//         };
+//         if (entry.isIntersecting) {
+//             rudderstackTrack('Page Scrolled', pageScrolledProperties);
+//             console.log('Page Scrolled: ' + entry.target.dataset.reachScroll + '%', pageScrolledProperties);
+//         }
+//     });
+// });
+// scrollElements.forEach(scroll => {pageScrolledObserver.observe(scroll)})
 
 
-// Button Viewed
-buttonViewedObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        const buttonViewedProperties = {
-            element_id: entry.target.id,
-            element_class: entry.target.className,
-            element_href: entry.target.href,
-            element_tag: entry.target.tagName.toLowerCase()
-        };
-        if (entry.isIntersecting) {
-            rudderstackTrack('Button Viewed', buttonViewedProperties);
-            console.log('Button Viewed:', entry.target.id, buttonViewedProperties);
-        }
-    });
-});
+// // Element Viewed
+// elementViewedObserver = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         const elementViewedProperties = {
+//             element_id: entry.target.id,
+//             element_class: entry.target.className,
+//             element_href: entry.target.href,
+//             element_tag: entry.target.tagName.toLowerCase()
+//         };
+//         if (entry.isIntersecting) {
+//             rudderstackTrack('Element Viewed', elementViewedProperties);
+//             console.log('Element Viewed:', entry.target.id, elementViewedProperties);
+//         }
+//     });
+// });
+// specialElements.forEach(impression => {elementViewedObserver.observe(impression);});
 
-buttonElements.forEach(impression => {buttonViewedObserver.observe(impression);});
+
+// // Button Viewed
+// buttonViewedObserver = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         const buttonViewedProperties = {
+//             element_id: entry.target.id,
+//             element_class: entry.target.className,
+//             element_href: entry.target.href,
+//             element_tag: entry.target.tagName.toLowerCase()
+//         };
+//         if (entry.isIntersecting) {
+//             rudderstackTrack('Button Viewed', buttonViewedProperties);
+//             console.log('Button Viewed:', entry.target.id, buttonViewedProperties);
+//         }
+//     });
+// });
+// buttonElements.forEach(impression => {buttonViewedObserver.observe(impression);});
 
 
-// Button Hovered 
-for (var i = 0 ; i < buttonElements.length; i++) {
-    const buttonElement = buttonElements[i];
-    buttonElement.addEventListener('mouseenter', event => {
-        let mouseExitListener;
+// // Button Hovered 
+// for (var i = 0 ; i < buttonElements.length; i++) {
+//     const buttonElement = buttonElements[i];
+//     buttonElement.addEventListener('mouseenter', event => {
+//         let mouseExitListener;
 
-        const mouseEnterTimer = window.setTimeout(function(){
-            const buttonHoveredProperties = {
-                element_id: event.target.id,
-                element_class: event.target.className,
-                element_href: event.target.href,
-                element_tag: event.target.tagName.toLowerCase()
-            };
-            rudderstackTrack('Button Hovered', buttonHoveredProperties);
-            console.log('Button Hovered:', event.target.id, buttonHoveredProperties);
-            buttonElement.removeEventListener('mouseleave', mouseExitListener)
-        }, 500);
-
-        mouseExitListener = buttonElement.addEventListener('mouseleave', event => {
-            window.clearTimeout(mouseEnterTimer)
-        })
-    })
-};
-
+//         const mouseEnterTimer = window.setTimeout(function(){
+//             const buttonHoveredProperties = {
+//                 element_id: event.target.id,
+//                 element_class: event.target.className,
+//                 element_href: event.target.href,
+//                 element_tag: event.target.tagName.toLowerCase()
+//             };
+//             rudderstackTrack('Button Hovered', buttonHoveredProperties);
+//             console.log('Button Hovered:', event.target.id, buttonHoveredProperties);
+//             buttonElement.removeEventListener('mouseleave', mouseExitListener)
+//         }, 500);
+//         mouseExitListener = buttonElement.addEventListener('mouseleave', event => {
+//             window.clearTimeout(mouseEnterTimer)
+//         })
+//     })
+// };
 
 // Button Clicked
 function trackButtonClick(element) {
@@ -149,16 +144,14 @@ function trackButtonClick(element) {
     rudderstackTrack('Button Clicked', buttonClickProperties);
     console.log('Button Clicked:', clickedButton.id, buttonClickProperties);
 }
-
 buttonElements.forEach(element => {
     element.addEventListener('click', function (event) {
         trackButtonClick(event.currentTarget)
     })
 });
 
-
-// Fareharbor Button Clicked
-!!window.FH && window.FH.autoLightframe({callback: trackButtonClick});
+// // Fareharbor Button Clicked
+// !!window.FH && window.FH.autoLightframe({callback: trackButtonClick});
 
 
 // Link Clicked
@@ -172,7 +165,6 @@ function trackLinkClick(clickedLink) {
     rudderstackTrack('Link Clicked', linkClickProperties);
     console.log('Link Clicked:', clickedLink.id, linkClickProperties);
 }
-
 linkElements.forEach(element => {
     element.addEventListener('click', function (event) {
         trackLinkClick(event.currentTarget)
@@ -180,95 +172,85 @@ linkElements.forEach(element => {
 });
 
 
-// Section Viewed
-sectionViewedObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        const sectionViewedProperties = {
-            element_id: entry.target.id,
-            element_class: entry.target.className,
-            element_tag: entry.target.tagName.toLowerCase()
-        };
-        if (entry.isIntersecting) {
-            rudderstackTrack('Section Viewed', sectionViewedProperties);
-            console.log('Section Viewed:', entry.target.id, sectionViewedProperties);
-        }
-    });
-});
+// // Section Viewed
+// sectionViewedObserver = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         const sectionViewedProperties = {
+//             element_id: entry.target.id,
+//             element_class: entry.target.className,
+//             element_tag: entry.target.tagName.toLowerCase()
+//         };
+//         if (entry.isIntersecting) {
+//             rudderstackTrack('Section Viewed', sectionViewedProperties);
+//             console.log('Section Viewed:', entry.target.id, sectionViewedProperties);
+//         }
+//     });
+// });
+// sectionElements.forEach(impression => {sectionViewedObserver.observe(impression);});
 
-sectionElements.forEach(impression => {sectionViewedObserver.observe(impression);});
+// // Menu Viewed
+// menuViewedObserver = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         const menuViewedProperties = {
+//             element_id: entry.target.id,
+//             element_class: entry.target.className,
+//             element_tag: entry.target.tagName.toLowerCase()
+//         };
+//         if (entry.isIntersecting) {
+//             rudderstackTrack('Menu Viewed', menuViewedProperties);
+//             console.log('Menu Viewed:', entry.target.id, menuViewedProperties);
+//         }
+//     });
+// });
+// menuElements.forEach(impression => {menuViewedObserver.observe(impression);});
 
+// //Cart Viewed
+// cartViewedObserver = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         const cartViewedProperties = {
+//             element_id: entry.target.id,
+//             element_class: entry.target.className,
+//             element_tag: entry.target.tagName.toLowerCase()
+//         };
+//         if (entry.isIntersecting) {
+//             rudderstackTrack('Cart Viewed', cartViewedProperties);
+//             console.log('Cart Viewed:', entry.target.id, cartViewedProperties);
+//         }
+//     });
+// });
+// cartElements.forEach(impression => {cartViewedObserver.observe(impression);});
 
-// Menu Viewed
-menuViewedObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        const menuViewedProperties = {
-            element_id: entry.target.id,
-            element_class: entry.target.className,
-            element_tag: entry.target.tagName.toLowerCase()
-        };
-        if (entry.isIntersecting) {
-            rudderstackTrack('Menu Viewed', menuViewedProperties);
-            console.log('Menu Viewed:', entry.target.id, menuViewedProperties);
-        }
-    });
-});
+// // Lightbox Viewed
+// lightboxViewedObserver = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         const lightboxViewedProperties = {
+//             element_id: entry.target.id,
+//             element_class: entry.target.className,
+//             element_tag: entry.target.tagName.toLowerCase()
+//         };
+//         if (entry.isIntersecting) {
+//             rudderstackTrack('Lightbox Viewed', lightboxViewedProperties);
+//             console.log('Lightbox Viewed', lightboxViewedProperties);
+//         }
+//     });
+// });
+// lightboxElements.forEach(impression => {lightboxViewedObserver.observe(impression);});
 
-menuElements.forEach(impression => {menuViewedObserver.observe(impression);});
-
-
-//Cart Viewed
-cartViewedObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        const cartViewedProperties = {
-            element_id: entry.target.id,
-            element_class: entry.target.className,
-            element_tag: entry.target.tagName.toLowerCase()
-        };
-        if (entry.isIntersecting) {
-            rudderstackTrack('Cart Viewed', cartViewedProperties);
-            console.log('Cart Viewed:', entry.target.id, cartViewedProperties);
-        }
-    });
-});
-
-cartElements.forEach(impression => {cartViewedObserver.observe(impression);});
-
-
-// Lightbox Viewed
-lightboxViewedObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        const lightboxViewedProperties = {
-            element_id: entry.target.id,
-            element_class: entry.target.className,
-            element_tag: entry.target.tagName.toLowerCase()
-        };
-        if (entry.isIntersecting) {
-            rudderstackTrack('Lightbox Viewed', lightboxViewedProperties);
-            console.log('Lightbox Viewed', lightboxViewedProperties);
-        }
-    });
-});
-
-lightboxElements.forEach(impression => {lightboxViewedObserver.observe(impression);});
-
-
-// Form Viewed
-formViewedObserver = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-        const formViewedProperties = {
-            element_id: entry.target.id,
-            element_class: entry.target.className,
-            element_tag: entry.target.tagName.toLowerCase()
-        };
-        if (entry.isIntersecting) {
-            rudderstackTrack('Form Viewed', formViewedProperties);
-            console.log('Form Viewed:', entry.target.id, formViewedProperties);
-        }
-    });
-});
-
-formElements.forEach(impression => {formViewedObserver.observe(impression);});
-
+// // Form Viewed
+// formViewedObserver = new IntersectionObserver(entries => {
+//     entries.forEach(entry => {
+//         const formViewedProperties = {
+//             element_id: entry.target.id,
+//             element_class: entry.target.className,
+//             element_tag: entry.target.tagName.toLowerCase()
+//         };
+//         if (entry.isIntersecting) {
+//             rudderstackTrack('Form Viewed', formViewedProperties);
+//             console.log('Form Viewed:', entry.target.id, formViewedProperties);
+//         }
+//     });
+// });
+// formElements.forEach(impression => {formViewedObserver.observe(impression);});
 
 // Form Engaged
 function trackFormEngagement(focusedInput) {
@@ -281,25 +263,20 @@ function trackFormEngagement(focusedInput) {
         form_id: !!parentForm && parentForm.id,
         form_name: !!parentForm && parentForm.dataset.name
     };
-
     rudderstackTrack('Form Engaged', inputFocusedProperties);
     console.log('Form Engaged:', focusedInput.id, inputFocusedProperties);
 }
-
 inputElements.forEach(element => {
     element.addEventListener('focus', function (event) {
         trackFormEngagement(event.currentTarget)
     })
 });
 
-
 // Form Submitted
 function onFormSubmitted (form,callback) {
-
     var maybeNameElement = form.querySelector("[name='name'],[name='Name'],[data-reach-track='name']");
     var maybeEmailElement = form.querySelector("[name='email'],[name='Email'],[type='email'],[data-reach-track='email']");
     var maybePhoneElement = form.querySelector("[name='phone'],[name='Phone'],[type='tel'],[data-reach-track='phone']");
-
     const formProperties = {
         form_id: form.id,
         form_name: form.name,
@@ -307,134 +284,86 @@ function onFormSubmitted (form,callback) {
     };
     rudderstackTrack('Form Submitted', formProperties);
     console.log('Form Submitted:', form.id, formProperties);
-
     // Identify the user
     const identity = {
         name: maybeNameElement && maybeNameElement.value,
         email: maybeEmailElement && maybeEmailElement.value,
         phone: maybePhoneElement && maybePhoneElement.value,
     };
-
     if (!!maybeNameElement || !!maybeEmailElement || !!maybePhoneElement) {
         rudderanalytics.identify(identity);
         console.log('User Profile Updated');
     };
-
     !!callback && callback()
 }
-
 document.addEventListener('submit', function(event){
     if (!event.target.matches('form')) return;
     var form = event.target;
-    
     onFormSubmitted(form)
 })
 
+// // Image Hovered
+// for (var i = 0 ; i < imageElements.length; i++) {
+//     const imageElement = imageElements[i];
+//     imageElement.addEventListener('mouseenter', event => {
+//         let mouseExitListener;
+//         const mouseEnterTimer = window.setTimeout(function(){
+//             const imageHoveredProperties = {
+//                 element_class: event.target.className,
+//                 element_source: event.target.src,
+//                 element_alt: event.target.alt,
+//                 element_tag: event.target.tagName.toLowerCase()
+//             };
+//             rudderstackTrack('Image Hovered', imageHoveredProperties);
+//             console.log('Image Hovered', imageHoveredProperties);
+//             imageElement.removeEventListener('mouseleave', mouseExitListener)
+//         }, 1000);
+//         mouseExitListener = imageElement.addEventListener('mouseleave', event => {
+//             window.clearTimeout(mouseEnterTimer)
+//         })
+//     })
+// };
 
-// Image Hovered
-for (var i = 0 ; i < imageElements.length; i++) {
-    const imageElement = imageElements[i];
-    imageElement.addEventListener('mouseenter', event => {
-        let mouseExitListener;
+// // Image Zoomed
+// function trackImageZoom(element) {
+//     var zoomedImage = element;
+//     const imageZoomedProperties = {
+//         element_class: zoomedImage.className,
+//         element_source: zoomedImage.src,
+//         element_tag: zoomedImage.tagName.toLowerCase()
+//     };
+//     rudderstackTrack('Image Zoomed', imageZoomedProperties);
+//     console.log('Image Zoomed', imageZoomedProperties);
+// }
+// zoomElements.forEach(element => {
+//     element.addEventListener('click', function (event) {
+//         trackImageZoom(event.currentTarget)
+//     })
+// });
 
-        const mouseEnterTimer = window.setTimeout(function(){
-            const imageHoveredProperties = {
-                element_class: event.target.className,
-                element_source: event.target.src,
-                element_alt: event.target.alt,
-                element_tag: event.target.tagName.toLowerCase()
-            };
-            rudderstackTrack('Image Hovered', imageHoveredProperties);
-            console.log('Image Hovered', imageHoveredProperties);
-            imageElement.removeEventListener('mouseleave', mouseExitListener)
-        }, 1000);
-
-        mouseExitListener = imageElement.addEventListener('mouseleave', event => {
-            window.clearTimeout(mouseEnterTimer)
-        })
-    })
-};
-
-
-// Image Zoomed
-function trackImageZoom(element) {
-    var zoomedImage = element;
-
-    const imageZoomedProperties = {
-        element_class: zoomedImage.className,
-        element_source: zoomedImage.src,
-        element_tag: zoomedImage.tagName.toLowerCase()
-    };
-
-    rudderstackTrack('Image Zoomed', imageZoomedProperties);
-    console.log('Image Zoomed', imageZoomedProperties);
-}
-
-zoomElements.forEach(element => {
-    element.addEventListener('click', function (event) {
-        trackImageZoom(event.currentTarget)
-    })
-});
-
-
-// Tooltip Clicked
-function trackTooltipClick(clickedTooltip) {
-    const tooltipClickProperties = {
-        element_id: clickedTooltip.id,
-        element_class: clickedTooltip.className,
-        element_tag: clickedTooltip.tagName.toLowerCase()
-    };
-    rudderstackTrack('Tooltip Clicked', tooltipClickProperties);
-    console.log('Tooltip Clicked:', clickedTooltip.id, tooltipClickProperties);
-}
-
-tooltipElements.forEach(element => {
-    element.addEventListener('click', function (event) {
-        trackTooltipClick(event.currentTarget)
-    })
-});
-
-// Associate tracking number with segment io user id so we can attribute calls to ad campaigns
-// (waits 10 seconds for call rail and segment code snippets to fire first)
-window.setTimeout(function() {
-    typeof rudderanalytics !== "undefined" && (function() {
-        var userId = rudderanalytics.getAnonymousId()
-
-        function distinct(values) { var acc = {}; values.forEach(function(value) { acc[value] = 1; }); return Object.keys(acc);}
-
-        var allPhoneNumbers = Array.from(document.querySelectorAll("a")).filter(function(a) { return a.href.includes("tel:"); }).map(function(a) { return a.href.replace("tel:", "")});
-
-        var distinctPhoneNumbers = distinct(allPhoneNumbers)
-
-        if (!!userId) {
-            distinctPhoneNumbers.forEach(function(trackingNumber) {
-
-                $.ajax( {
-                    method: "POST",
-                    url: "https://api.choosereach.com/v7/analytics/segmentIOAndTrackingNumber" ,
-                    data: JSON.stringify({
-                        segmentIOUserId: userId,
-                        trackingNumber: trackingNumber
-                    }),
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-            })
-        }
-    })();
-}, 10000);
+// // Tooltip Clicked
+// function trackTooltipClick(clickedTooltip) {
+//     const tooltipClickProperties = {
+//         element_id: clickedTooltip.id,
+//         element_class: clickedTooltip.className,
+//         element_tag: clickedTooltip.tagName.toLowerCase()
+//     };
+//     rudderstackTrack('Tooltip Clicked', tooltipClickProperties);
+//     console.log('Tooltip Clicked:', clickedTooltip.id, tooltipClickProperties);
+// }
+// tooltipElements.forEach(element => {
+//     element.addEventListener('click', function (event) {
+//         trackTooltipClick(event.currentTarget)
+//     })
+// });
 
 // Insights
 window.onload = function(){
     window.setTimeout(function(){
-
         // Rounds values to nearest hundredth decimal place.
         function round(value, precision) {var multiplier = Math.pow(10, precision || 0);return Math.round(value * multiplier) / multiplier;}
-
         // Return only distinct values in an array.
         function reachDistinct(values) {var acc = {}; values.forEach(function(value) {acc[value] = 1;}); return Object.keys(acc);}
-
         // Insights Definitions
         const
             connection = navigator.connection,
@@ -605,4 +534,3 @@ window.onload = function(){
         console.log('Page Insights', pageInsightsProperties);
     });
 };
-
